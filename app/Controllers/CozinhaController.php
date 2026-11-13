@@ -42,7 +42,7 @@ class CozinhaController extends Controller {
             $turmasMedio = ['1º Ano EM', '2º Ano EM', '3º Ano EM'];
 
             foreach ($alunos as $a) {
-                if (($a['status'] ?? 'presente') === 'presente') {
+                if (($a['status'] ?? null) === 'presente') {
                     if (in_array($a['turma'], $turmasFund1)) $fund1++;
                     elseif (in_array($a['turma'], $turmasFund2)) $fund2++;
                     elseif (in_array($a['turma'], $turmasMedio)) $medio++;

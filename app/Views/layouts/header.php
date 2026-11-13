@@ -17,16 +17,69 @@ $usuarioLogado = usuario_logado();
                 extend: {
                     colors: {
                         brand: {
-                            50: '#f0fdf4',
-                            100: '#dcfce7',
-                            200: '#bbf7d0',
-                            400: '#4ade80',
-                            500: '#22c55e',
-                            600: '#16a34a',
-                            700: '#15803d',
-                            accent: '#f59e0b',
-                            coral: '#f43f5e',
-                            violet: '#8b5cf6'
+                            50: '#fff6ed',
+                            100: '#ffe8d2',
+                            200: '#ffd2a8',
+                            300: '#ffb56b',
+                            400: '#ffa04d',
+                            500: '#f58220',
+                            600: '#e66c0b',
+                            700: '#bf5200',
+                            800: '#8a3c00',
+                            900: '#612b00',
+                            accent: '#ffb56b'
+                        },
+                        emerald: {
+                            50: '#fff6ed',
+                            100: '#ffe8d2',
+                            200: '#ffd2a8',
+                            300: '#ffb56b',
+                            400: '#ffa04d',
+                            500: '#f58220',
+                            600: '#e66c0b',
+                            700: '#bf5200',
+                            800: '#8a3c00',
+                            900: '#612b00',
+                            950: '#401b00'
+                        },
+                        green: {
+                            50: '#fff6ed',
+                            100: '#ffe8d2',
+                            200: '#ffd2a8',
+                            300: '#ffb56b',
+                            400: '#ffa04d',
+                            500: '#f58220',
+                            600: '#e66c0b',
+                            700: '#bf5200',
+                            800: '#8a3c00',
+                            900: '#612b00',
+                            950: '#401b00'
+                        },
+                        amber: {
+                            50: '#faf9f6',
+                            100: '#e5e2d9',
+                            200: '#d8d2c4',
+                            300: '#c7bda8',
+                            400: '#ffb56b',
+                            500: '#f58220',
+                            600: '#e66c0b',
+                            700: '#bf5200',
+                            800: '#8a3c00',
+                            900: '#612b00',
+                            950: '#401b00'
+                        },
+                        indigo: {
+                            50: '#faf9f6',
+                            100: '#e5e2d9',
+                            200: '#d8d2c4',
+                            300: '#c7bda8',
+                            400: '#ffb56b',
+                            500: '#f58220',
+                            600: '#e66c0b',
+                            700: '#bf5200',
+                            800: '#8a3c00',
+                            900: '#612b00',
+                            950: '#401b00'
                         }
                     },
                     fontFamily: {
@@ -75,13 +128,11 @@ $usuarioLogado = usuario_logado();
 
     <header class="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
+            <div class="flex items-center justify-between h-24">
 
 
-                <a href="<?= url('/') ?>" class="flex items-center gap-3 group focus:outline-none">
-                    <div class="w-11 h-11 rounded-lg bg-emerald-800 flex items-center justify-center text-sm font-bold tracking-wide text-white">
-                        CE
-                    </div>
+                <a href="<?= url($usuarioLogado ? '' : 'login') ?>" class="flex items-center gap-3 group focus:outline-none">
+                    <img src="<?= asset('img/vivalcris-logo.png') ?>" alt="Logo VivalCris" class="vivalcris-logo" width="56" height="56">
                     <div>
                         <div class="flex items-center gap-2">
                             <span class="font-brand font-bold text-2xl text-slate-800 tracking-tight">VivalCris</span>
@@ -91,23 +142,26 @@ $usuarioLogado = usuario_logado();
                 </a>
 
 
+                <?php if ($usuarioLogado): ?>
                 <nav class="hidden lg:flex items-center gap-1 xl:gap-2">
-                    <a href="<?= url('/') ?>" class="nav-item <?= isActiveRoute('/') ?>">Início</a>
+                        <a href="<?= url('/') ?>" class="nav-item <?= isActiveRoute('/') ?>">Início</a>
 
 
-                    <?php if (!$usuarioLogado || tem_perfil(['inspetora', 'admin'])): ?>
+                    <?php if (tem_perfil(['inspetora', 'admin'])): ?>
                         <a href="<?= url('frequencia') ?>" class="nav-item <?= isActiveRoute('frequencia') ?>">Frequência</a>
                         <a href="<?= url('frequencia/historico') ?>" class="nav-item <?= isActiveRoute('frequencia/historico') ?>">Histórico</a>
                     <?php endif; ?>
 
 
-                    <?php if (!$usuarioLogado || tem_perfil(['nutricionista', 'admin'])): ?>
+                    <?php if (tem_perfil(['nutricionista', 'admin'])): ?>
                         <a href="<?= url('cozinha') ?>" class="nav-item <?= isActiveRoute('cozinha') ?>">Cozinha</a>
                     <?php endif; ?>
 
                     <a href="<?= url('alimentacao/cardapio') ?>" class="nav-item <?= isActiveRoute('alimentacao/cardapio') ?>">Cardápio</a>
 
-                    <a href="<?= url('alunos') ?>" class="nav-item <?= isActiveRoute('alunos') ?>">Alunos</a>
+                    <?php if (tem_perfil('admin')): ?>
+                        <a href="<?= url('alunos') ?>" class="nav-item <?= isActiveRoute('alunos') ?>">Alunos</a>
+                    <?php endif; ?>
 
 
                     <?php if (tem_perfil('admin')): ?>
@@ -117,16 +171,19 @@ $usuarioLogado = usuario_logado();
 
                     <a href="<?= url('relatorios') ?>" class="nav-item <?= isActiveRoute('relatorios') ?>">Relatórios</a>
                 </nav>
+                <?php endif; ?>
 
 
                 <div class="flex items-center gap-2">
 
 
 
+                    <?php if ($usuarioLogado): ?>
                     <button onclick="document.getElementById('modalSobre').classList.remove('hidden')"
                             class="hidden xl:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition">
                         Sobre
                     </button>
+                    <?php endif; ?>
 
 
                     <?php if ($usuarioLogado): ?>
@@ -155,16 +212,16 @@ $usuarioLogado = usuario_logado();
                     <?php endif; ?>
 
 
-                    <button onclick="toggleMobileMenu()" class="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100">
-                        <span class="text-2xl">☰</span>
-                    </button>
+                    <?php if ($usuarioLogado): ?>
+                        <button onclick="toggleMobileMenu()" class="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100">
+                            <span class="text-2xl">☰</span>
+                        </button>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
-
-
+        <?php if ($usuarioLogado): ?>
         <div id="mobileMenu" class="hidden lg:hidden border-t border-slate-100 bg-white/95 px-4 pt-2 pb-6 space-y-1">
-            <?php if ($usuarioLogado): ?>
                 <div class="p-3 bg-emerald-50 rounded-xl flex items-center justify-between mb-2">
                     <div class="flex items-center gap-2">
                         <span class="text-2xl"><?= $usuarioLogado['avatar'] ?></span>
@@ -175,20 +232,22 @@ $usuarioLogado = usuario_logado();
                     </div>
                     <a href="<?= url('logout') ?>" class="text-xs font-bold text-rose-600">Sair</a>
                 </div>
-            <?php endif; ?>
 
             <a href="<?= url('/') ?>" class="mobile-nav-item">Início</a>
             <a href="<?= url('frequencia') ?>" class="mobile-nav-item">Frequência</a>
             <a href="<?= url('frequencia/historico') ?>" class="mobile-nav-item">Histórico</a>
             <a href="<?= url('cozinha') ?>" class="mobile-nav-item">Cozinha</a>
             <a href="<?= url('alimentacao/cardapio') ?>" class="mobile-nav-item">Cardápio</a>
-            <a href="<?= url('alunos') ?>" class="mobile-nav-item">Alunos</a>
+            <?php if (tem_perfil('admin')): ?>
+                <a href="<?= url('alunos') ?>" class="mobile-nav-item">Alunos</a>
+            <?php endif; ?>
             <?php if (tem_perfil('admin')): ?>
                 <a href="<?= url('admin') ?>" class="mobile-nav-item">Administração</a>
                 <a href="<?= url('admin/usuarios') ?>" class="mobile-nav-item">Usuários</a>
             <?php endif; ?>
             <a href="<?= url('relatorios') ?>" class="mobile-nav-item">Relatórios</a>
         </div>
+        <?php endif; ?>
     </header>
 
 

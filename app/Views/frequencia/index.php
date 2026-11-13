@@ -236,7 +236,7 @@ require_once __DIR__ . '/../layouts/header.php';
             <span>📝</span> Lista de Estudantes da Sala (<?= count($alunos) ?>)
         </h3>
         <span class="text-xs text-slate-600">
-            Clique nos botões de cada estudante para atualizar em tempo real
+            Marque cada estudante; sem seleção, a frequência fica em branco
         </span>
     </div>
 
@@ -263,7 +263,7 @@ require_once __DIR__ . '/../layouts/header.php';
                 <?php else: ?>
                     <?php foreach ($alunos as $aluno): ?>
                         <?php
-                            $status = $aluno['status'] ?? 'presente';
+                            $status = $aluno['status'] ?? '';
                         ?>
                         <tr id="aluno-row-<?= $aluno['aluno_id'] ?>" class="hover:bg-slate-50/70 transition-colors">
 
@@ -308,11 +308,12 @@ require_once __DIR__ . '/../layouts/header.php';
                             <td class="py-3.5 px-4 text-center">
                                 <span id="badge-status-<?= $aluno['aluno_id'] ?>"
                                       class="px-3 py-1 rounded-xl text-xs font-bold capitalize transition-all duration-300
-                                      <?= ($status === 'presente') ? 'badge-presente' : (($status === 'ausente') ? 'badge-ausente' : 'badge-justificado') ?>">
+                                      <?= ($status === 'presente') ? 'badge-presente' : (($status === 'ausente') ? 'badge-ausente' : (($status === 'justificado') ? 'badge-justificado' : 'badge-pendente')) ?>">
                                     <?php
                                         if ($status === 'presente') echo '✓ Presente';
                                         elseif ($status === 'ausente') echo '✕ Ausente';
-                                        else echo '• Justificado';
+                                        elseif ($status === 'justificado') echo '• Justificado';
+                                        else echo 'Não marcado';
                                     ?>
                                 </span>
                             </td>

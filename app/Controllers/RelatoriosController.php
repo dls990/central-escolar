@@ -15,6 +15,8 @@ use App\Models\Refeicao;
 class RelatoriosController extends Controller {
     // Calcula os totais por turma e as restricoes para o relatorio escolar.
     public function index(): void {
+        $this->requireAuth();
+
         $hoje = date('Y-m-d');
         $alunos = Aluno::all();
         $turmas = Aluno::getTurmas();

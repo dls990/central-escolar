@@ -57,9 +57,7 @@
     <footer class="bg-white border-t border-slate-200 py-8 mt-12 transition-all">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-md bg-emerald-800 text-white flex items-center justify-center text-xs font-bold">
-                    CE
-                </div>
+                <img src="<?= asset('img/vivalcris-logo.png') ?>" alt="Logo VivalCris" class="vivalcris-logo vivalcris-logo-footer" width="40" height="40">
                 <div>
                     <p class="font-brand font-bold text-slate-800">VivalCris</p>
                     <p class="text-xs text-slate-600">Frequência e alimentação escolar</p>

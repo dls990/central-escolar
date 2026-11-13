@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteRule ^(?:app|core|config|database)(?:/|$) - [F,L,NC]
+RewriteRule \.(?:sql|sqlite|db)$ - [F,L,NC]

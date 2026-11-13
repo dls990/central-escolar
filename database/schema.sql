@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS frequencias (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     aluno_id INTEGER NOT NULL,
     data DATE NOT NULL,
-    status TEXT NOT NULL DEFAULT 'presente' CHECK (status IN ('presente', 'ausente', 'justificado')),
+    status TEXT NOT NULL CHECK (status IN ('presente', 'ausente', 'justificado')),
     horario TEXT,
     observacao TEXT,
     inspetora_nome TEXT,

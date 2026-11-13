@@ -105,7 +105,9 @@ require_once __DIR__ . '/../layouts/header.php';
             <a href="<?= url('frequencia') ?>"><span><strong>Frequência</strong><small>Registro diário das 12 turmas</small></span><b aria-hidden="true">→</b></a>
             <a href="<?= url('cozinha') ?>"><span><strong>Cozinha</strong><small>Pedidos e status de preparo</small></span><b aria-hidden="true">→</b></a>
             <a href="<?= url('alimentacao/votacao') ?>"><span><strong>Votação de pratos</strong><small>Preferências do cardápio escolar</small></span><b aria-hidden="true">→</b></a>
-            <a href="<?= url('alunos') ?>"><span><strong>Alunos</strong><small>Cadastro e restrições alimentares</small></span><b aria-hidden="true">→</b></a>
+            <?php if (tem_perfil('admin')): ?>
+                <a href="<?= url('alunos') ?>"><span><strong>Alunos</strong><small>Cadastro e restrições alimentares</small></span><b aria-hidden="true">→</b></a>
+            <?php endif; ?>
         </nav>
         <?php if ($liderVotacao): ?>
             <div class="dashboard-vote-summary">

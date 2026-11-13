@@ -126,7 +126,7 @@ class Database {
                 `id` INT AUTO_INCREMENT PRIMARY KEY,
                 `aluno_id` INT NOT NULL,
                 `data` DATE NOT NULL,
-                `status` ENUM('presente', 'ausente', 'justificado') NOT NULL DEFAULT 'presente',
+                `status` ENUM('presente', 'ausente', 'justificado') NOT NULL,
                 `horario` VARCHAR(10) DEFAULT NULL,
                 `observacao` TEXT DEFAULT NULL,
                 `inspetora_nome` VARCHAR(100) DEFAULT NULL,
@@ -242,7 +242,7 @@ class Database {
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 aluno_id INTEGER NOT NULL,
                 data DATE NOT NULL,
-                status TEXT CHECK(status IN ('presente', 'ausente', 'justificado')) NOT NULL DEFAULT 'presente',
+                status TEXT CHECK(status IN ('presente', 'ausente', 'justificado')) NOT NULL,
                 horario TEXT,
                 observacao TEXT,
                 inspetora_nome TEXT,
@@ -467,36 +467,8 @@ class Database {
         $db->exec("DELETE FROM historico_frequencia_diaria");
 
         $totalAlunos = (int)$db->query("SELECT COUNT(*) FROM alunos")->fetchColumn();
-        $hoje = date('Y-m-d');
         $ontem = date('Y-m-d', strtotime('-1 day'));
         $anteontem = date('Y-m-d', strtotime('-2 days'));
-
-
-        $stmtFreq = $db->prepare("INSERT INTO frequencias (aluno_id, data, status, horario, observacao, inspetora_nome) VALUES (?, ?, ?, ?, ?, ?)");
-
-
-        for ($id = 1; $id <= $totalAlunos; $id++) {
-            if ($id === 6 || $id === 18 || $id === 28) {
-                $status = 'ausente';
-                $horario = null;
-                $obs = 'Falta comunicada pela família';
-            } elseif ($id === 4 || $id === 22) {
-                $status = 'justificado';
-                $horario = null;
-                $obs = 'Consulta médica / odontológica';
-            } else {
-                $status = 'presente';
-                $horario = sprintf('07:%02d', 10 + ($id % 25));
-                $obs = null;
-            }
-            $stmtFreq->execute([$id, $hoje, $status, $horario, $obs, 'Inspetora Vivi']);
-        }
-
-
-        HistoricoFrequencia::salvarDiario($hoje, 'Inspetora Vivi');
-
-
-        PedidoCozinha::enviarParaCozinha($hoje, 'Inspetora Vivi', 'Alunos do 7º e 8º EF têm aula prática antes do almoço. Refeições conferidas!');
 
 
         $db->exec("

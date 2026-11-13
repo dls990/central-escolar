@@ -43,7 +43,7 @@ class PedidoCozinha extends Model {
 
         $sql = "
             SELECT a.id, a.nome, a.matricula, a.turma, a.restricoes,
-                   COALESCE(f.status, 'presente') as status
+                   f.status
             FROM alunos a
             LEFT JOIN frequencias f ON a.id = f.aluno_id AND f.data = ?
         ";

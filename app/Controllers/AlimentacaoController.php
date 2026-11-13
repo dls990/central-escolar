@@ -17,16 +17,30 @@ use App\Models\Usuario;
 class AlimentacaoController extends Controller {
     // Prepara os cardapios da semana e os dados do formulario de edicao.
     public function cardapio(): void {
+        $diasSemana = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira'];
         $cardapios = Cardapio::all();
         $cardapioHoje = Cardapio::getCardapioDeHoje();
         $idEdicao = (int)($_GET['editar'] ?? 0);
+        $diaSelecionado = $_GET['dia'] ?? $cardapioHoje['dia_semana'];
+
+        if (!in_array($diaSelecionado, $diasSemana, true)) {
+            $diaSelecionado = $diasSemana[0];
+        }
+
+        $cardapioEdicao = $idEdicao > 0 ? Cardapio::find($idEdicao) : null;
+        if ($cardapioEdicao) {
+            $diaSelecionado = $cardapioEdicao['dia_semana'];
+        } else {
+            $cardapioEdicao = Cardapio::getDoDia($diaSelecionado);
+        }
 
         $this->view('alimentacao/cardapio', [
             'cardapios' => $cardapios,
             'cardapioHoje' => $cardapioHoje,
-            'cardapioEdicao' => $idEdicao > 0 ? Cardapio::find($idEdicao) : null,
-            'podeGerenciar' => Usuario::temPerfil('nutricionista'),
-            'diasSemana' => ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira']
+            'cardapioEdicao' => $cardapioEdicao,
+            'diaSelecionado' => $diaSelecionado,
+            'podeGerenciar' => Usuario::temPerfil(['nutricionista', 'admin']),
+            'diasSemana' => $diasSemana
         ]);
     }
 
@@ -59,18 +73,18 @@ class AlimentacaoController extends Controller {
             || $calorias < 0
             || $calorias > 2000) {
             $this->flash('error', 'Confira os campos obrigatórios e informe calorias entre 0 e 2000.');
-            $this->redirect('alimentacao/cardapio' . ($id > 0 ? '?editar=' . $id : ''));
+            $this->redirect('alimentacao/cardapio?dia=' . rawurlencode($diaSemana));
             return;
         }
 
         if (!Cardapio::salvar($dados, $id > 0 ? $id : null)) {
             $this->flash('error', 'Já existe um cardápio cadastrado para esse dia ou o registro não foi encontrado.');
-            $this->redirect('alimentacao/cardapio' . ($id > 0 ? '?editar=' . $id : ''));
+            $this->redirect('alimentacao/cardapio?dia=' . rawurlencode($diaSemana));
             return;
         }
 
         $this->flash('success', $id > 0 ? 'Cardápio atualizado.' : 'Cardápio adicionado.');
-        $this->redirect('alimentacao/cardapio');
+        $this->redirect('alimentacao/cardapio?dia=' . rawurlencode($diaSemana));
     }
 
     // Duplica um cardapio de origem para outro dia da semana.
@@ -83,18 +97,18 @@ class AlimentacaoController extends Controller {
 
         if ($origemId <= 0 || !in_array($diaDestino, $diasSemana, true)) {
             $this->flash('error', 'Selecione um cardápio de origem e um dia de destino válidos.');
-            $this->redirect('alimentacao/cardapio');
+            $this->redirect('alimentacao/cardapio?dia=' . rawurlencode($diaDestino));
             return;
         }
 
         if (!Cardapio::copiar($origemId, $diaDestino)) {
             $this->flash('error', 'Não foi possível copiar. Selecione dias diferentes e tente novamente.');
-            $this->redirect('alimentacao/cardapio');
+            $this->redirect('alimentacao/cardapio?dia=' . rawurlencode($diaDestino));
             return;
         }
 
         $this->flash('success', "Cardápio copiado para {$diaDestino}. Você pode editar o conteúdo copiado.");
-        $this->redirect('alimentacao/cardapio');
+        $this->redirect('alimentacao/cardapio?dia=' . rawurlencode($diaDestino));
     }
 
     // Reune alunos, consumo e estatisticas para montar a fila do refeitorio.

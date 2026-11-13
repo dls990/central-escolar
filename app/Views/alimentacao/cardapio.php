@@ -4,8 +4,9 @@
 
 $tituloPagina = 'Cardápio Semanal Escolar | VivalCris';
 require_once __DIR__ . '/../layouts/header.php';
+$cardapiosPorDia = array_column($cardapios, null, 'dia_semana');
 $origemPadrao = $cardapioEdicao['id'] ?? ($cardapios[0]['id'] ?? 0);
-$diaOrigemPadrao = $cardapioEdicao['dia_semana'] ?? ($cardapios[0]['dia_semana'] ?? '');
+$diaOrigemPadrao = $cardapioEdicao['dia_semana'] ?? $diaSelecionado;
 $diaDestinoPadrao = '';
 foreach ($diasSemana as $dia):
     if ($dia !== $diaOrigemPadrao) {
@@ -43,25 +44,33 @@ endforeach;
         <div class="menu-manager-heading">
             <div>
                 <h2 id="menu-manager-title">Gerenciar cardápios</h2>
-                <p>Adicione uma refeição, edite um dia ou copie outro cardápio para substituir o destino.</p>
+                <p>Escolha um dia na lista para adicionar ou editar o cardápio correspondente.</p>
             </div>
-            <?php if ($cardapioEdicao): ?>
-                <a class="menu-cancel" href="<?= url('alimentacao/cardapio') ?>">Cancelar edição</a>
-            <?php endif; ?>
         </div>
 
         <div class="menu-manager-grid">
+            <nav class="menu-calendar" aria-label="Dias da semana do cardápio">
+                <h3>Semana</h3>
+                <?php foreach ($diasSemana as $dia): ?>
+                    <?php $menuDoDia = $cardapiosPorDia[$dia] ?? null; ?>
+                    <a href="<?= url('alimentacao/cardapio?dia=' . rawurlencode($dia)) ?>"
+                       class="menu-calendar-day <?= $dia === $diaSelecionado ? 'is-selected' : '' ?>">
+                        <span><?= htmlspecialchars($dia) ?></span>
+                        <small><?= $menuDoDia ? 'Editar cardápio' : 'Adicionar cardápio' ?></small>
+                    </a>
+                <?php endforeach; ?>
+            </nav>
+
             <form method="POST" action="<?= url('alimentacao/cardapio/salvar') ?>" class="menu-editor">
-                <h3><?= $cardapioEdicao ? 'Editar cardápio' : 'Adicionar cardápio' ?></h3>
+                <h3><?= $cardapioEdicao ? 'Editar cardápio' : 'Adicionar cardápio' ?> · <?= htmlspecialchars($diaSelecionado) ?></h3>
                 <input type="hidden" name="id" value="<?= (int)$valoresEdicao['id'] ?>">
 
                 <div class="menu-form-grid">
                     <div class="menu-field">
                         <label for="menu-dia">Dia da semana</label>
                         <select id="menu-dia" name="dia_semana" required>
-                            <option value="">Selecione o dia</option>
                             <?php foreach ($diasSemana as $dia): ?>
-                                <option value="<?= htmlspecialchars($dia) ?>" <?= $valoresEdicao['dia_semana'] === $dia ? 'selected' : '' ?>><?= htmlspecialchars($dia) ?></option>
+                                <option value="<?= htmlspecialchars($dia) ?>" <?= $diaSelecionado === $dia ? 'selected' : '' ?>><?= htmlspecialchars($dia) ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -98,7 +107,7 @@ endforeach;
                 <button type="submit" class="menu-submit"><?= $cardapioEdicao ? 'Salvar alterações' : 'Adicionar ao cardápio' ?></button>
             </form>
 
-            <form method="POST" action="<?= url('alimentacao/cardapio/copiar') ?>" class="menu-copy" onsubmit="return confirm('O cardápio do dia de destino será substituído. Deseja continuar?')">
+            <form method="POST" action="<?= url('alimentacao/cardapio/copiar') ?>" class="menu-copy menu-copy-wide" onsubmit="return confirm('O cardápio do dia de destino será substituído. Deseja continuar?')">
                 <h3>Copiar de outro dia</h3>
                 <p>Os campos do dia de origem serão copiados para o dia de destino.</p>
 
@@ -122,6 +131,11 @@ endforeach;
             </form>
         </div>
     </section>
+<?php else: ?>
+    <p class="menu-manager-notice">
+        Para adicionar ou editar cardápios, entre com um perfil de nutricionista ou administrador.
+        <a href="<?= url('login') ?>">Acessar o sistema</a>
+    </p>
 <?php endif; ?>
 
 
@@ -199,7 +213,7 @@ endforeach;
 
             <?php if ($podeGerenciar): ?>
                 <div class="menu-card-actions">
-                    <a href="<?= url('alimentacao/cardapio?editar=' . (int)$c['id']) ?>">Editar este dia</a>
+                    <a href="<?= url('alimentacao/cardapio?dia=' . rawurlencode($c['dia_semana'])) ?>">Editar este dia</a>
                 </div>
             <?php endif; ?>
 
@@ -213,7 +227,9 @@ endforeach;
         <h4>Restrições e alergias</h4>
         <p>Consulte os cadastros dos alunos antes de preparar ou adaptar as refeições.</p>
     </div>
-    <a href="<?= url('alunos') ?>">Consultar alunos</a>
+    <?php if (tem_perfil('admin')): ?>
+        <a href="<?= url('alunos') ?>">Consultar alunos</a>
+    <?php endif; ?>
 </div>
 
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>

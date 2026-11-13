@@ -13,6 +13,8 @@ use App\Models\Aluno;
 class AlunosController extends Controller {
     // Lista os alunos cadastrados com os filtros selecionados.
     public function index(): void {
+        $this->requireRole('admin');
+
         $turma = $_GET['turma'] ?? 'todas';
         $busca = trim($_GET['busca'] ?? '');
 
@@ -39,6 +41,8 @@ class AlunosController extends Controller {
 
     // Exibe o formulario vazio para cadastrar um aluno.
     public function novo(): void {
+        $this->requireRole('admin');
+
         $turmas = Aluno::getTurmas();
         $this->view('alunos/form', [
             'aluno' => null,
@@ -49,6 +53,8 @@ class AlunosController extends Controller {
 
     // Valida os campos e cria o registro do aluno.
     public function salvar(): void {
+        $this->requireRole('admin');
+
         $nome = trim($_POST['nome'] ?? '');
         $matricula = trim($_POST['matricula'] ?? '');
         $turma = trim($_POST['turma'] ?? '');
@@ -77,6 +83,8 @@ class AlunosController extends Controller {
 
     // Busca o aluno solicitado e abre o formulario preenchido para edicao.
     public function editar(): void {
+        $this->requireRole('admin');
+
         $id = (int)($_GET['id'] ?? 0);
         $aluno = Aluno::find($id);
 
@@ -96,6 +104,8 @@ class AlunosController extends Controller {
 
     // Atualiza os dados do aluno a partir do formulario de edicao.
     public function atualizar(): void {
+        $this->requireRole('admin');
+
         $id = (int)($_POST['id'] ?? 0);
         $nome = trim($_POST['nome'] ?? '');
         $matricula = trim($_POST['matricula'] ?? '');
@@ -123,6 +133,8 @@ class AlunosController extends Controller {
 
     // Exclui o aluno identificado pela requisicao.
     public function excluir(): void {
+        $this->requireRole('admin');
+
         $id = (int)($_POST['id'] ?? 0);
         if ($id > 0) {
             Aluno::delete($id);

@@ -6,6 +6,8 @@
 
 namespace Core;
 
+use App\Models\Usuario;
+
 class Router {
     private static array $routes = [];
 
@@ -31,6 +33,10 @@ class Router {
 
         $uri = '/' . trim($uri, '/');
 
+        if ($uri !== '/login' && !Usuario::estaLogado()) {
+            header('Location: ' . url('login'));
+            exit;
+        }
 
         if (isset(self::$routes[$method][$uri])) {
             self::executeHandler(self::$routes[$method][$uri]);

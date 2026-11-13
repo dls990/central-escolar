@@ -51,7 +51,7 @@ class FrequenciaController extends Controller {
 
         $alunoId = (int)($_POST['aluno_id'] ?? 0);
         $data = $_POST['data'] ?? date('Y-m-d');
-        $status = $_POST['status'] ?? 'presente';
+        $status = $_POST['status'] ?? '';
         $obs = $_POST['observacao'] ?? null;
 
         if ($alunoId <= 0 || !in_array($status, ['presente', 'ausente', 'justificado'])) {
@@ -85,9 +85,14 @@ class FrequenciaController extends Controller {
         $usuario = $this->requireAuth();
 
         $data = $_POST['data'] ?? date('Y-m-d');
-        $status = $_POST['status'] ?? 'presente';
+        $status = $_POST['status'] ?? '';
         $turma = $_POST['turma'] ?? 'todas';
         $inspetoraNome = $usuario['nome'] ?? 'Inspetora';
+
+        if (!in_array($status, ['presente', 'ausente', 'justificado'], true)) {
+            $this->json(['success' => false, 'message' => 'Selecione um status de frequência válido.'], 400);
+            return;
+        }
 
         $totalAlterados = Frequencia::marcarTodos($data, $status, $turma, $inspetoraNome);
 

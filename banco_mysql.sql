@@ -47,7 +47,7 @@ CREATE TABLE `frequencias` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `aluno_id` INT NOT NULL,
     `data` DATE NOT NULL,
-    `status` ENUM('presente', 'ausente', 'justificado') NOT NULL DEFAULT 'presente',
+    `status` ENUM('presente', 'ausente', 'justificado') NOT NULL,
     `horario` VARCHAR(10) DEFAULT NULL,
     `observacao` TEXT DEFAULT NULL,
     `inspetora_nome` VARCHAR(100) DEFAULT NULL,
