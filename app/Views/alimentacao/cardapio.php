@@ -1,5 +1,5 @@
 <?php
-// Exibe o cardapio semanal.
+// Apresenta os pratos da semana e, para a nutricionista, formularios de edicao e copia.
 
 
 $tituloPagina = 'Cardápio Semanal Escolar | VivalCris';

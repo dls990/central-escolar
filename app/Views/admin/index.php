@@ -1,5 +1,5 @@
 <?php
-// Exibe o painel administrativo.
+// Painel geral: resume chamadas, pedidos da cozinha, cardapio e usuarios.
 
 
 $tituloPagina = 'Painel do Administrador Geral | VivalCris';
@@ -36,6 +36,7 @@ require_once __DIR__ . '/../layouts/header.php';
 </div>
 
 
+<!-- Compara os indicadores dos dois setores acompanhados pela administracao. -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
 
 
@@ -135,6 +136,7 @@ require_once __DIR__ . '/../layouts/header.php';
 </div>
 
 
+<!-- Detalha o grafico consolidado e as contas ativas do sistema. -->
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
 
 
@@ -201,6 +203,7 @@ require_once __DIR__ . '/../layouts/header.php';
 </div>
 
 <script>
+// Usa os totais do controller para desenhar o grafico geral do dia.
 document.addEventListener('DOMContentLoaded', () => {
     const ctx = document.getElementById('adminPizzaChart');
     if (!ctx) return;

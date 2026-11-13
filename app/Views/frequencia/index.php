@@ -1,5 +1,5 @@
 <?php
-// Exibe a chamada dos alunos.
+// Permite filtrar turmas, registrar presencas e enviar o total diario para a cozinha.
 
 $tituloPagina = 'Chamada Interativa & Frequência | VivalCris';
 require_once __DIR__ . '/../layouts/header.php';
@@ -18,6 +18,7 @@ require_once __DIR__ . '/../layouts/header.php';
     </div>
 
 
+    <!-- Os filtros recarregam a chamada para a data e turma escolhidas. -->
     <form method="GET" action="<?= url('frequencia') ?>" class="flex flex-wrap items-center gap-2 bg-white p-2 rounded-2xl border border-slate-200 shadow-sm">
         <div>
             <label class="sr-only">Data</label>
@@ -46,6 +47,7 @@ require_once __DIR__ . '/../layouts/header.php';
 </div>
 
 
+<!-- Informa se o censo do dia ja chegou a cozinha ou ainda precisa ser enviado. -->
 <div class="scroll-reveal mb-6">
     <?php if ($pedidoCozinha): ?>
         <div class="p-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -92,9 +94,11 @@ require_once __DIR__ . '/../layouts/header.php';
 </div>
 
 
+<!-- Reune o grafico, os indicadores e as acoes gerais da chamada. -->
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
 
 
+    <!-- Grafico e acesso rapido ao historico do dia selecionado. -->
     <div class="lg:col-span-5 scroll-reveal-left">
         <div class="fun-card p-5 bg-white border-2 border-emerald-100 h-full flex flex-col justify-between">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-3">
@@ -140,6 +144,7 @@ require_once __DIR__ . '/../layouts/header.php';
     <div class="lg:col-span-7 flex flex-col justify-between gap-4">
 
 
+        <!-- Indicadores que mostram o resultado agregado da chamada. -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 scroll-reveal">
 
             <div class="fun-card p-3.5 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white">
@@ -224,6 +229,7 @@ require_once __DIR__ . '/../layouts/header.php';
 </div>
 
 
+<!-- Tabela individual com dados, restricoes e controles de presenca por aluno. -->
 <div class="scroll-reveal fun-card overflow-hidden">
     <div class="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
         <h3 class="font-brand font-bold text-slate-800 text-sm flex items-center gap-2">
@@ -298,6 +304,7 @@ require_once __DIR__ . '/../layouts/header.php';
                             </td>
 
 
+                            <!-- Atualiza o status visual sem sair da tela da chamada. -->
                             <td class="py-3.5 px-4 text-center">
                                 <span id="badge-status-<?= $aluno['aluno_id'] ?>"
                                       class="px-3 py-1 rounded-xl text-xs font-bold capitalize transition-all duration-300
@@ -356,6 +363,7 @@ require_once __DIR__ . '/../layouts/header.php';
 </div>
 
 
+<!-- Confirma quantidades e observacao antes de enviar o resumo para a cozinha. -->
 <div id="modalEnvioCozinha" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border-4 border-amber-300 transform transition-all animate-scale-up">
         <div class="flex items-center justify-between pb-3 border-b border-slate-100">

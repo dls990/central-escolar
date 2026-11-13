@@ -8,6 +8,7 @@
 use App\Models\Usuario;
 
 if (!function_exists('base_url')) {
+    // Detecta o subdiretorio da aplicacao para montar links corretos.
     function base_url(): string {
         $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
         $base = dirname($scriptName);
@@ -19,6 +20,7 @@ if (!function_exists('base_url')) {
 }
 
 if (!function_exists('url')) {
+    // Monta URLs internas preservando o caminho base do projeto.
     function url(string $path = ''): string {
         $path = ltrim($path, '/');
         $base = base_url();
@@ -27,6 +29,7 @@ if (!function_exists('url')) {
 }
 
 if (!function_exists('asset')) {
+    // Gera o caminho de arquivos estaticos como CSS e JavaScript.
     function asset(string $path): string {
         $path = ltrim($path, '/');
         return url($path);
@@ -34,6 +37,7 @@ if (!function_exists('asset')) {
 }
 
 if (!function_exists('isActiveRoute')) {
+    // Marca o item do menu que corresponde a pagina atual.
     function isActiveRoute(string $route): string {
         $currentUri = $_SERVER['REQUEST_URI'] ?? '/';
         $base = base_url();
@@ -48,18 +52,21 @@ if (!function_exists('isActiveRoute')) {
 }
 
 if (!function_exists('usuario_logado')) {
+    // Retorna os dados da conta armazenada na sessao.
     function usuario_logado(): ?array {
         return Usuario::usuarioAtual();
     }
 }
 
 if (!function_exists('esta_logado')) {
+    // Verifica se ha uma conta autenticada.
     function esta_logado(): bool {
         return Usuario::estaLogado();
     }
 }
 
 if (!function_exists('tem_perfil')) {
+    // Compara o perfil atual com um ou mais perfis permitidos.
     function tem_perfil(string|array $perfis): bool {
         return Usuario::temPerfil($perfis);
     }

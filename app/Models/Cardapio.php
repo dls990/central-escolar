@@ -10,6 +10,7 @@ namespace App\Models;
 use Core\Model;
 
 class Cardapio extends Model {
+    // Lista todos os cardapios em ordem de dia da semana.
     public static function all(): array {
         $stmt = self::getConnection()->query("SELECT * FROM cardapios");
         $cardapios = $stmt->fetchAll();
@@ -24,6 +25,7 @@ class Cardapio extends Model {
         return $cardapios;
     }
 
+    // Busca um cardapio pelo seu identificador.
     public static function find(int $id): ?array {
         $stmt = self::getConnection()->prepare("SELECT * FROM cardapios WHERE id = ?");
         $stmt->execute([$id]);
@@ -31,6 +33,7 @@ class Cardapio extends Model {
         return $row ?: null;
     }
 
+    // Localiza o cardapio associado ao dia da semana informado.
     public static function getDoDia(string $diaSemana): ?array {
         $stmt = self::getConnection()->prepare("SELECT * FROM cardapios WHERE dia_semana = ? LIMIT 1");
         $stmt->execute([$diaSemana]);
@@ -38,6 +41,7 @@ class Cardapio extends Model {
         return $row ?: null;
     }
 
+    // Determina o dia atual e devolve o cardapio correspondente.
     public static function getCardapioDeHoje(): array {
         $diasMap = [
             1 => 'Segunda-feira',
@@ -69,6 +73,7 @@ class Cardapio extends Model {
         ];
     }
 
+    // Insere um novo cardapio ou atualiza o registro existente.
     public static function salvar(array $dados, ?int $id = null): bool {
         $db = self::getConnection();
         $stmt = $db->prepare('SELECT id FROM cardapios WHERE dia_semana = ? AND id <> ? LIMIT 1');
@@ -111,6 +116,7 @@ class Cardapio extends Model {
         ]);
     }
 
+    // Copia os itens de um dia para outro sem sobrescrever o original.
     public static function copiar(int $origemId, string $diaDestino): bool {
         $origem = self::find($origemId);
         if (!$origem) {

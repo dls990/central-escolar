@@ -1,5 +1,5 @@
 <?php
-// Exibe a gestao de usuarios.
+// Tela administrativa com formulario e lista para manter contas e perfis.
 
 
 $tituloPagina = 'Usuários | Administração';

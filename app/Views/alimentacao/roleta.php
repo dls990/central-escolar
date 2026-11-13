@@ -1,5 +1,5 @@
 <?php
-// Exibe a roleta de lanches.
+// Desenha uma roleta interativa que sugere lanches e dicas de nutricao.
 
 
 $tituloPagina = 'Roleta de Lanches Saudáveis | VivalCris';

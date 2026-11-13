@@ -1,4 +1,5 @@
-/* Define a aparencia da aplicacao. */
+/* Reune navegacao, cartoes, animacoes, formularios e ajustes responsivos. */
+/* Links ativos e navegacao principal em telas grandes e pequenas. */
 .nav-item {
     display: inline-flex;
     align-items: center;
@@ -55,6 +56,7 @@
 }
 
 
+/* Animacoes usadas para entrada, destaque e aparicao dos conteudos. */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -138,6 +140,7 @@
 }
 
 
+/* Elementos com estas classes aparecem quando o JavaScript os revela. */
 .scroll-reveal {
     opacity: 0;
     transform: translateY(28px);
@@ -180,6 +183,7 @@
 .delay-300 { transition-delay: 300ms; }
 .delay-400 { transition-delay: 400ms; }
 
+/* Fundo geral e estrutura da tela de autenticacao. */
 .app-body {
     background: #f4f7f5;
     font-family: 'Source Sans 3', sans-serif;

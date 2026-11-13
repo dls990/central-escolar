@@ -1,11 +1,13 @@
 // Reproduz os efeitos sonoros da interface.
 class SoundEffects {
+    // Guarda o estado do som e prepara o contexto de audio sob demanda.
     constructor() {
         this.ctx = null;
         this.muted = localStorage.getItem('edunutri_muted') === 'true';
         this.updateIcon();
     }
 
+    // Cria ou reativa o contexto exigido pelo navegador para tocar sons.
     init() {
         if (!this.ctx) {
             const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -16,6 +18,7 @@ class SoundEffects {
         }
     }
 
+    // Alterna o silencio, persiste a escolha e atualiza o icone.
     toggleMute() {
         this.muted = !this.muted;
         localStorage.setItem('edunutri_muted', this.muted);
@@ -25,6 +28,7 @@ class SoundEffects {
         }
     }
 
+    // Atualiza o indicador visual de som ligado ou desligado.
     updateIcon() {
         const icon = document.getElementById('soundIcon');
         if (icon) {
@@ -32,6 +36,7 @@ class SoundEffects {
         }
     }
 
+    // Toca um sinal curto usado em cliques e mudancas de interface.
     playPop() {
         if (this.muted) return;
         this.init();
@@ -53,6 +58,7 @@ class SoundEffects {
         osc.stop(this.ctx.currentTime + 0.08);
     }
 
+    // Toca tres notas para indicar uma operacao concluida.
     playSuccess() {
         if (this.muted) return;
         this.init();
@@ -76,6 +82,7 @@ class SoundEffects {
         });
     }
 
+    // Toca uma sequencia mais longa para celebrar uma acao.
     playFanfare() {
         if (this.muted) return;
         this.init();
@@ -100,6 +107,7 @@ class SoundEffects {
         });
     }
 
+    // Toca um clique leve usado como marcacao durante a roleta.
     playTick() {
         if (this.muted) return;
         this.init();

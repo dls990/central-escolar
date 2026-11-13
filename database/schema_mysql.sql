@@ -1,4 +1,5 @@
--- Define as tabelas e os dados iniciais do sistema.
+-- ATENCAO: este script remove as tabelas atuais antes de recria-las.
+-- Use-o apenas quando os dados existentes puderem ser apagados.
 CREATE DATABASE IF NOT EXISTS `central_escolar` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE `central_escolar`;
 
@@ -14,6 +15,7 @@ DROP TABLE IF EXISTS `alunos`;
 DROP TABLE IF EXISTS `usuarios`;
 SET FOREIGN_KEY_CHECKS = 1;
 
+-- Contas do sistema, dados de acesso e perfis de permissao.
 CREATE TABLE `usuarios` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `nome` VARCHAR(150) NOT NULL,
@@ -27,6 +29,7 @@ CREATE TABLE `usuarios` (
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Estudantes cadastrados, suas turmas e restricoes alimentares.
 CREATE TABLE `alunos` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `nome` VARCHAR(150) NOT NULL,
@@ -39,6 +42,7 @@ CREATE TABLE `alunos` (
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Situacao diaria individual de cada estudante.
 CREATE TABLE `frequencias` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `aluno_id` INT NOT NULL,
@@ -52,6 +56,7 @@ CREATE TABLE `frequencias` (
     UNIQUE KEY `uq_aluno_data` (`aluno_id`, `data`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Quantidades de refeicoes e observacoes trocadas com a cozinha.
 CREATE TABLE `pedidos_cozinha` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `data` DATE NOT NULL UNIQUE,
@@ -72,6 +77,7 @@ CREATE TABLE `pedidos_cozinha` (
     `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Totais arquivados para graficos e consultas de dias anteriores.
 CREATE TABLE `historico_frequencia_diaria` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `data` DATE NOT NULL UNIQUE,
@@ -85,6 +91,7 @@ CREATE TABLE `historico_frequencia_diaria` (
     `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Pratos planejados para cada dia letivo da semana.
 CREATE TABLE `cardapios` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `dia_semana` VARCHAR(30) NOT NULL,
@@ -97,6 +104,7 @@ CREATE TABLE `cardapios` (
     `emoji` VARCHAR(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Consumo e avaliacao de merenda associados a cada estudante.
 CREATE TABLE `refeicoes` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `aluno_id` INT NOT NULL,
@@ -109,6 +117,7 @@ CREATE TABLE `refeicoes` (
     CONSTRAINT `fk_ref_aluno` FOREIGN KEY (`aluno_id`) REFERENCES `alunos`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Pratos da votacao e quantidade de votos recebidos.
 CREATE TABLE `votacao_pratos` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `nome` VARCHAR(150) NOT NULL,
@@ -118,6 +127,7 @@ CREATE TABLE `votacao_pratos` (
     `categoria` VARCHAR(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Conteudo educativo mostrado pelo mascote de nutricao.
 CREATE TABLE `dicas_nutricao` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `titulo` VARCHAR(150) NOT NULL,

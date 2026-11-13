@@ -1,4 +1,4 @@
-<!-- Exibe a pagina de rota nao encontrada. -->
+<!-- Informa que a rota solicitada nao existe e oferece retorno a pagina inicial. -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>

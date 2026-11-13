@@ -16,6 +16,7 @@ use App\Models\Usuario;
 
 class FrequenciaController extends Controller {
 
+    // Reune alunos, filtros, estatisticas e dados do grafico para a chamada.
     public function index(): void {
         $this->requireAuth();
 
@@ -44,6 +45,7 @@ class FrequenciaController extends Controller {
         ]);
     }
 
+    // Registra a situacao de um aluno e atualiza o historico diario.
     public function salvar(): void {
         $usuario = $this->requireAuth();
 
@@ -78,6 +80,7 @@ class FrequenciaController extends Controller {
         ]);
     }
 
+    // Marca em lote os alunos da turma selecionada e recalcula as estatisticas.
     public function marcarTodos(): void {
         $usuario = $this->requireAuth();
 
@@ -103,6 +106,7 @@ class FrequenciaController extends Controller {
         ]);
     }
 
+    // Consolida a chamada do dia e envia o pedido de refeicoes para a cozinha.
     public function enviarParaCozinha(): void {
         $usuario = $this->requireAuth();
 
@@ -119,12 +123,14 @@ class FrequenciaController extends Controller {
         ]);
     }
 
+    // Retorna em JSON os valores do grafico para a data solicitada.
     public function pizzaDados(): void {
         $data = $_GET['data'] ?? date('Y-m-d');
         $dados = HistoricoFrequencia::getDadosGraficoPizza($data);
         $this->json($dados);
     }
 
+    // Carrega os dias arquivados e o detalhe da data escolhida.
     public function historico(): void {
         $this->requireAuth();
 

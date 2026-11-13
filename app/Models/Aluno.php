@@ -11,6 +11,7 @@ use Core\Model;
 use PDO;
 
 class Aluno extends Model {
+    // Retorna os alunos agrupados na ordem escolar das turmas.
     public static function all(): array {
         $turmas = self::getTurmas();
         $stmt = self::getConnection()->query("SELECT * FROM alunos");
@@ -28,6 +29,7 @@ class Aluno extends Model {
         return $todos;
     }
 
+    // Localiza um aluno pelo identificador usado nos formularios.
     public static function find(int $id): ?array {
         $stmt = self::getConnection()->prepare("SELECT * FROM alunos WHERE id = ?");
         $stmt->execute([$id]);
@@ -35,12 +37,14 @@ class Aluno extends Model {
         return $result ?: null;
     }
 
+    // Busca somente os alunos matriculados na turma informada.
     public static function getByTurma(string $turma): array {
         $stmt = self::getConnection()->prepare("SELECT * FROM alunos WHERE turma = ? ORDER BY nome ASC");
         $stmt->execute([$turma]);
         return $stmt->fetchAll();
     }
 
+    // Lista as turmas existentes na ordem do ensino fundamental e medio.
     public static function getTurmas(): array {
         $ordem = [
             '1º Ano EF', '2º Ano EF', '3º Ano EF', '4º Ano EF', '5º Ano EF',
@@ -63,6 +67,7 @@ class Aluno extends Model {
         return !empty($turmas) ? $turmas : $ordem;
     }
 
+    // Insere o aluno e devolve o identificador criado pelo banco.
     public static function create(array $data): int {
         $avatars = ['👦', '👧', '🧒', '👩', '🧑', '🎒', '⭐', '🎈'];
         $avatar = $data['avatar'] ?? $avatars[array_rand($avatars)];
@@ -82,6 +87,7 @@ class Aluno extends Model {
         return (int)self::getConnection()->lastInsertId();
     }
 
+    // Atualiza os dados cadastrais do aluno selecionado.
     public static function update(int $id, array $data): bool {
         $stmt = self::getConnection()->prepare("
             UPDATE alunos
@@ -98,16 +104,19 @@ class Aluno extends Model {
         ]);
     }
 
+    // Remove o cadastro identificado pelo seu ID.
     public static function delete(int $id): bool {
         $stmt = self::getConnection()->prepare("DELETE FROM alunos WHERE id = ?");
         return $stmt->execute([$id]);
     }
 
+    // Soma pontos ao saldo Nutri do aluno apos uma atividade.
     public static function adicionarPontos(int $id, int $pontos): bool {
         $stmt = self::getConnection()->prepare("UPDATE alunos SET pontos_nutri = pontos_nutri + ? WHERE id = ?");
         return $stmt->execute([$pontos, $id]);
     }
 
+    // Conta quantos alunos estao cadastrados no sistema.
     public static function countTotal(): int {
         $stmt = self::getConnection()->query("SELECT COUNT(*) FROM alunos");
         return (int)$stmt->fetchColumn();

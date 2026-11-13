@@ -1,5 +1,5 @@
 <?php
-// Exibe a fila do refeitorio.
+// Mostra alunos por turma, consumo marcado e indicadores de atendimento do refeitorio.
 
 
 $tituloPagina = 'Fila do Refeitório | VivalCris';

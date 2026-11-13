@@ -17,6 +17,7 @@ use App\Models\Cardapio;
 
 class AdminController extends Controller {
 
+    // Monta o painel com indicadores de frequencia, cozinha e usuarios.
     public function index(): void {
         $usuario = $this->requireRole('admin');
 
@@ -53,6 +54,7 @@ class AdminController extends Controller {
         ]);
     }
 
+    // Carrega a lista de contas exibida na area de administracao.
     public function usuarios(): void {
         $usuario = $this->requireRole('admin');
         $usuarios = Usuario::all();
@@ -64,6 +66,7 @@ class AdminController extends Controller {
         ]);
     }
 
+    // Valida os dados enviados pelo formulario e cria uma conta de usuario.
     public function salvarUsuario(): void {
         $this->requireRole('admin');
 
@@ -110,6 +113,7 @@ class AdminController extends Controller {
         $this->redirect('admin/usuarios');
     }
 
+    // Remove a conta solicitada, respeitando a protecao do administrador principal.
     public function excluirUsuario(): void {
         $this->requireRole('admin');
 

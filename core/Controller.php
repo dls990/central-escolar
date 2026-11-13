@@ -9,9 +9,7 @@ namespace Core;
 use App\Models\Usuario;
 
 class Controller {
-
-
-
+    // Inclui a view solicitada e disponibiliza os dados recebidos.
     protected function view(string $viewPath, array $data = []): void {
         extract($data);
 
@@ -27,6 +25,7 @@ class Controller {
 
 
 
+    // Envia uma resposta JSON com o codigo HTTP informado.
     protected function json(mixed $data, int $statusCode = 200): void {
         http_response_code($statusCode);
         header('Content-Type: application/json; charset=utf-8');
@@ -37,6 +36,7 @@ class Controller {
 
 
 
+    // Direciona o navegador para outra rota da aplicacao.
     protected function redirect(string $path): void {
         $url = url($path);
         header("Location: {$url}");
@@ -46,6 +46,7 @@ class Controller {
 
 
 
+    // Guarda uma mensagem temporaria para exibir apos o redirecionamento.
     protected function flash(string $tipo, string $mensagem): void {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -56,6 +57,7 @@ class Controller {
 
 
 
+    // Devolve os dados da conta que esta autenticada na sessao.
     protected function currentUser(): ?array {
         return Usuario::usuarioAtual();
     }
@@ -63,6 +65,7 @@ class Controller {
 
 
 
+    // Impede o acesso anonimo e envia a pessoa para a tela de login.
     protected function requireAuth(): array {
         $user = Usuario::usuarioAtual();
         if (!$user) {
@@ -75,6 +78,7 @@ class Controller {
 
 
 
+    // Confere o perfil permitido antes de liberar uma area restrita.
     protected function requireRole(string|array $perfis): array {
         $user = $this->requireAuth();
         if (!Usuario::temPerfil($perfis)) {

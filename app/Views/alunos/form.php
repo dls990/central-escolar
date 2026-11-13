@@ -1,5 +1,5 @@
 <?php
-// Exibe o formulario de cadastro de alunos.
+// Formulario reutilizado para inserir ou alterar dados escolares de um aluno.
 
 
 $tituloPagina = $titulo . ' | VivalCris';

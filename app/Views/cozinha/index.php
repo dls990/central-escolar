@@ -1,5 +1,5 @@
 <?php
-// Exibe o painel da cozinha.
+// Resume refeicoes e restricoes e permite acompanhar o preparo enviado pela inspetoria.
 
 
 $tituloPagina = 'Painel da Cozinha & Nutricionista | VivalCris';

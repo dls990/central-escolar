@@ -12,6 +12,7 @@ use PDO;
 
 class Frequencia extends Model {
 
+    // Monta a chamada do dia, com filtro opcional e situacao de cada aluno.
     public static function getChamada(string $data, ?string $turma = null): array {
         $sql = "
             SELECT a.id as aluno_id, a.nome, a.matricula, a.turma, a.avatar, a.restricoes,
@@ -46,6 +47,7 @@ class Frequencia extends Model {
         return $alunos;
     }
 
+    // Cria ou atualiza a presenca de um aluno para a data indicada.
     public static function registrar(int $alunoId, string $data, string $status, ?string $horario = null, ?string $obs = null, ?string $inspetoraNome = null): bool {
         if ($status === 'presente' && empty($horario)) {
             $horario = date('H:i');
@@ -60,6 +62,7 @@ class Frequencia extends Model {
         $stmtCheck->execute([$alunoId, $data]);
         $existente = $stmtCheck->fetchColumn();
 
+        // Mantem um unico registro por aluno e data: atualiza ou insere.
         if ($existente) {
             $stmt = $db->prepare("
                 UPDATE frequencias
@@ -76,6 +79,7 @@ class Frequencia extends Model {
         }
     }
 
+    // Aplica o mesmo status a todos os alunos da turma ou da escola.
     public static function marcarTodos(string $data, string $status, ?string $turma = null, ?string $inspetoraNome = null): int {
         $alunos = (!empty($turma) && $turma !== 'todas')
             ? Aluno::getByTurma($turma)
@@ -90,6 +94,7 @@ class Frequencia extends Model {
         return $count;
     }
 
+    // Calcula presentes, ausentes, pendentes e taxa de presenca do dia.
     public static function getEstatisticas(string $data): array {
         $totalAlunos = Aluno::countTotal();
 
@@ -108,6 +113,7 @@ class Frequencia extends Model {
         $ausentes = (int)($stats['ausentes'] ?? 0);
         $justificados = (int)($stats['justificados'] ?? 0);
         $registrados = $presentes + $ausentes + $justificados;
+        // A diferenca mostra quantos estudantes ainda aguardam marcacao.
         $naoRegistrados = max(0, $totalAlunos - $registrados);
 
         $taxaPresenca = ($totalAlunos > 0) ? round(($presentes / $totalAlunos) * 100, 1) : 0;

@@ -1,5 +1,5 @@
 <?php
-// Exibe os relatorios escolares.
+// Apresenta totais escolares e indicadores agrupados para consulta e impressao.
 
 $tituloPagina = 'Relatórios Escolares | VivalCris';
 require_once __DIR__ . '/../layouts/header.php';

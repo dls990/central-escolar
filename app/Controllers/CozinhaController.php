@@ -15,7 +15,7 @@ use App\Models\Frequencia;
 use App\Models\Aluno;
 
 class CozinhaController extends Controller {
-
+    // Carrega pedidos, cardapio e dados da frequencia para o painel da cozinha.
     public function index(): void {
         $this->requireAuth();
 
@@ -79,6 +79,7 @@ class CozinhaController extends Controller {
         ]);
     }
 
+    // Atualiza o andamento do pedido e salva a observacao da cozinha.
     public function atualizarStatus(): void {
         $this->requireRole(['nutricionista', 'admin']);
 

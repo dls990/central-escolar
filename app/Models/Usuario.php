@@ -11,12 +11,13 @@ use Core\Model;
 use PDO;
 
 class Usuario extends Model {
-
+    // Lista as contas disponiveis para o painel administrativo.
     public static function all(): array {
         $stmt = self::getConnection()->query("SELECT id, nome, usuario, perfil, cargo, avatar, ativo, ultimo_login, created_at FROM usuarios ORDER BY id ASC");
         return $stmt->fetchAll();
     }
 
+    // Busca uma conta pelo identificador interno.
     public static function find(int $id): ?array {
         $stmt = self::getConnection()->prepare("SELECT id, nome, usuario, perfil, cargo, avatar, ativo, ultimo_login, created_at FROM usuarios WHERE id = ?");
         $stmt->execute([$id]);
@@ -24,6 +25,7 @@ class Usuario extends Model {
         return $res ?: null;
     }
 
+    // Localiza a conta pelo nome de usuario usado no login.
     public static function findByUsuario(string $usuario): ?array {
         $stmt = self::getConnection()->prepare("SELECT * FROM usuarios WHERE LOWER(usuario) = LOWER(?) AND ativo = 1");
         $stmt->execute([trim($usuario)]);
@@ -31,6 +33,7 @@ class Usuario extends Model {
         return $res ?: null;
     }
 
+    // Valida a senha e devolve os dados seguros da conta.
     public static function autenticar(string $usuario, string $senha): ?array {
         $user = self::findByUsuario($usuario);
         if (!$user) {
@@ -50,6 +53,7 @@ class Usuario extends Model {
         return null;
     }
 
+    // Armazena os dados da conta autenticada na sessao.
     public static function login(array $user): void {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -58,6 +62,7 @@ class Usuario extends Model {
         $_SESSION['usuario_logado'] = $user;
     }
 
+    // Limpa os dados de autenticacao da sessao atual.
     public static function logout(): void {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -65,6 +70,7 @@ class Usuario extends Model {
         unset($_SESSION['usuario_logado']);
     }
 
+    // Devolve os dados da sessao sem expor informacoes privadas.
     public static function usuarioAtual(): ?array {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -72,10 +78,12 @@ class Usuario extends Model {
         return $_SESSION['usuario_logado'] ?? null;
     }
 
+    // Indica se a sessao contem uma conta autenticada.
     public static function estaLogado(): bool {
         return self::usuarioAtual() !== null;
     }
 
+    // Permite testar um perfil unico ou uma lista de perfis.
     public static function temPerfil(string|array $perfis): bool {
         $usuario = self::usuarioAtual();
         if (!$usuario) {
@@ -94,6 +102,7 @@ class Usuario extends Model {
         return $usuario['perfil'] === $perfis;
     }
 
+    // Cria uma conta e armazena a senha protegida por hash.
     public static function criar(array $dados): int {
         $hash = password_hash($dados['senha'], PASSWORD_DEFAULT);
         $stmt = self::getConnection()->prepare("
@@ -112,6 +121,7 @@ class Usuario extends Model {
         return (int)self::getConnection()->lastInsertId();
     }
 
+    // Atualiza os dados cadastrais e de acesso da conta informada.
     public static function atualizar(int $id, array $dados): bool {
         if (!empty($dados['senha'])) {
             $hash = password_hash($dados['senha'], PASSWORD_DEFAULT);
@@ -148,6 +158,7 @@ class Usuario extends Model {
         }
     }
 
+    // Impede remover a conta principal e exclui as demais contas.
     public static function excluir(int $id): bool {
 
         $u = self::find($id);

@@ -14,13 +14,16 @@ use PDOException;
 class Database {
     private static ?PDO $instance = null;
 
+    // Abre a conexao selecionada na configuracao e prepara o banco para uso.
     public static function getInstance(): PDO {
         if (self::$instance === null) {
+            // O arquivo de configuracao define qual banco e credenciais usar.
             $config = require __DIR__ . '/../../config/database.php';
             $driver = $config['driver'] ?? 'mysql';
 
             try {
                 if ($driver === 'mysql') {
+                    // MySQL e o modo recomendado para a instalacao no XAMPP.
                     $mc = $config['mysql'];
                     $dsn = "mysql:host={$mc['host']};port={$mc['port']};dbname={$mc['database']};charset={$mc['charset']}";
                     self::$instance = new PDO($dsn, $mc['username'], $mc['password']);
@@ -29,6 +32,7 @@ class Database {
                     self::$instance->exec("SET NAMES utf8mb4");
                 } else {
 
+                    // SQLite guarda o banco em arquivo, sem exigir servidor separado.
                     $dbDir = __DIR__ . '/../../database';
                     if (!is_dir($dbDir)) {
                         mkdir($dbDir, 0777, true);
@@ -40,9 +44,11 @@ class Database {
                 }
 
 
+                // Garante que a estrutura exista antes de qualquer consulta.
                 self::ensureSchema(self::$instance, $driver);
 
 
+                // A carga inicial so roda quando ainda nao ha contas cadastradas.
                 $userCount = (int)self::$instance->query("SELECT COUNT(*) FROM usuarios")->fetchColumn();
                 if ($userCount === 0) {
                     self::seedData(self::$instance, $driver);
@@ -55,11 +61,13 @@ class Database {
         return self::$instance;
     }
 
+    // Descarta a conexao em memoria e abre uma nova instancia.
     public static function resetDatabase(): void {
         self::$instance = null;
         self::getInstance();
     }
 
+    // Direciona a criacao da estrutura para o driver ativo.
     private static function ensureSchema(PDO $db, string $driver): void {
         if ($driver === 'mysql') {
             self::ensureSchemaMysql($db);
@@ -68,8 +76,10 @@ class Database {
         }
     }
 
+    // Confere se as tabelas MySQL existem e cria a estrutura se necessario.
     private static function ensureSchemaMysql(PDO $db): void {
 
+        // A lista permite detectar uma instalacao incompleta, nao apenas vazia.
         $tabelas = ['usuarios', 'alunos', 'frequencias', 'pedidos_cozinha',
                      'historico_frequencia_diaria', 'cardapios', 'refeicoes',
                      'votacao_pratos', 'dicas_nutricao'];
@@ -84,6 +94,7 @@ class Database {
         }
     }
 
+    // Define as tabelas relacionais usadas quando o driver e MySQL.
     private static function createTablesMysql(PDO $db): void {
         $db->exec("
             CREATE TABLE IF NOT EXISTS `usuarios` (
@@ -199,6 +210,7 @@ class Database {
         ");
     }
 
+    // Cria as tabelas SQLite quando o banco ainda nao tem estrutura.
     private static function ensureSchemaSqlite(PDO $db): void {
         $db->exec("
             CREATE TABLE IF NOT EXISTS usuarios (
@@ -314,7 +326,9 @@ class Database {
         ");
     }
 
+    // Executa as cargas iniciais apenas quando o banco esta sem usuarios.
     public static function seedData(PDO $db, ?string $driver = null): void {
+        // Se nao receber o driver, reaproveita a escolha da configuracao.
         if ($driver === null) {
             $config = require __DIR__ . '/../../config/database.php';
             $driver = $config['driver'] ?? 'mysql';
@@ -327,6 +341,7 @@ class Database {
         self::seedHistoricoEFrequencia($db, $driver);
     }
 
+    // Insere as contas demonstrativas com senhas armazenadas em hash.
     public static function seedUsuarios(PDO $db): void {
         $db->exec("DELETE FROM usuarios");
 
@@ -384,6 +399,7 @@ class Database {
         }
     }
 
+    // Popula as turmas com os registros demonstrativos de alunos.
     public static function seedAlunos(PDO $db): void {
         $db->exec("DELETE FROM alunos");
 
@@ -444,6 +460,7 @@ class Database {
         }
     }
 
+    // Prepara exemplos de chamada, pedidos para a cozinha e historico.
     public static function seedHistoricoEFrequencia(PDO $db, ?string $driver = null): void {
         $db->exec("DELETE FROM frequencias");
         $db->exec("DELETE FROM pedidos_cozinha");
@@ -508,6 +525,7 @@ class Database {
         ");
     }
 
+    // Insere as opcoes iniciais de refeicao para cada dia da semana.
     public static function seedCardapios(PDO $db): void {
         $db->exec("DELETE FROM cardapios");
         $cardapios = [
@@ -524,6 +542,7 @@ class Database {
         }
     }
 
+    // Cadastra as opcoes iniciais da votacao dos pratos.
     public static function seedVotacao(PDO $db): void {
         $db->exec("DELETE FROM votacao_pratos");
         $pratosVotacao = [
@@ -539,6 +558,7 @@ class Database {
         }
     }
 
+    // Cadastra as dicas exibidas pelo mascote de nutricao.
     public static function seedDicas(PDO $db): void {
         $db->exec("DELETE FROM dicas_nutricao");
         $dicas = [

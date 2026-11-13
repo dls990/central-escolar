@@ -8,9 +8,11 @@
 
 return [
 
+    // Escolha 'mysql' para XAMPP ou 'sqlite' para usar um banco em arquivo.
     'driver' => 'mysql',
 
 
+    // Credenciais do servidor MySQL local.
     'mysql' => [
         'host' => '127.0.0.1',
         'port' => 3306,
@@ -21,6 +23,7 @@ return [
     ],
 
 
+    // Caminho do arquivo usado quando o driver SQLite esta selecionado.
     'sqlite' => [
         'database' => __DIR__ . '/../database/escola.sqlite'
     ]

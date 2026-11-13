@@ -1,6 +1,8 @@
 -- Define as tabelas e os dados iniciais do sistema.
+-- Ativa a validacao dos relacionamentos entre tabelas no SQLite.
 PRAGMA foreign_keys = ON;
 
+-- Contas, perfis de acesso e data do ultimo login.
 CREATE TABLE IF NOT EXISTS usuarios (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     nome TEXT NOT NULL,
@@ -14,6 +16,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Cadastro de estudantes, turmas e restricoes alimentares.
 CREATE TABLE IF NOT EXISTS alunos (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     nome TEXT NOT NULL,
@@ -30,6 +33,7 @@ CREATE TABLE IF NOT EXISTS alunos (
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Registro individual de presenca para cada aluno e dia.
 CREATE TABLE IF NOT EXISTS frequencias (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     aluno_id INTEGER NOT NULL,
@@ -43,6 +47,7 @@ CREATE TABLE IF NOT EXISTS frequencias (
     UNIQUE (aluno_id, data)
 );
 
+-- Resumo diario enviado pela inspetoria para o preparo das refeicoes.
 CREATE TABLE IF NOT EXISTS pedidos_cozinha (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     data DATE NOT NULL UNIQUE,
@@ -63,6 +68,7 @@ CREATE TABLE IF NOT EXISTS pedidos_cozinha (
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Totais arquivados para consultar a frequencia de dias anteriores.
 CREATE TABLE IF NOT EXISTS historico_frequencia_diaria (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     data DATE NOT NULL UNIQUE,
@@ -76,6 +82,7 @@ CREATE TABLE IF NOT EXISTS historico_frequencia_diaria (
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Refeicoes planejadas para cada dia da semana.
 CREATE TABLE IF NOT EXISTS cardapios (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     dia_semana TEXT NOT NULL,
@@ -88,6 +95,7 @@ CREATE TABLE IF NOT EXISTS cardapios (
     emoji TEXT NOT NULL
 );
 
+-- Consumo e avaliacao de refeicao registrados por aluno.
 CREATE TABLE IF NOT EXISTS refeicoes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     aluno_id INTEGER NOT NULL,
@@ -102,6 +110,7 @@ CREATE TABLE IF NOT EXISTS refeicoes (
     UNIQUE (aluno_id, data)
 );
 
+-- Opcoes de pratos e contagem da votacao escolar.
 CREATE TABLE IF NOT EXISTS votacao_pratos (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     nome TEXT NOT NULL,
@@ -111,6 +120,7 @@ CREATE TABLE IF NOT EXISTS votacao_pratos (
     categoria TEXT NOT NULL
 );
 
+-- Dicas educativas mostradas pelo mascote.
 CREATE TABLE IF NOT EXISTS dicas_nutricao (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     titulo TEXT NOT NULL,
@@ -118,6 +128,7 @@ CREATE TABLE IF NOT EXISTS dicas_nutricao (
     icone TEXT NOT NULL
 );
 
+-- Indices para acelerar consultas frequentes por data e status.
 CREATE INDEX IF NOT EXISTS idx_frequencias_data ON frequencias(data);
 CREATE INDEX IF NOT EXISTS idx_frequencias_inspetora ON frequencias(inspetora_nome);
 CREATE INDEX IF NOT EXISTS idx_pedidos_status ON pedidos_cozinha(status);

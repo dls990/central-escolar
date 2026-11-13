@@ -1,5 +1,5 @@
 <?php
-// Exibe o formulario de acesso.
+// Apresenta o formulario de login e mensagens de validacao da autenticacao.
 
 
 $tituloPagina = 'Entrar | VivalCris';

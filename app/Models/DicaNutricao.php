@@ -7,11 +7,13 @@ use Core\Model;
 use PDO;
 
 class DicaNutricao extends Model {
+    // Lista as dicas cadastradas para o mascote.
     public static function all(): array {
         $stmt = self::getConnection()->query("SELECT * FROM dicas_nutricao ORDER BY id ASC");
         return $stmt->fetchAll();
     }
 
+    // Escolhe uma dica aleatoria para apresentar na interface.
     public static function getAleatoria(): array {
         $db = self::getConnection();
         $funcaoAleatoria = $db->getAttribute(PDO::ATTR_DRIVER_NAME) === 'sqlite' ? 'RANDOM()' : 'RAND()';

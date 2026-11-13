@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollReveal();
 });
 
+// Anima cada elemento quando ele entra pela primeira vez na tela.
 function initScrollReveal() {
     const targets = document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale');
     if (!targets.length) return;
@@ -22,6 +23,7 @@ function initScrollReveal() {
     targets.forEach(el => observer.observe(el));
 }
 
+// Exibe avisos temporarios de sucesso, informacao ou erro.
 function showToast(message, type = 'success') {
     const container = document.getElementById('toastContainer');
     if (!container) return;
@@ -54,6 +56,7 @@ function showToast(message, type = 'success') {
     }, 3800);
 }
 
+// Salva uma presenca e atualiza linha, indicadores e grafico sem recarregar.
 async function atualizarFrequencia(alunoId, status, data) {
     window.appAudio?.playPop();
 
@@ -104,6 +107,7 @@ async function atualizarFrequencia(alunoId, status, data) {
     }
 }
 
+// Reflete a situacao escolhida no selo, horario e botoes do aluno.
 function atualizarLinhaFrequencia(alunoId, status, horario) {
     const badge = document.getElementById(`badge-status-${alunoId}`);
     const timeSpan = document.getElementById(`horario-${alunoId}`);
@@ -140,6 +144,7 @@ function atualizarLinhaFrequencia(alunoId, status, horario) {
     });
 }
 
+// Atualiza os totais de presenca mostrados nos cards da chamada.
 function atualizarCardsEstatisticas(stats) {
     if (!stats) return;
 
@@ -154,6 +159,7 @@ function atualizarCardsEstatisticas(stats) {
     if (elJust) elJust.textContent = stats.justificados;
 }
 
+// Solicita confirmacao antes de registrar presenca para a turma filtrada.
 async function marcarTodosPresentes(data, turma) {
     if (!confirm('Deseja marcar TODOS os alunos listados como presentes hoje?')) return;
 
@@ -184,6 +190,7 @@ async function marcarTodosPresentes(data, turma) {
     }
 }
 
+// Envia a contagem diaria e a observacao da inspetoria para a cozinha.
 async function enviarParaCozinha(data) {
     const obsInput = document.getElementById('obsEnvioCozinha');
     const obs = obsInput ? obsInput.value : '';
@@ -232,6 +239,7 @@ async function enviarParaCozinha(data) {
     }
 }
 
+// Registra o novo estado de preparo informado pela cozinha.
 async function atualizarStatusCozinha(data, status, obs = '') {
     window.appAudio?.playPop();
 

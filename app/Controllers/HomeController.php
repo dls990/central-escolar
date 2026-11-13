@@ -18,6 +18,7 @@ use App\Models\HistoricoFrequencia;
 use App\Models\PedidoCozinha;
 
 class HomeController extends Controller {
+    // Prepara os dados publicos e os avisos exibidos na pagina inicial.
     public function index(): void {
         $hoje = date('Y-m-d');
 

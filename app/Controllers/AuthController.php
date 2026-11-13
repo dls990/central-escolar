@@ -11,7 +11,7 @@ use Core\Controller;
 use App\Models\Usuario;
 
 class AuthController extends Controller {
-
+    // Exibe a tela de acesso quando nao ha uma sessao ativa.
     public function login(): void {
 
         if (Usuario::estaLogado()) {
@@ -28,6 +28,7 @@ class AuthController extends Controller {
         ]);
     }
 
+    // Confere as credenciais, inicia a sessao e encaminha pelo perfil.
     public function autenticar(): void {
         $usuario = trim($_POST['usuario'] ?? '');
         $senha = trim($_POST['senha'] ?? '');
@@ -51,12 +52,14 @@ class AuthController extends Controller {
         $this->redirecionarPorPerfil($user['perfil']);
     }
 
+    // Encerra a sessao atual e retorna a pessoa para a tela de acesso.
     public function logout(): void {
         Usuario::logout();
         $this->flash('success', 'Você saiu do sistema com segurança. Até breve!');
         $this->redirect('login');
     }
 
+    // Escolhe a pagina inicial adequada ao perfil autenticado.
     private function redirecionarPorPerfil(string $perfil): void {
         switch ($perfil) {
             case 'inspetora':

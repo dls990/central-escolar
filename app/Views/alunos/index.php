@@ -1,5 +1,5 @@
 <?php
-// Exibe a lista de alunos.
+// Lista e filtra os alunos e oferece atalhos para cadastrar ou editar registros.
 
 
 $tituloPagina = 'Gestão de Alunos | VivalCris';

@@ -1,10 +1,11 @@
 <?php
-// Exibe o historico de frequencia.
+// Exibe o grafico e o resumo do dia selecionado ao lado da lista de dias arquivados.
 
 $tituloPagina = 'Histórico Diário de Gráficos de Frequência | VivalCris';
 require_once __DIR__ . '/../layouts/header.php';
 ?>
 
+<!-- Identifica o historico e oferece retorno para a chamada do dia atual. -->
 <div class="scroll-reveal flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
     <div>
         <div class="flex items-center gap-2">
@@ -25,7 +26,7 @@ require_once __DIR__ . '/../layouts/header.php';
 
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-
+    <!-- Apresenta os totais e o grafico do dia selecionado. -->
     <div class="lg:col-span-6 scroll-reveal-left">
         <div class="fun-card p-6 bg-white border-2 border-emerald-100 shadow-xl">
 
@@ -63,6 +64,7 @@ require_once __DIR__ . '/../layouts/header.php';
             </div>
 
 
+            <!-- Mostra quem fechou a chamada e o retorno da cozinha, quando houver. -->
             <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-2">
                 <div class="flex items-center justify-between">
                     <span class="text-slate-600 font-medium">Registrado / Fechado por:</span>
@@ -92,6 +94,7 @@ require_once __DIR__ . '/../layouts/header.php';
     </div>
 
 
+    <!-- Lista datas arquivadas e permite abrir o resumo de cada dia. -->
     <div class="lg:col-span-6 scroll-reveal-right space-y-4">
 
         <div class="flex items-center justify-between">
@@ -154,6 +157,7 @@ require_once __DIR__ . '/../layouts/header.php';
 
 
 <script>
+// Desenha o grafico de presencas usando os dados preparados pelo controller.
 document.addEventListener('DOMContentLoaded', () => {
     const ctx = document.getElementById('graficoHistoricoPizza');
     if (!ctx) return;

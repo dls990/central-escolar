@@ -13,6 +13,7 @@ use App\Models\Frequencia;
 use App\Models\Refeicao;
 
 class RelatoriosController extends Controller {
+    // Calcula os totais por turma e as restricoes para o relatorio escolar.
     public function index(): void {
         $hoje = date('Y-m-d');
         $alunos = Aluno::all();

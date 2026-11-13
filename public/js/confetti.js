@@ -1,5 +1,6 @@
 // Cria efeitos visuais de celebracao.
 class ConfettiEngine {
+    // Prepara o canvas, a lista de particulas e a resposta a redimensionamentos.
     constructor() {
         this.canvas = document.getElementById('confettiCanvas');
         if (!this.canvas) return;
@@ -11,12 +12,14 @@ class ConfettiEngine {
         window.addEventListener('resize', () => this.resize());
     }
 
+    // Ajusta a area de desenho ao tamanho atual da janela.
     resize() {
         if (!this.canvas) return;
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
     }
 
+    // Cria particulas coloridas e inicia o ciclo de animacao.
     launch(count = 70) {
         if (!this.canvas) return;
         const colors = ['#22c55e', '#3b82f6', '#f59e0b', '#ec4899', '#8b5cf6', '#10b981', '#fbbf24'];
@@ -42,6 +45,7 @@ class ConfettiEngine {
         }
     }
 
+    // Move, desenha e remove particulas a cada quadro da animacao.
     animate() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 

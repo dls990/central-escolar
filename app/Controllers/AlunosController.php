@@ -11,6 +11,7 @@ use Core\Controller;
 use App\Models\Aluno;
 
 class AlunosController extends Controller {
+    // Lista os alunos cadastrados com os filtros selecionados.
     public function index(): void {
         $turma = $_GET['turma'] ?? 'todas';
         $busca = trim($_GET['busca'] ?? '');
@@ -36,6 +37,7 @@ class AlunosController extends Controller {
         ]);
     }
 
+    // Exibe o formulario vazio para cadastrar um aluno.
     public function novo(): void {
         $turmas = Aluno::getTurmas();
         $this->view('alunos/form', [
@@ -45,6 +47,7 @@ class AlunosController extends Controller {
         ]);
     }
 
+    // Valida os campos e cria o registro do aluno.
     public function salvar(): void {
         $nome = trim($_POST['nome'] ?? '');
         $matricula = trim($_POST['matricula'] ?? '');
@@ -72,6 +75,7 @@ class AlunosController extends Controller {
         $this->redirect('alunos');
     }
 
+    // Busca o aluno solicitado e abre o formulario preenchido para edicao.
     public function editar(): void {
         $id = (int)($_GET['id'] ?? 0);
         $aluno = Aluno::find($id);
@@ -90,6 +94,7 @@ class AlunosController extends Controller {
         ]);
     }
 
+    // Atualiza os dados do aluno a partir do formulario de edicao.
     public function atualizar(): void {
         $id = (int)($_POST['id'] ?? 0);
         $nome = trim($_POST['nome'] ?? '');
@@ -116,6 +121,7 @@ class AlunosController extends Controller {
         $this->redirect('alunos');
     }
 
+    // Exclui o aluno identificado pela requisicao.
     public function excluir(): void {
         $id = (int)($_POST['id'] ?? 0);
         if ($id > 0) {

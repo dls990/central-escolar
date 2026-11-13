@@ -10,6 +10,7 @@ namespace App\Models;
 use Core\Model;
 
 class Refeicao extends Model {
+    // Lista os consumos registrados para a data selecionada.
     public static function getDoDia(string $data): array {
         $stmt = self::getConnection()->prepare("
             SELECT r.*, a.nome as aluno_nome, a.matricula, a.turma, a.avatar, a.restricoes
@@ -22,12 +23,14 @@ class Refeicao extends Model {
         return $stmt->fetchAll();
     }
 
+    // Confere se o aluno ja possui consumo registrado naquele dia.
     public static function jaConsumiu(int $alunoId, string $data): bool {
         $stmt = self::getConnection()->prepare("SELECT id FROM refeicoes WHERE aluno_id = ? AND data = ?");
         $stmt->execute([$alunoId, $data]);
         return (bool)$stmt->fetchColumn();
     }
 
+    // Registra o consumo, a avaliacao e o comentario do aluno.
     public static function registrar(int $alunoId, int $cardapioId, string $data, int $avaliacao = 5, ?string $comentario = null): bool {
 
         $stmtCheck = self::getConnection()->prepare("SELECT id FROM refeicoes WHERE aluno_id = ? AND data = ?");
@@ -51,11 +54,13 @@ class Refeicao extends Model {
         return $success;
     }
 
+    // Remove o registro de consumo do aluno para a data informada.
     public static function remover(int $alunoId, string $data): bool {
         $stmt = self::getConnection()->prepare("DELETE FROM refeicoes WHERE aluno_id = ? AND data = ?");
         return $stmt->execute([$alunoId, $data]);
     }
 
+    // Resume quantas refeicoes foram servidas e as avaliacoes recebidas.
     public static function getEstatisticas(string $data): array {
         $totalAlunos = Aluno::countTotal();
 

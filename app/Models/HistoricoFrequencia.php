@@ -12,6 +12,7 @@ use PDO;
 
 class HistoricoFrequencia extends Model {
 
+    // Recalcula o resumo do dia e cria ou atualiza seu registro historico.
     public static function salvarDiario(string $data, ?string $fechadoPor = null): bool {
         $db = self::getConnection();
 
@@ -36,12 +37,14 @@ class HistoricoFrequencia extends Model {
 
 
 
+        // Evita gravar um historico vazio antes de qualquer chamada do dia.
         $registrados = $presentes + $ausentes + $justificados;
         if ($totalAlunos > 0 && $registrados === 0) {
 
             return false;
         }
 
+        // A taxa usa todos os matriculados como base, inclusive os pendentes.
         $taxaPresenca = ($totalAlunos > 0) ? round(($presentes / $totalAlunos) * 100, 1) : 0;
 
 
@@ -49,6 +52,7 @@ class HistoricoFrequencia extends Model {
         $stmtCheck->execute([$data]);
         $existente = $stmtCheck->fetch();
 
+        // Atualiza o resumo existente ou cria o primeiro registro para a data.
         if ($existente) {
             $responsavel = $fechadoPor ?: ($existente['fechado_por'] ?: 'Inspetora');
             $stmtUp = $db->prepare("
@@ -85,6 +89,7 @@ class HistoricoFrequencia extends Model {
         }
     }
 
+    // Recupera o resumo arquivado para uma data especifica.
     public static function getPorData(string $data): ?array {
         $stmt = self::getConnection()->prepare("SELECT * FROM historico_frequencia_diaria WHERE data = ?");
         $stmt->execute([$data]);
@@ -92,6 +97,7 @@ class HistoricoFrequencia extends Model {
         return $res ?: null;
     }
 
+    // Retorna os dias arquivados mais recentes dentro do limite solicitado.
     public static function getTodos(int $limite = 30): array {
         $stmt = self::getConnection()->prepare("SELECT * FROM historico_frequencia_diaria ORDER BY data DESC LIMIT ?");
         $stmt->bindValue(1, $limite, PDO::PARAM_INT);
@@ -99,13 +105,12 @@ class HistoricoFrequencia extends Model {
         return $stmt->fetchAll();
     }
 
-
-
-
+    // Usa o resumo salvo ou calcula os dados atuais para alimentar o grafico.
     public static function getDadosGraficoPizza(string $data): array {
 
         $historico = self::getPorData($data);
 
+        // Sem resumo arquivado, calcula os dados diretamente dos registros atuais.
         if (!$historico) {
 
             $db = self::getConnection();
@@ -136,6 +141,7 @@ class HistoricoFrequencia extends Model {
             $fechadoPor = $historico['fechado_por'] ?? 'Inspetora';
         }
 
+        // Alunos sem status entram como pendentes para completar o grafico.
         $pendentes = max(0, $totalAlunos - ($presentes + $ausentes + $justificados));
 
         return [

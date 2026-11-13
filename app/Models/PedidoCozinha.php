@@ -12,6 +12,7 @@ use PDO;
 
 class PedidoCozinha extends Model {
 
+    // Busca o pedido diario e converte as restricoes salvas em JSON.
     public static function getPorData(string $data): ?array {
         $stmt = self::getConnection()->prepare("SELECT * FROM pedidos_cozinha WHERE data = ?");
         $stmt->execute([$data]);
@@ -27,6 +28,7 @@ class PedidoCozinha extends Model {
         return $res;
     }
 
+    // Lista os pedidos mais recentes enviados para a cozinha.
     public static function getUltimosPedidos(int $limite = 15): array {
         $stmt = self::getConnection()->prepare("SELECT * FROM pedidos_cozinha ORDER BY data DESC LIMIT ?");
         $stmt->bindValue(1, $limite, PDO::PARAM_INT);
@@ -34,9 +36,7 @@ class PedidoCozinha extends Model {
         return $stmt->fetchAll();
     }
 
-
-
-
+    // Calcula refeicoes, presencas e restricoes e grava o envio diario.
     public static function enviarParaCozinha(string $data, string $inspetoraNome, ?string $obs = null): array {
         $db = self::getConnection();
 
@@ -51,6 +51,7 @@ class PedidoCozinha extends Model {
         $stmt->execute([$data]);
         $alunos = $stmt->fetchAll();
 
+        // Inicializa os totais que serao enviados junto com o pedido.
         $totalMatriculados = count($alunos);
         $totalPresentes = 0;
         $totalAusentes = 0;
@@ -67,6 +68,7 @@ class PedidoCozinha extends Model {
         $restricoesContagem = [];
         $restricoesDetalhes = [];
 
+        // Conta refeicoes por segmento e guarda restricoes dos presentes.
         foreach ($alunos as $a) {
             $st = $a['status'];
             if ($st === 'presente') {
@@ -99,6 +101,7 @@ class PedidoCozinha extends Model {
         }
 
 
+        // Converte a contagem de dietas em um resumo para o painel da cozinha.
         $resumoTextArray = [];
         foreach ($restricoesContagem as $tipo => $qtd) {
             $resumoTextArray[] = "{$qtd}x {$tipo}";
@@ -110,6 +113,7 @@ class PedidoCozinha extends Model {
 
         $existente = self::getPorData($data);
 
+        // Um novo envio no mesmo dia atualiza o pedido em vez de duplicar.
         if ($existente) {
             $stmtUp = $db->prepare("
                 UPDATE pedidos_cozinha
@@ -160,6 +164,7 @@ class PedidoCozinha extends Model {
         }
 
 
+        // Mantem o historico de presenca alinhado com os dados enviados.
         HistoricoFrequencia::salvarDiario($data, $inspetoraNome);
 
         return [
@@ -179,6 +184,7 @@ class PedidoCozinha extends Model {
         ];
     }
 
+    // Atualiza a etapa de preparo e, se informada, a observacao da cozinha.
     public static function atualizarStatus(string $data, string $status, ?string $obsCozinha = null): bool {
         $db = self::getConnection();
         if ($obsCozinha !== null) {

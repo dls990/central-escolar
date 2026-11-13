@@ -1,5 +1,5 @@
 <?php
-// Exibe a votacao dos pratos.
+// Lista os pratos em disputa e apresenta as opcoes para registrar um voto.
 
 
 $tituloPagina = 'Votação da Sexta Especial | VivalCris';

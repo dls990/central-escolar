@@ -1,5 +1,5 @@
 <?php
-// Exibe o painel inicial.
+// Apresenta o sistema, atalhos para os modulos e avisos escolares relevantes.
 
 $tituloPagina = 'VivalCris - Central Escolar de Frequência & Alimentação';
 require_once __DIR__ . '/../layouts/header.php';

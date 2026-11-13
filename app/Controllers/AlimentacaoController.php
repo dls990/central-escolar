@@ -15,6 +15,7 @@ use App\Models\Votacao;
 use App\Models\Usuario;
 
 class AlimentacaoController extends Controller {
+    // Prepara os cardapios da semana e os dados do formulario de edicao.
     public function cardapio(): void {
         $cardapios = Cardapio::all();
         $cardapioHoje = Cardapio::getCardapioDeHoje();
@@ -29,6 +30,7 @@ class AlimentacaoController extends Controller {
         ]);
     }
 
+    // Valida e grava um cardapio novo ou as alteracoes de um existente.
     public function salvarCardapio(): void {
         $this->requireRole('nutricionista');
 
@@ -71,6 +73,7 @@ class AlimentacaoController extends Controller {
         $this->redirect('alimentacao/cardapio');
     }
 
+    // Duplica um cardapio de origem para outro dia da semana.
     public function copiarCardapio(): void {
         $this->requireRole('nutricionista');
 
@@ -94,6 +97,7 @@ class AlimentacaoController extends Controller {
         $this->redirect('alimentacao/cardapio');
     }
 
+    // Reune alunos, consumo e estatisticas para montar a fila do refeitorio.
     public function fila(): void {
         $data = $_GET['data'] ?? date('Y-m-d');
         $turma = $_GET['turma'] ?? 'todas';
@@ -123,6 +127,7 @@ class AlimentacaoController extends Controller {
         ]);
     }
 
+    // Registra o consumo do aluno ou cancela um consumo ja anotado.
     public function salvarConsumo(): void {
         $alunoId = (int)($_POST['aluno_id'] ?? 0);
         $cardapioId = (int)($_POST['cardapio_id'] ?? 1);
@@ -156,6 +161,7 @@ class AlimentacaoController extends Controller {
         ]);
     }
 
+    // Carrega as opcoes da votacao e identifica a opcao mais votada.
     public function votacao(): void {
         $pratos = Votacao::all();
         $totalVotos = Votacao::getTotalVotos();
@@ -168,6 +174,7 @@ class AlimentacaoController extends Controller {
         ]);
     }
 
+    // Registra o voto recebido e devolve a contagem atualizada em JSON.
     public function votar(): void {
         $pratoId = (int)($_POST['prato_id'] ?? 0);
 
@@ -188,6 +195,7 @@ class AlimentacaoController extends Controller {
         ]);
     }
 
+    // Exibe a pagina interativa com a roleta de lanches.
     public function roleta(): void {
         $this->view('alimentacao/roleta');
     }

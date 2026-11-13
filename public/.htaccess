@@ -1,5 +1,7 @@
 RewriteEngine On
 
+# Deixa arquivos existentes serem servidos diretamente pelo Apache.
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
+# Encaminha as demais URLs para o roteador PHP.
 RewriteRule ^ index.php [QSA,L]

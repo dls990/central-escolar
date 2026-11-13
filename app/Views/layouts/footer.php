@@ -1,4 +1,4 @@
-<!-- Exibe o rodape compartilhado. -->
+<!-- Fecha o conteudo, mostra informacoes do site e carrega os scripts comuns. -->
     </main>
 
 

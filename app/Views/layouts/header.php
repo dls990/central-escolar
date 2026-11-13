@@ -1,5 +1,5 @@
 <?php
-// Exibe o cabecalho e a navegacao.
+// Prepara a identidade visual, menus por perfil, mensagens e abertura do conteudo.
 
 $usuarioLogado = usuario_logado();
 ?>

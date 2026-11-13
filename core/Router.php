@@ -9,14 +9,17 @@ namespace Core;
 class Router {
     private static array $routes = [];
 
+    // Associa uma rota GET a uma acao de controller.
     public static function get(string $path, string $handler): void {
         self::$routes['GET'][$path] = $handler;
     }
 
+    // Associa uma rota POST a uma acao de controller.
     public static function post(string $path, string $handler): void {
         self::$routes['POST'][$path] = $handler;
     }
 
+    // Localiza a rota correspondente ao metodo e ao caminho solicitados.
     public static function dispatch(): void {
         $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
         $uri = self::resolveUri();
@@ -39,6 +42,7 @@ class Router {
         require_once __DIR__ . '/../app/Views/errors/404.php';
     }
 
+    // Normaliza o endereco e remove a pasta base usada no servidor.
     private static function resolveUri(): string {
 
         if (!empty($_GET['url'])) {
@@ -60,6 +64,7 @@ class Router {
         return empty($requestUri) ? '/' : $requestUri;
     }
 
+    // Cria o controller e chama a acao registrada para a rota.
     private static function executeHandler(string $handler): void {
         [$controllerName, $action] = explode('@', $handler);
         $fullControllerClass = "App\\Controllers\\{$controllerName}";
