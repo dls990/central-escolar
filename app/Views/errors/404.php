@@ -1,3 +1,4 @@
+<!-- Exibe a pagina de rota nao encontrada. -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>

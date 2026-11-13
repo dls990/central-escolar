@@ -1,7 +1,4 @@
-/**
- * Sintetizador de Efeitos Sonoros Web Audio API
- * Funciona 100% offline, sem carregar arquivos de áudio externos!
- */
+// Reproduz os efeitos sonoros da interface.
 class SoundEffects {
     constructor() {
         this.ctx = null;

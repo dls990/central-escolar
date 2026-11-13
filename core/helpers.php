@@ -1,7 +1,9 @@
 <?php
-/**
- * Funções auxiliares globais
- */
+// Fornece funcoes auxiliares compartilhadas.
+
+
+
+
 
 use App\Models\Usuario;
 

@@ -1,4 +1,7 @@
 <?php
+// Exibe o formulario de acesso.
+
+
 $tituloPagina = 'Entrar | VivalCris';
 require_once __DIR__ . '/../layouts/header.php';
 ?>

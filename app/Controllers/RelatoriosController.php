@@ -1,7 +1,10 @@
 <?php
-/**
- * Controller Relatorios
- */
+// Gera os relatorios escolares.
+
+
+
+
+
 namespace App\Controllers;
 
 use Core\Controller;
@@ -18,13 +21,13 @@ class RelatoriosController extends Controller {
         $statsFreq = Frequencia::getEstatisticas($hoje);
         $statsRef = Refeicao::getEstatisticas($hoje);
 
-        // Agrupamento por turma
+
         $resumoPorTurma = [];
         foreach ($turmas as $turma) {
             $alunosTurma = Aluno::getByTurma($turma);
             $totalTurma = count($alunosTurma);
             $chamada = Frequencia::getChamada($hoje, $turma);
-            
+
             $presentes = 0;
             foreach ($chamada as $c) {
                 if (($c['status'] ?? '') === 'presente') {
@@ -41,7 +44,7 @@ class RelatoriosController extends Controller {
             ];
         }
 
-        // Estatística de restrições
+
         $restricoesContagem = [];
         foreach ($alunos as $a) {
             $r = trim($a['restricoes'] ?? 'Nenhuma');

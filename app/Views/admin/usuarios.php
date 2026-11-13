@@ -1,4 +1,7 @@
 <?php
+// Exibe a gestao de usuarios.
+
+
 $tituloPagina = 'Usuários | Administração';
 $rotulosPerfil = [
     'inspetora' => 'Inspetoria',

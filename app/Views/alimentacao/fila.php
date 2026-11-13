@@ -1,9 +1,12 @@
 <?php
+// Exibe a fila do refeitorio.
+
+
 $tituloPagina = 'Fila do Refeitório | VivalCris';
 require_once __DIR__ . '/../layouts/header.php';
 ?>
 
-<!-- Cabeçalho -->
+
 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
     <div>
         <div class="flex items-center gap-2">
@@ -15,12 +18,12 @@ require_once __DIR__ . '/../layouts/header.php';
         </p>
     </div>
 
-    <!-- Filtros de Turma e Data -->
+
     <form method="GET" action="<?= url('alimentacao/fila') ?>" class="flex flex-wrap items-center gap-2 bg-white p-2 rounded-2xl border border-slate-200 shadow-sm">
-        <input type="date" name="data" value="<?= htmlspecialchars($data) ?>" onchange="this.form.submit()" 
+        <input type="date" name="data" value="<?= htmlspecialchars($data) ?>" onchange="this.form.submit()"
                class="text-xs font-semibold px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700">
 
-        <select name="turma" onchange="this.form.submit()" 
+        <select name="turma" onchange="this.form.submit()"
                 class="text-xs font-semibold px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700">
             <option value="todas" <?= ($turmaSelecionada === 'todas') ? 'selected' : '' ?>>Todas as Turmas</option>
             <?php foreach ($turmas as $t): ?>
@@ -36,7 +39,7 @@ require_once __DIR__ . '/../layouts/header.php';
     </form>
 </div>
 
-<!-- Card Informativo do Prato Atual -->
+
 <div class="p-4 bg-amber-50 rounded-2xl border border-amber-200 flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
     <div class="flex items-center gap-3">
         <span class="text-3xl"><?= $cardapioHoje['emoji'] ?></span>
@@ -51,7 +54,7 @@ require_once __DIR__ . '/../layouts/header.php';
     </div>
 </div>
 
-<!-- Lista de Alunos e Controle de Merenda -->
+
 <div class="fun-card overflow-hidden">
     <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
@@ -67,13 +70,13 @@ require_once __DIR__ . '/../layouts/header.php';
             </thead>
             <tbody class="divide-y divide-slate-100 text-sm">
                 <?php foreach ($alunos as $aluno): ?>
-                    <?php 
+                    <?php
                         $jaComeu = isset($consumoMap[$aluno['id']]);
                         $infoConsumo = $jaComeu ? $consumoMap[$aluno['id']] : null;
                         $temAlergia = (!empty($aluno['restricoes']) && strtolower($aluno['restricoes']) !== 'nenhuma');
                     ?>
                     <tr class="hover:bg-amber-50/30 transition-colors">
-                        
+
                         <td class="py-3.5 px-4">
                             <div class="flex items-center gap-3">
                                 <span class="text-3xl select-none"><?= $aluno['avatar'] ?></span>
@@ -88,7 +91,7 @@ require_once __DIR__ . '/../layouts/header.php';
                             <?= htmlspecialchars($aluno['turma']) ?>
                         </td>
 
-                        <!-- Alerta de Restrição -->
+
                         <td class="py-3.5 px-4">
                             <?php if ($temAlergia): ?>
                                 <span class="inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-xl bg-rose-100 text-rose-800 border border-rose-300 animate-pulse-subtle">
@@ -101,7 +104,7 @@ require_once __DIR__ . '/../layouts/header.php';
                             <?php endif; ?>
                         </td>
 
-                        <!-- Status da Refeição -->
+
                         <td class="py-3.5 px-4 text-center">
                             <?php if ($jaComeu): ?>
                                 <span class="inline-flex items-center gap-1 px-3 py-1 rounded-xl text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
@@ -114,17 +117,17 @@ require_once __DIR__ . '/../layouts/header.php';
                             <?php endif; ?>
                         </td>
 
-                        <!-- Pontos Nutri -->
+
                         <td class="py-3.5 px-4 text-center">
                             <span class="inline-flex items-center gap-1 font-bold text-xs text-amber-700 bg-amber-100 px-2.5 py-1 rounded-full">
                                 <span>⭐</span> <?= $aluno['pontos_nutri'] ?? 50 ?> pts
                             </span>
                         </td>
 
-                        <!-- Ação -->
+
                         <td class="py-3.5 px-4 text-center">
                             <?php if ($jaComeu): ?>
-                                <button onclick="toggleConsumoMerenda(<?= $aluno['id'] ?>, <?= $cardapioHoje['id'] ?>, '<?= $data ?>', 'cancelar')" 
+                                <button onclick="toggleConsumoMerenda(<?= $aluno['id'] ?>, <?= $cardapioHoje['id'] ?>, '<?= $data ?>', 'cancelar')"
                                         class="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-200 hover:bg-rose-100 hover:text-rose-700 text-slate-700 transition">
                                     Cancelar Registro
                                 </button>
@@ -143,10 +146,10 @@ require_once __DIR__ . '/../layouts/header.php';
     </div>
 </div>
 
-<!-- Modal Divertido de Avaliação e Registro de Merenda -->
+
 <div id="modalAvaliarMerenda" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border-4 border-amber-300 transform transition-all animate-scale-up">
-        
+
         <div class="text-center mb-4">
             <span class="text-5xl block mb-2 animate-bounce">😋</span>
             <h3 class="font-brand font-bold text-xl text-slate-800">Hora do Lanche & Almoço!</h3>
@@ -157,13 +160,13 @@ require_once __DIR__ . '/../layouts/header.php';
         <input type="hidden" id="modalTemAlergia" value="false">
         <input type="hidden" id="modalRestricao" value="">
 
-        <!-- Alerta de Restrição se houver -->
+
         <div id="alertaRestricaoModal" class="hidden p-3 bg-rose-50 border border-rose-300 rounded-2xl mb-4 text-xs text-rose-800">
             <strong>⚠️ Atenção Cozinha:</strong> <span id="alertaRestricaoTexto"></span>
             <p class="text-[11px] text-rose-600 mt-1">Certifique-se de que o prato entregue foi devidamente adaptado.</p>
         </div>
 
-        <!-- Avaliação com Estrelas / Emojis -->
+
         <div class="mb-4">
             <label class="block text-center text-xs font-bold text-slate-700 mb-2">O que o aluno achou do prato?</label>
             <div class="flex justify-center gap-2 text-2xl" id="estrelasContainer">
@@ -177,7 +180,7 @@ require_once __DIR__ . '/../layouts/header.php';
             <p id="avaliacaoLabel" class="text-center text-xs font-bold text-amber-600 mt-1">Adorei! Nota 5 ⭐</p>
         </div>
 
-        <!-- Comentário Rápido -->
+
         <div class="mb-5">
             <input type="text" id="comentarioInput" placeholder="Algum elogio ou observação? (Opcional)" class="w-full text-xs p-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-400">
         </div>

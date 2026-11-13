@@ -1,4 +1,6 @@
 <?php
+// Exibe o historico de frequencia.
+
 $tituloPagina = 'Histórico Diário de Gráficos de Frequência | VivalCris';
 require_once __DIR__ . '/../layouts/header.php';
 ?>
@@ -22,11 +24,11 @@ require_once __DIR__ . '/../layouts/header.php';
 </div>
 
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-    
-    <!-- Coluna 1: Gráfico de Pizza do Dia Selecionado -->
+
+
     <div class="lg:col-span-6 scroll-reveal-left">
         <div class="fun-card p-6 bg-white border-2 border-emerald-100 shadow-xl">
-            
+
             <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
                 <div>
                     <span class="text-xs font-bold text-emerald-700 uppercase tracking-wider block">Gráfico Salvo</span>
@@ -39,12 +41,12 @@ require_once __DIR__ . '/../layouts/header.php';
                 </span>
             </div>
 
-            <!-- Gráfico de Pizza Salvo -->
+
             <div class="relative w-full aspect-square max-w-[320px] mx-auto my-4 flex items-center justify-center">
                 <canvas id="graficoHistoricoPizza"></canvas>
             </div>
 
-            <!-- Detalhes do Registro Arquivado -->
+
             <div class="grid grid-cols-3 gap-2 text-center my-4">
                 <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-100">
                     <span class="text-xs text-emerald-700 font-bold block">Presentes</span>
@@ -60,7 +62,7 @@ require_once __DIR__ . '/../layouts/header.php';
                 </div>
             </div>
 
-            <!-- Metadados da Comunicação -->
+
             <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-2">
                 <div class="flex items-center justify-between">
                     <span class="text-slate-600 font-medium">Registrado / Fechado por:</span>
@@ -89,9 +91,9 @@ require_once __DIR__ . '/../layouts/header.php';
         </div>
     </div>
 
-    <!-- Coluna 2: Lista de Todos os Dias Salvos no Histórico -->
+
     <div class="lg:col-span-6 scroll-reveal-right space-y-4">
-        
+
         <div class="flex items-center justify-between">
             <h3 class="font-brand font-bold text-lg text-slate-800 flex items-center gap-2">
                 <span>📚</span> Dias Arquivados no Sistema
@@ -109,10 +111,10 @@ require_once __DIR__ . '/../layouts/header.php';
                 </div>
             <?php else: ?>
                 <?php foreach ($historicos as $h): ?>
-                    <?php 
+                    <?php
                         $isAtivo = ($h['data'] === $dataSelecionada);
                     ?>
-                    <a href="<?= url('frequencia/historico?data=' . $h['data']) ?>" 
+                    <a href="<?= url('frequencia/historico?data=' . $h['data']) ?>"
                        class="block p-4 rounded-2xl border transition-all duration-200 <?= $isAtivo ? 'bg-emerald-50 border-emerald-500 shadow-md ring-2 ring-emerald-300' : 'bg-white border-slate-200 hover:border-emerald-300 hover:shadow-sm' ?>">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-3">
@@ -150,7 +152,7 @@ require_once __DIR__ . '/../layouts/header.php';
 
 </div>
 
-<!-- Script de Inicialização do Gráfico Salvo -->
+
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const ctx = document.getElementById('graficoHistoricoPizza');

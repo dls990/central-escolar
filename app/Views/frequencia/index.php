@@ -1,9 +1,11 @@
 <?php
+// Exibe a chamada dos alunos.
+
 $tituloPagina = 'Chamada Interativa & Frequência | VivalCris';
 require_once __DIR__ . '/../layouts/header.php';
 ?>
 
-<!-- Cabeçalho da Página com Filtros e Animação de Entrada -->
+
 <div class="scroll-reveal flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
     <div>
         <div class="flex items-center gap-2">
@@ -15,18 +17,18 @@ require_once __DIR__ . '/../layouts/header.php';
         </p>
     </div>
 
-    <!-- Filtros de Data e Turmas Únicas (1º ao 5º EF, 6º ao 9º EF, 1º ao 3º EM) -->
+
     <form method="GET" action="<?= url('frequencia') ?>" class="flex flex-wrap items-center gap-2 bg-white p-2 rounded-2xl border border-slate-200 shadow-sm">
         <div>
             <label class="sr-only">Data</label>
-            <input type="date" name="data" value="<?= htmlspecialchars($data) ?>" 
+            <input type="date" name="data" value="<?= htmlspecialchars($data) ?>"
                    onchange="this.form.submit()"
                    class="text-xs font-semibold px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500">
         </div>
 
         <div>
             <label class="sr-only">Turma</label>
-            <select name="turma" onchange="this.form.submit()" 
+            <select name="turma" onchange="this.form.submit()"
                     class="text-xs font-semibold px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 <option value="todas" <?= ($turmaSelecionada === 'todas') ? 'selected' : '' ?>>Todas as 12 Salas Únicas</option>
                 <?php foreach ($turmas as $t): ?>
@@ -43,7 +45,7 @@ require_once __DIR__ . '/../layouts/header.php';
     </form>
 </div>
 
-<!-- Banner de Integração com a Cozinha -->
+
 <div class="scroll-reveal mb-6">
     <?php if ($pedidoCozinha): ?>
         <div class="p-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -54,7 +56,7 @@ require_once __DIR__ . '/../layouts/header.php';
                         Censo de Alimentação Enviado para a Cozinha!
                     </h3>
                     <p class="text-xs text-emerald-100">
-                        Enviado por <strong><?= htmlspecialchars($pedidoCozinha['enviado_por']) ?></strong> às <?= htmlspecialchars($pedidoCozinha['horario_envio']) ?> • 
+                        Enviado por <strong><?= htmlspecialchars($pedidoCozinha['enviado_por']) ?></strong> às <?= htmlspecialchars($pedidoCozinha['horario_envio']) ?> •
                         Total de <strong><?= $pedidoCozinha['total_presentes'] ?> refeições</strong> confirmadas para preparo hoje.
                     </p>
                 </div>
@@ -81,7 +83,7 @@ require_once __DIR__ . '/../layouts/header.php';
                     </p>
                 </div>
             </div>
-            <button onclick="document.getElementById('modalEnvioCozinha').classList.remove('hidden')" 
+            <button onclick="document.getElementById('modalEnvioCozinha').classList.remove('hidden')"
                     class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-brand font-bold text-xs transition transform hover:scale-105 shadow-md shadow-amber-500/20 whitespace-nowrap">
                 🚀 Enviar Censo para a Cozinha
             </button>
@@ -89,10 +91,10 @@ require_once __DIR__ . '/../layouts/header.php';
     <?php endif; ?>
 </div>
 
-<!-- Grid Principal: Gráfico de Pizza Diário + Indicadores de Chamada -->
+
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
-    
-    <!-- Coluna 1: Gráfico de Pizza que Salva Automaticamente -->
+
+
     <div class="lg:col-span-5 scroll-reveal-left">
         <div class="fun-card p-5 bg-white border-2 border-emerald-100 h-full flex flex-col justify-between">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-3">
@@ -107,12 +109,12 @@ require_once __DIR__ . '/../layouts/header.php';
                 </span>
             </div>
 
-            <!-- Canvas do Gráfico de Pizza -->
+
             <div class="relative w-full aspect-square max-w-[270px] mx-auto my-2 flex items-center justify-center">
                 <canvas id="graficoPizzaDiario"></canvas>
             </div>
 
-            <!-- Legenda e Responsável -->
+
             <div class="pt-3 border-t border-slate-100 space-y-2 text-xs">
                 <div class="flex items-center justify-between text-slate-600">
                     <span>Responsável pelo registro:</span>
@@ -121,11 +123,11 @@ require_once __DIR__ . '/../layouts/header.php';
                     </strong>
                 </div>
                 <div class="flex items-center justify-between">
-                    <a href="<?= url('frequencia/historico?data=' . $data) ?>" 
+                    <a href="<?= url('frequencia/historico?data=' . $data) ?>"
                        class="text-xs font-bold text-brand-600 hover:text-brand-700 flex items-center gap-1 transition">
                         <span>📅</span> Ver Histórico de Dias Salvos
                     </a>
-                    <button onclick="document.getElementById('modalEnvioCozinha').classList.remove('hidden')" 
+                    <button onclick="document.getElementById('modalEnvioCozinha').classList.remove('hidden')"
                             class="text-xs font-bold text-emerald-600 hover:text-emerald-700 underline">
                         Avisar Cozinha
                     </button>
@@ -134,12 +136,12 @@ require_once __DIR__ . '/../layouts/header.php';
         </div>
     </div>
 
-    <!-- Coluna 2: 4 Cards de Estatísticas e Botões de Ação -->
+
     <div class="lg:col-span-7 flex flex-col justify-between gap-4">
-        
-        <!-- Cards de Indicadores de Presença -->
+
+
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 scroll-reveal">
-            
+
             <div class="fun-card p-3.5 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white">
                 <div class="flex items-center justify-between text-emerald-100 text-[10px] font-bold uppercase">
                     <span>Taxa de Presença</span>
@@ -186,7 +188,7 @@ require_once __DIR__ . '/../layouts/header.php';
 
         </div>
 
-        <!-- Barra de Ações Rápidas -->
+
         <div class="scroll-reveal p-4 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
             <div class="flex items-center gap-2 text-xs text-slate-600 font-semibold">
                 <span>Filtro Ativo:</span>
@@ -209,7 +211,7 @@ require_once __DIR__ . '/../layouts/header.php';
             </div>
         </div>
 
-        <!-- Mini Info Educativa para os Pais -->
+
         <div class="p-3.5 rounded-2xl bg-indigo-50/70 border border-indigo-100 text-indigo-900 text-xs flex items-center gap-3">
             <span class="text-2xl select-none">💡</span>
             <div>
@@ -221,7 +223,7 @@ require_once __DIR__ . '/../layouts/header.php';
 
 </div>
 
-<!-- Tabela Interativa de Alunos (Salas Únicas) -->
+
 <div class="scroll-reveal fun-card overflow-hidden">
     <div class="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
         <h3 class="font-brand font-bold text-slate-800 text-sm flex items-center gap-2">
@@ -254,12 +256,12 @@ require_once __DIR__ . '/../layouts/header.php';
                     </tr>
                 <?php else: ?>
                     <?php foreach ($alunos as $aluno): ?>
-                        <?php 
+                        <?php
                             $status = $aluno['status'] ?? 'presente';
                         ?>
                         <tr id="aluno-row-<?= $aluno['aluno_id'] ?>" class="hover:bg-slate-50/70 transition-colors">
-                            
-                            <!-- Nome & Avatar -->
+
+
                             <td class="py-3.5 px-4">
                                 <div class="flex items-center gap-3">
                                     <span class="text-2xl select-none"><?= $aluno['avatar'] ?></span>
@@ -272,19 +274,19 @@ require_once __DIR__ . '/../layouts/header.php';
                                 </div>
                             </td>
 
-                            <!-- Matrícula -->
+
                             <td class="py-3.5 px-4 font-mono text-xs text-slate-600">
                                 <?= htmlspecialchars($aluno['matricula']) ?>
                             </td>
 
-                            <!-- Turma (Sala Única) -->
+
                             <td class="py-3.5 px-4">
                                 <span class="font-bold text-xs px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200">
                                     <?= htmlspecialchars($aluno['turma']) ?>
                                 </span>
                             </td>
 
-                            <!-- Restrição Alimentar -->
+
                             <td class="py-3.5 px-4">
                                 <?php if (!empty($aluno['restricoes']) && strtolower($aluno['restricoes']) !== 'nenhuma'): ?>
                                     <span class="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-xl bg-rose-50 text-rose-700 border border-rose-200">
@@ -295,12 +297,12 @@ require_once __DIR__ . '/../layouts/header.php';
                                 <?php endif; ?>
                             </td>
 
-                            <!-- Badge de Status Atual -->
+
                             <td class="py-3.5 px-4 text-center">
-                                <span id="badge-status-<?= $aluno['aluno_id'] ?>" 
+                                <span id="badge-status-<?= $aluno['aluno_id'] ?>"
                                       class="px-3 py-1 rounded-xl text-xs font-bold capitalize transition-all duration-300
                                       <?= ($status === 'presente') ? 'badge-presente' : (($status === 'ausente') ? 'badge-ausente' : 'badge-justificado') ?>">
-                                    <?php 
+                                    <?php
                                         if ($status === 'presente') echo '✓ Presente';
                                         elseif ($status === 'ausente') echo '✕ Ausente';
                                         else echo '• Justificado';
@@ -308,11 +310,11 @@ require_once __DIR__ . '/../layouts/header.php';
                                 </span>
                             </td>
 
-                            <!-- Botões de Ação Dinâmica -->
+
                             <td class="py-3.5 px-4 text-center">
                                 <div class="inline-flex items-center gap-1.5 p-1 bg-slate-100 rounded-2xl">
-                                    
-                                    <!-- Presente -->
+
+
                                     <button onclick="atualizarFrequencia(<?= $aluno['aluno_id'] ?>, 'presente', '<?= $data ?>')"
                                             data-aluno="<?= $aluno['aluno_id'] ?>"
                                             data-status="presente"
@@ -322,7 +324,7 @@ require_once __DIR__ . '/../layouts/header.php';
                                         ✓ Presente
                                     </button>
 
-                                    <!-- Falta / Ausente -->
+
                                     <button onclick="atualizarFrequencia(<?= $aluno['aluno_id'] ?>, 'ausente', '<?= $data ?>')"
                                             data-aluno="<?= $aluno['aluno_id'] ?>"
                                             data-status="ausente"
@@ -332,7 +334,7 @@ require_once __DIR__ . '/../layouts/header.php';
                                         ✕ Ausente
                                     </button>
 
-                                    <!-- Justificado -->
+
                                     <button onclick="atualizarFrequencia(<?= $aluno['aluno_id'] ?>, 'justificado', '<?= $data ?>')"
                                             data-aluno="<?= $aluno['aluno_id'] ?>"
                                             data-status="justificado"
@@ -353,7 +355,7 @@ require_once __DIR__ . '/../layouts/header.php';
     </div>
 </div>
 
-<!-- Modal de Envio para a Cozinha -->
+
 <div id="modalEnvioCozinha" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border-4 border-amber-300 transform transition-all animate-scale-up">
         <div class="flex items-center justify-between pb-3 border-b border-slate-100">
@@ -410,7 +412,7 @@ require_once __DIR__ . '/../layouts/header.php';
     </div>
 </div>
 
-<!-- Inicialização e Manipulação do Gráfico de Pizza -->
+
 <script>
 let graficoPizza = null;
 
@@ -455,10 +457,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Função global para atualizar o gráfico via AJAX
+
     window.atualizarGraficoPizza = function(pizzaData) {
         if (!graficoPizza || !pizzaData) return;
-        
+
         graficoPizza.data.datasets[0].data = [
             pizzaData.presentes,
             pizzaData.ausentes,

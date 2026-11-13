@@ -1,7 +1,10 @@
 <?php
-/**
- * Model Refeicao - Controle de Almoço / Merenda Escolar
- */
+// Registra as refeicoes e suas avaliacoes.
+
+
+
+
+
 namespace App\Models;
 
 use Core\Model;
@@ -26,7 +29,7 @@ class Refeicao extends Model {
     }
 
     public static function registrar(int $alunoId, int $cardapioId, string $data, int $avaliacao = 5, ?string $comentario = null): bool {
-        // Se já consumiu, atualiza avaliação
+
         $stmtCheck = self::getConnection()->prepare("SELECT id FROM refeicoes WHERE aluno_id = ? AND data = ?");
         $stmtCheck->execute([$alunoId, $data]);
         $id = $stmtCheck->fetchColumn();
@@ -42,7 +45,7 @@ class Refeicao extends Model {
         ");
         $success = $stmt->execute([$alunoId, $cardapioId, $data, $avaliacao, $comentario]);
         if ($success) {
-            // Bonifica o aluno com +10 pontos no jogo saudável
+
             Aluno::adicionarPontos($alunoId, 10);
         }
         return $success;
@@ -57,7 +60,7 @@ class Refeicao extends Model {
         $totalAlunos = Aluno::countTotal();
 
         $stmt = self::getConnection()->prepare("
-            SELECT 
+            SELECT
                 COUNT(*) as total_refeicoes,
                 AVG(avaliacao) as media_avaliacao
             FROM refeicoes

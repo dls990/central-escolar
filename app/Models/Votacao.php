@@ -1,7 +1,10 @@
 <?php
-/**
- * Model Votacao - Votação do Prato Favorito da Semana
- */
+// Gerencia a votacao das refeicoes.
+
+
+
+
+
 namespace App\Models;
 
 use Core\Model;

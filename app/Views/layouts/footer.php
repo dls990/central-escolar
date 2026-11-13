@@ -1,6 +1,7 @@
+<!-- Exibe o rodape compartilhado. -->
     </main>
 
-    <!-- Modal Educativo: Detalhes do Trabalho Escolar (MVC e Tecnologias) -->
+
     <div id="modalSobre" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white rounded-lg max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto transform transition-all animate-scale-up">
             <div class="flex items-center justify-between pb-4 border-b border-slate-100">
@@ -49,10 +50,10 @@
         </div>
     </div>
 
-    <!-- Container de Notificações Toast Flutuantes -->
+
     <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-    <!-- Rodapé -->
+
     <footer class="bg-white border-t border-slate-200 py-8 mt-12 transition-all">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-3">
@@ -74,7 +75,7 @@
         </div>
     </footer>
 
-    <!-- Scripts JavaScript -->
+
     <script>
         const BASE_URL = '<?= base_url() ?>';
         function toggleMobileMenu() {

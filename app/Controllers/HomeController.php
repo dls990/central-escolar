@@ -1,7 +1,10 @@
 <?php
-/**
- * Controller Home / Dashboard
- */
+// Controla a pagina inicial.
+
+
+
+
+
 namespace App\Controllers;
 
 use Core\Controller;
@@ -17,7 +20,7 @@ use App\Models\PedidoCozinha;
 class HomeController extends Controller {
     public function index(): void {
         $hoje = date('Y-m-d');
-        
+
         $statsFrequencia = Frequencia::getEstatisticas($hoje);
         $pizzaStats = HistoricoFrequencia::getDadosGraficoPizza($hoje);
         $pedidoHoje = PedidoCozinha::getPorData($hoje);
@@ -27,7 +30,7 @@ class HomeController extends Controller {
         $liderVotacao = Votacao::getLider();
         $totalAlunos = Aluno::countTotal();
 
-        // Alunos com restrições alimentares para exibir no alerta de segurança alimentar
+
         $todosAlunos = Aluno::all();
         $alunosComAlergia = array_filter($todosAlunos, function($a) {
             return !empty($a['restricoes']) && strtolower($a['restricoes']) !== 'nenhuma';

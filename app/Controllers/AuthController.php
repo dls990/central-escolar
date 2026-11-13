@@ -1,7 +1,10 @@
 <?php
-/**
- * Controller Auth - Login, Logout e Seleção Rápida de Usuários para Apresentação
- */
+// Controla a autenticacao e as sessoes.
+
+
+
+
+
 namespace App\Controllers;
 
 use Core\Controller;
@@ -10,7 +13,7 @@ use App\Models\Usuario;
 class AuthController extends Controller {
 
     public function login(): void {
-        // Se já estiver logado, redireciona para a tela inicial ou painel correspondente
+
         if (Usuario::estaLogado()) {
             $user = Usuario::usuarioAtual();
             $this->redirecionarPorPerfil($user['perfil']);

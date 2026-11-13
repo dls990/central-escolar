@@ -1,9 +1,4 @@
-/* ========================================================
-   VivalCris - Estilos Customizados e Animações de Entrada/Rolagem
-   Central de Frequência e Alimentação Escolar
-   ======================================================== */
-
-/* Navegação */
+/* Define a aparencia da aplicacao. */
 .nav-item {
     display: inline-flex;
     align-items: center;
@@ -45,7 +40,7 @@
     color: #16634d;
 }
 
-/* Cards de interface */
+
 .fun-card {
     background: #ffffff;
     border-radius: 0.5rem;
@@ -59,9 +54,7 @@
     border-color: #cbd5e1;
 }
 
-/* ========================================================
-   Animações de Entrada (Entry Animations)
-   ======================================================== */
+
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -144,9 +137,7 @@
     animation: none;
 }
 
-/* ========================================================
-   Animações de Rolagem (Scroll Animations via IntersectionObserver)
-   ======================================================== */
+
 .scroll-reveal {
     opacity: 0;
     transform: translateY(28px);
@@ -183,7 +174,7 @@
     transform: translate(0, 0) scale(1);
 }
 
-/* Atrasos escalonados para listas de cards */
+
 .delay-100 { transition-delay: 100ms; }
 .delay-200 { transition-delay: 200ms; }
 .delay-300 { transition-delay: 300ms; }
@@ -1123,7 +1114,7 @@
     .menu-field-wide { grid-column: auto; }
 }
 
-/* Badges de Frequência */
+
 .badge-presente {
     background-color: #dcfce7;
     color: #15803d;
@@ -1142,7 +1133,7 @@
     border: 1px solid #fcd34d;
 }
 
-/* Estilos de Status da Cozinha */
+
 .status-cozinha-pendente {
     background-color: #f1f5f9;
     color: #475569;
@@ -1167,7 +1158,7 @@
     border-left: 4px solid #22c55e;
 }
 
-/* Notificações Toast */
+
 .toast-msg {
     display: flex;
     align-items: center;
@@ -1185,7 +1176,7 @@
     pointer-events: auto;
 }
 
-/* Estilos de Impressão */
+
 @media print {
     header, footer, #soundToggleBtn, #modalSobre, .no-print {
         display: none !important;

@@ -1,4 +1,7 @@
 <?php
+// Exibe o painel da cozinha.
+
+
 $tituloPagina = 'Painel da Cozinha & Nutricionista | VivalCris';
 require_once __DIR__ . '/../layouts/header.php';
 
@@ -6,7 +9,7 @@ $dadosExibicao = $pedido ?: $previaTempoReal;
 $statusCozinha = $pedido['status'] ?? 'pendente';
 ?>
 
-<!-- Cabeçalho com Animação de Entrada -->
+
 <div class="scroll-reveal flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
     <div class="flex items-center gap-3">
         <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-3xl shadow-sm">
@@ -27,7 +30,7 @@ $statusCozinha = $pedido['status'] ?? 'pendente';
         </div>
     </div>
 
-    <!-- Seletor de Data -->
+
     <form method="GET" action="<?= url('cozinha') ?>" class="flex items-center gap-2 bg-white p-2 rounded-2xl border border-slate-200 shadow-sm">
         <label class="text-xs font-bold text-slate-600 pl-2">Data:</label>
         <input type="date" name="data" value="<?= htmlspecialchars($data) ?>" onchange="this.form.submit()"
@@ -38,7 +41,7 @@ $statusCozinha = $pedido['status'] ?? 'pendente';
     </form>
 </div>
 
-<!-- Banner de Status de Comunicação com a Inspetoria -->
+
 <div class="scroll-reveal mb-8">
     <?php if ($pedido): ?>
         <div class="p-5 rounded-3xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -62,7 +65,7 @@ $statusCozinha = $pedido['status'] ?? 'pendente';
                 </div>
             </div>
 
-            <!-- Botão de Atualização de Preparo -->
+
             <div class="flex flex-col sm:items-end gap-2">
                 <span class="text-xs text-emerald-100 font-semibold">Status Atual do Almoço:</span>
                 <span class="px-4 py-2 rounded-xl bg-white text-emerald-800 font-brand font-bold text-sm shadow capitalize">
@@ -93,10 +96,10 @@ $statusCozinha = $pedido['status'] ?? 'pendente';
     <?php endif; ?>
 </div>
 
-<!-- Indicadores de Refeições & Combate ao Desperdício -->
+
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-    
-    <!-- Total de Refeições a Preparar -->
+
+
     <div class="scroll-reveal fun-card p-5 bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/20">
         <div class="flex items-center justify-between text-emerald-100 text-xs font-bold uppercase">
             <span>Refeições a Preparar</span>
@@ -110,7 +113,7 @@ $statusCozinha = $pedido['status'] ?? 'pendente';
         </p>
     </div>
 
-    <!-- Desperdício Evitado (Alunos Faltantes) -->
+
     <div class="scroll-reveal delay-100 fun-card p-5 bg-white border-2 border-rose-200">
         <div class="flex items-center justify-between text-slate-600 text-xs font-bold uppercase">
             <span>Desperdício Zero (Faltas)</span>
@@ -124,7 +127,7 @@ $statusCozinha = $pedido['status'] ?? 'pendente';
         </p>
     </div>
 
-    <!-- Divisão Fundamental 1 e 2 -->
+
     <div class="scroll-reveal delay-200 fun-card p-5 bg-white border-2 border-amber-200">
         <div class="flex items-center justify-between text-slate-600 text-xs font-bold uppercase">
             <span>Ensino Fundamental</span>
@@ -140,7 +143,7 @@ $statusCozinha = $pedido['status'] ?? 'pendente';
         </div>
     </div>
 
-    <!-- Divisão Ensino Médio -->
+
     <div class="scroll-reveal delay-300 fun-card p-5 bg-white border-2 border-indigo-200">
         <div class="flex items-center justify-between text-slate-600 text-xs font-bold uppercase">
             <span>Ensino Médio</span>
@@ -156,10 +159,10 @@ $statusCozinha = $pedido['status'] ?? 'pendente';
 
 </div>
 
-<!-- Linha de Ação: Controle de Preparo da Cozinha + Restrições Alimentares -->
+
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
-    
-    <!-- Coluna 1: Ações de Controle de Cozimento da Nutricionista -->
+
+
     <div class="lg:col-span-7 scroll-reveal-left">
         <div class="fun-card p-6 bg-white border-2 border-amber-100 shadow-md h-full flex flex-col justify-between">
             <div>
@@ -173,9 +176,9 @@ $statusCozinha = $pedido['status'] ?? 'pendente';
                     <span class="text-2xl select-none">👩‍🍳</span>
                 </div>
 
-                <!-- Passos do Workflow da Cozinha -->
+
                 <div class="grid grid-cols-3 gap-2 my-4 text-center">
-                    
+
                     <button type="button" onclick="atualizarStatusCozinha('<?= $data ?>', 'enviado')"
                             class="p-3 rounded-2xl border text-xs font-bold transition transform active:scale-95 <?= ($statusCozinha === 'enviado') ? 'bg-blue-50 border-blue-500 text-blue-700 ring-2 ring-blue-300' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-blue-50' ?>">
                         <span class="text-2xl block mb-1">📥</span>
@@ -196,7 +199,7 @@ $statusCozinha = $pedido['status'] ?? 'pendente';
 
                 </div>
 
-                <!-- Formulário de Observação da Nutricionista -->
+
                 <form method="POST" action="<?= url('cozinha/atualizarStatus') ?>" class="mt-4 pt-4 border-t border-slate-100">
                     <input type="hidden" name="data" value="<?= htmlspecialchars($data) ?>">
                     <input type="hidden" name="status" value="<?= htmlspecialchars($statusCozinha) ?>">
@@ -205,7 +208,7 @@ $statusCozinha = $pedido['status'] ?? 'pendente';
                         Nota ou Recado da Nutricionista para o Painel Geral:
                     </label>
                     <div class="flex gap-2">
-                        <input type="text" name="observacao_cozinha" 
+                        <input type="text" name="observacao_cozinha"
                                value="<?= htmlspecialchars($pedido['observacao_cozinha'] ?? '') ?>"
                                placeholder="Ex: Almoço servido quente. Pratos especiais separados!"
                                class="flex-grow text-xs p-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500">
@@ -216,7 +219,7 @@ $statusCozinha = $pedido['status'] ?? 'pendente';
                 </form>
             </div>
 
-            <!-- Cardápio Resumido de Hoje -->
+
             <?php if ($cardapioHoje): ?>
                 <div class="mt-4 p-4 rounded-2xl bg-amber-50/70 border border-amber-200">
                     <div class="flex items-center justify-between text-xs font-bold text-amber-900 mb-1">
@@ -234,7 +237,7 @@ $statusCozinha = $pedido['status'] ?? 'pendente';
         </div>
     </div>
 
-    <!-- Coluna 2: Alerta de Restrições Alimentares dos Alunos Presentes -->
+
     <div class="lg:col-span-5 scroll-reveal-right">
         <div class="fun-card p-6 bg-white border-2 border-rose-100 shadow-md h-full flex flex-col justify-between">
             <div>
@@ -250,7 +253,7 @@ $statusCozinha = $pedido['status'] ?? 'pendente';
                     </span>
                 </div>
 
-                <?php 
+                <?php
                     $listaRestricoes = $dadosExibicao['restricoes_lista'] ?? [];
                 ?>
 
@@ -285,7 +288,7 @@ $statusCozinha = $pedido['status'] ?? 'pendente';
 
 </div>
 
-<!-- Histórico Recente de Pedidos Recebidos na Cozinha -->
+
 <div class="scroll-reveal fun-card p-6 bg-white border border-slate-200 shadow-sm">
     <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
         <h3 class="font-brand font-bold text-lg text-slate-800 flex items-center gap-2">

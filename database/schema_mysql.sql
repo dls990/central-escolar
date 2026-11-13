@@ -1,9 +1,4 @@
--- ========================================================
--- BANCO DE DADOS COMPLETO PARA XAMPP / MYSQL / PHPMYADMIN
--- Projeto: Central de Frequência e Alimentação Escolar
--- Feira Tecnológica
--- ========================================================
-
+-- Define as tabelas e os dados iniciais do sistema.
 CREATE DATABASE IF NOT EXISTS `central_escolar` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE `central_escolar`;
 
@@ -130,9 +125,6 @@ CREATE TABLE `dicas_nutricao` (
     `icone` VARCHAR(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ========================================================
--- SEED INICIAL DE DADOS
--- ========================================================
 
 INSERT INTO `usuarios` (`id`, `nome`, `usuario`, `senha`, `perfil`, `cargo`, `avatar`, `ativo`) VALUES
 (1, 'Vivi', 'vivi', '$2y$10$TKXpka3wUO.YPChrMgVCreOJ9epmQ.FC6FNqN9prIk1EJxHDWnfEy', 'inspetora', 'Inspetora Escolar (Fund 1 & 2)', '👩‍🏫', 1),

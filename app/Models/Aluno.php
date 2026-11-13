@@ -1,7 +1,10 @@
 <?php
-/**
- * Model Aluno
- */
+// Consulta e atualiza os dados dos alunos.
+
+
+
+
+
 namespace App\Models;
 
 use Core\Model;
@@ -81,7 +84,7 @@ class Aluno extends Model {
 
     public static function update(int $id, array $data): bool {
         $stmt = self::getConnection()->prepare("
-            UPDATE alunos 
+            UPDATE alunos
             SET nome = ?, matricula = ?, turma = ?, restricoes = ?, telefone_responsavel = ?
             WHERE id = ?
         ");

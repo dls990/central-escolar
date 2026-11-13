@@ -1,9 +1,12 @@
 <?php
+// Exibe o painel administrativo.
+
+
 $tituloPagina = 'Painel do Administrador Geral | VivalCris';
 require_once __DIR__ . '/../layouts/header.php';
 ?>
 
-<!-- Cabeçalho do ADM com Animação de Entrada -->
+
 <div class="scroll-reveal flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
     <div class="flex items-center gap-3">
         <div class="w-14 h-14 rounded-2xl bg-indigo-100 text-indigo-800 flex items-center justify-center text-3xl shadow-sm">
@@ -25,17 +28,17 @@ require_once __DIR__ . '/../layouts/header.php';
     </div>
 
     <div class="flex items-center gap-2">
-        <a href="<?= url('admin/usuarios') ?>" 
+        <a href="<?= url('admin/usuarios') ?>"
            class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-brand font-bold text-xs transition shadow-sm flex items-center gap-1.5">
             <span>⚙️</span> Gerenciar Usuários
         </a>
     </div>
 </div>
 
-<!-- Cards Comparativos dos Dois Lados (Inspetoria VS Cozinha) -->
+
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-    
-    <!-- Lado 1: Inspetoria e Frequência Escolar -->
+
+
     <div class="scroll-reveal-left fun-card p-6 bg-white border-2 border-emerald-100 shadow-md">
         <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
             <div class="flex items-center gap-2">
@@ -81,7 +84,7 @@ require_once __DIR__ . '/../layouts/header.php';
         </div>
     </div>
 
-    <!-- Lado 2: Cozinha e Alimentação Escolar -->
+
     <div class="scroll-reveal-right fun-card p-6 bg-white border-2 border-amber-100 shadow-md">
         <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
             <div class="flex items-center gap-2">
@@ -131,10 +134,10 @@ require_once __DIR__ . '/../layouts/header.php';
 
 </div>
 
-<!-- Linha de Gestão: Gráfico de Pizza Geral + Quadro de Usuários -->
+
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
-    
-    <!-- Gráfico de Pizza Central do ADM -->
+
+
     <div class="lg:col-span-5 scroll-reveal-left">
         <div class="fun-card p-6 bg-white border border-slate-200 shadow-sm h-full flex flex-col justify-between">
             <div class="border-b border-slate-100 pb-3 mb-3">
@@ -154,7 +157,7 @@ require_once __DIR__ . '/../layouts/header.php';
         </div>
     </div>
 
-    <!-- Usuários Cadastrados no Sistema (Inspetoras, Nutricionista, ADM) -->
+
     <div class="lg:col-span-7 scroll-reveal-right">
         <div class="fun-card p-6 bg-white border border-slate-200 shadow-sm h-full">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">

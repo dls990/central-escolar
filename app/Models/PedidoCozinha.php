@@ -1,7 +1,10 @@
 <?php
-/**
- * Model PedidoCozinha - Comunicação entre Inspetoras e Cozinha/Nutricionista
- */
+// Gerencia os pedidos enviados a cozinha.
+
+
+
+
+
 namespace App\Models;
 
 use Core\Model;
@@ -31,13 +34,13 @@ class PedidoCozinha extends Model {
         return $stmt->fetchAll();
     }
 
-    /**
-     * Envia o censo de frequência diretamente para a cozinha
-     */
+
+
+
     public static function enviarParaCozinha(string $data, string $inspetoraNome, ?string $obs = null): array {
         $db = self::getConnection();
 
-        // Obtém todos os alunos e seus status na data
+
         $sql = "
             SELECT a.id, a.nome, a.matricula, a.turma, a.restricoes,
                    COALESCE(f.status, 'presente') as status
@@ -53,9 +56,9 @@ class PedidoCozinha extends Model {
         $totalAusentes = 0;
         $totalJustificados = 0;
 
-        $refeicoesFund1 = 0; // 1º ao 5º EF
-        $refeicoesFund2 = 0; // 6º ao 9º EF
-        $refeicoesMedio = 0; // 1º ao 3º EM
+        $refeicoesFund1 = 0;
+        $refeicoesFund2 = 0;
+        $refeicoesMedio = 0;
 
         $turmasFund1 = ['1º Ano EF', '2º Ano EF', '3º Ano EF', '4º Ano EF', '5º Ano EF'];
         $turmasFund2 = ['6º Ano EF', '7º Ano EF', '8º Ano EF', '9º Ano EF'];
@@ -69,7 +72,7 @@ class PedidoCozinha extends Model {
             if ($st === 'presente') {
                 $totalPresentes++;
 
-                // Segmento
+
                 if (in_array($a['turma'], $turmasFund1)) {
                     $refeicoesFund1++;
                 } elseif (in_array($a['turma'], $turmasFund2)) {
@@ -78,7 +81,7 @@ class PedidoCozinha extends Model {
                     $refeicoesMedio++;
                 }
 
-                // Restrições de alunos presentes
+
                 if (!empty($a['restricoes']) && strtolower($a['restricoes']) !== 'nenhuma') {
                     $tipo = trim($a['restricoes']);
                     $restricoesContagem[$tipo] = ($restricoesContagem[$tipo] ?? 0) + 1;
@@ -95,7 +98,7 @@ class PedidoCozinha extends Model {
             }
         }
 
-        // Resumo legível das restrições
+
         $resumoTextArray = [];
         foreach ($restricoesContagem as $tipo => $qtd) {
             $resumoTextArray[] = "{$qtd}x {$tipo}";
@@ -104,13 +107,13 @@ class PedidoCozinha extends Model {
 
         $horarioAtual = date('H:i');
 
-        // Salva ou atualiza pedido na tabela pedidos_cozinha
+
         $existente = self::getPorData($data);
 
         if ($existente) {
             $stmtUp = $db->prepare("
-                UPDATE pedidos_cozinha 
-                SET enviado_por = ?, horario_envio = ?, total_matriculados = ?, 
+                UPDATE pedidos_cozinha
+                SET enviado_por = ?, horario_envio = ?, total_matriculados = ?,
                     total_presentes = ?, total_ausentes = ?, total_justificados = ?,
                     refeicoes_fund1 = ?, refeicoes_fund2 = ?, refeicoes_medio = ?,
                     restricoes_resumo = ?, restricoes_detalhes = ?,
@@ -134,7 +137,7 @@ class PedidoCozinha extends Model {
             ]);
         } else {
             $stmtIn = $db->prepare("
-                INSERT INTO pedidos_cozinha 
+                INSERT INTO pedidos_cozinha
                 (data, enviado_por, horario_envio, total_matriculados, total_presentes, total_ausentes, total_justificados,
                  refeicoes_fund1, refeicoes_fund2, refeicoes_medio, restricoes_resumo, restricoes_detalhes, status, observacao_inspetora)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'enviado', ?)
@@ -156,7 +159,7 @@ class PedidoCozinha extends Model {
             ]);
         }
 
-        // Também salva automaticamente no histórico de frequência diária
+
         HistoricoFrequencia::salvarDiario($data, $inspetoraNome);
 
         return [

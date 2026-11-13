@@ -1,4 +1,7 @@
 <?php
+// Exibe a roleta de lanches.
+
+
 $tituloPagina = 'Roleta de Lanches Saudáveis | VivalCris';
 require_once __DIR__ . '/../layouts/header.php';
 ?>
@@ -15,28 +18,28 @@ require_once __DIR__ . '/../layouts/header.php';
     </p>
 </div>
 
-<!-- Roleta Interativa -->
+
 <div class="max-w-xl mx-auto flex flex-col items-center">
-    
-    <!-- Ponteiro Indicador da Roleta -->
+
+
     <div class="relative z-20 -mb-4 flex flex-col items-center">
         <div class="w-0 h-0 border-l-[16px] border-l-transparent border-r-[16px] border-r-transparent border-t-[28px] border-t-rose-600 drop-shadow-md"></div>
     </div>
 
-    <!-- Canvas da Roleta -->
+
     <div class="relative p-2 bg-white rounded-full shadow-2xl border-8 border-amber-300">
         <canvas id="roletaCanvas" width="380" height="380" class="rounded-full"></canvas>
     </div>
 
-    <!-- Botão de Girar -->
+
     <div class="mt-8 flex flex-col sm:flex-row items-center gap-4">
-        <button id="btnGirarRoleta" onclick="girarRoleta()" 
+        <button id="btnGirarRoleta" onclick="girarRoleta()"
                 class="px-8 py-3.5 bg-gradient-to-r from-rose-500 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white font-brand font-bold text-lg rounded-2xl shadow-xl shadow-rose-500/20 transition transform hover:scale-105 active:scale-95 flex items-center gap-2">
             <span>🎡</span> GIRAR A ROLETA!
         </button>
     </div>
 
-    <!-- Card de Resultado da Roleta -->
+
     <div id="resultadoRoleta" class="hidden mt-8 fun-card p-6 max-w-md w-full text-center border-4 border-amber-300 bg-amber-50/50 animate-scale-up">
         <span id="resultadoEmoji" class="text-6xl block mb-2 animate-bounce">🍎</span>
         <h3 id="resultadoTitulo" class="font-brand font-bold text-2xl text-slate-800 mb-1">Maçã com Canela</h3>
@@ -81,12 +84,12 @@ require_once __DIR__ . '/../layouts/header.php';
             ctx.lineTo(radius, radius);
             ctx.fill();
 
-            // Borda interna suave
+
             ctx.strokeStyle = '#ffffff';
             ctx.lineWidth = 3;
             ctx.stroke();
 
-            // Texto & Emoji
+
             ctx.save();
             ctx.fillStyle = '#ffffff';
             ctx.font = 'bold 13px Inter, sans-serif';
@@ -97,7 +100,7 @@ require_once __DIR__ . '/../layouts/header.php';
             ctx.restore();
         }
 
-        // Círculo central
+
         ctx.beginPath();
         ctx.arc(radius, radius, 28, 0, 2 * Math.PI);
         ctx.fillStyle = '#ffffff';
@@ -134,11 +137,11 @@ require_once __DIR__ . '/../layouts/header.php';
             const decorrido = tempoAtual - inicio;
             const progresso = Math.min(decorrido / duracao, 1);
 
-            // Easing Ease-Out Cubic
+
             const easeOut = 1 - Math.pow(1 - progresso, 3);
             anguloAtual = anguloInicial + anguloTotal * easeOut;
 
-            // Som de Tick
+
             if (decorrido - ultimoTick > 120 * (1 + easeOut * 2)) {
                 window.appAudio?.playTick();
                 ultimoTick = decorrido;
@@ -159,11 +162,11 @@ require_once __DIR__ . '/../layouts/header.php';
     }
 
     function finalizarGiro() {
-        // Calcula o índice onde o ponteiro do topo (-90 graus ou 3*PI/2) parou
+
         const radius = canvas.width / 2;
         const anguloNormalizado = (anguloAtual % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
-        
-        // O ponteiro está no topo: 3*PI/2 (270 graus)
+
+
         const anguloPonteiro = (3 * Math.PI / 2);
         let anguloRelativo = (anguloPonteiro - anguloNormalizado + 2 * Math.PI) % (2 * Math.PI);
         const index = Math.floor(anguloRelativo / arc);
@@ -179,7 +182,7 @@ require_once __DIR__ . '/../layouts/header.php';
         document.getElementById('resultadoRoleta').classList.remove('hidden');
     }
 
-    // Inicializa a roleta ao carregar
+
     desenharRoleta();
 </script>
 

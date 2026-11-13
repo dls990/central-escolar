@@ -1,12 +1,4 @@
-/**
- * Lógica Principal da Aplicação VivalCris
- * Central de Frequência e Alimentação Escolar
- * Animações de Rolagem, Gráfico de Pizza Diário e Comunicação Inspetoria-Cozinha
- */
-
-// ========================================================
-// 1. Animações de Rolagem (Scroll Reveal com IntersectionObserver)
-// ========================================================
+// Gerencia as interacoes da interface escolar.
 document.addEventListener('DOMContentLoaded', () => {
     initScrollReveal();
 });
@@ -19,7 +11,6 @@ function initScrollReveal() {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('is-revealed');
-                // Opcional: deixar de observar para não reanimar repetidamente
                 obs.unobserve(entry.target);
             }
         });
@@ -31,16 +22,13 @@ function initScrollReveal() {
     targets.forEach(el => observer.observe(el));
 }
 
-// ========================================================
-// 2. Notificações Toast Flutuantes
-// ========================================================
 function showToast(message, type = 'success') {
     const container = document.getElementById('toastContainer');
     if (!container) return;
 
     const toast = document.createElement('div');
     toast.className = 'toast-msg animate-scale-up';
-    
+
     let icon = '🎉';
     let borderColor = '#22c55e';
     if (type === 'error') {
@@ -66,9 +54,6 @@ function showToast(message, type = 'success') {
     }, 3800);
 }
 
-// ========================================================
-// 3. Marcação de Chamada / Frequência via AJAX com Atualização do Gráfico de Pizza
-// ========================================================
 async function atualizarFrequencia(alunoId, status, data) {
     window.appAudio?.playPop();
 
@@ -98,8 +83,7 @@ async function atualizarFrequencia(alunoId, status, data) {
             window.appAudio?.playSuccess();
             atualizarLinhaFrequencia(alunoId, status, result.horario);
             atualizarCardsEstatisticas(result.stats);
-            
-            // Atualiza o Gráfico de Pizza automaticamente
+
             if (result.pizza && window.atualizarGraficoPizza) {
                 window.atualizarGraficoPizza(result.pizza);
             }
@@ -142,13 +126,12 @@ function atualizarLinhaFrequencia(alunoId, status, horario) {
         timeSpan.textContent = (status === 'presente' && horario) ? `Chegada: ${horario}` : '';
     }
 
-    // Atualiza botões da linha
     const buttons = document.querySelectorAll(`[data-aluno="${alunoId}"]`);
     buttons.forEach(btn => {
         const btnStatus = btn.dataset.status;
         if (btnStatus === status) {
             btn.className = `px-3 py-1.5 rounded-xl font-bold text-xs transition transform active:scale-90 text-white shadow-sm ring-2 ring-offset-1 ${
-                status === 'presente' ? 'bg-emerald-500 ring-emerald-400' : 
+                status === 'presente' ? 'bg-emerald-500 ring-emerald-400' :
                 (status === 'ausente' ? 'bg-rose-500 ring-rose-400' : 'bg-amber-500 ring-amber-400')
             }`;
         } else {
@@ -171,7 +154,6 @@ function atualizarCardsEstatisticas(stats) {
     if (elJust) elJust.textContent = stats.justificados;
 }
 
-// Ação em Massa: Marcar Todos
 async function marcarTodosPresentes(data, turma) {
     if (!confirm('Deseja marcar TODOS os alunos listados como presentes hoje?')) return;
 
@@ -202,9 +184,6 @@ async function marcarTodosPresentes(data, turma) {
     }
 }
 
-// ========================================================
-// 4. Envio de Censo de Frequência para a Cozinha (Inspetoras -> Nutricionista)
-// ========================================================
 async function enviarParaCozinha(data) {
     const obsInput = document.getElementById('obsEnvioCozinha');
     const obs = obsInput ? obsInput.value : '';
@@ -232,7 +211,6 @@ async function enviarParaCozinha(data) {
             window.appAudio?.playFanfare();
             showToast(result.message);
 
-            // Fecha modal se aberto
             const modal = document.getElementById('modalEnvioCozinha');
             if (modal) modal.classList.add('hidden');
 
@@ -254,9 +232,6 @@ async function enviarParaCozinha(data) {
     }
 }
 
-// ========================================================
-// 5. Atualização de Status da Cozinha (Nutricionista)
-// ========================================================
 async function atualizarStatusCozinha(data, status, obs = '') {
     window.appAudio?.playPop();
 

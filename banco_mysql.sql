@@ -1,9 +1,4 @@
--- ========================================================
--- BANCO DE DADOS COMPLETO PARA XAMPP / MYSQL / PHPMYADMIN
--- Projeto: Central de Frequência e Alimentação Escolar
--- Feira Tecnológica
--- ========================================================
-
+-- Define as tabelas e os dados iniciais do sistema.
 CREATE DATABASE IF NOT EXISTS `central_escolar` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE `central_escolar`;
 
@@ -19,9 +14,6 @@ DROP TABLE IF EXISTS `alunos`;
 DROP TABLE IF EXISTS `usuarios`;
 SET FOREIGN_KEY_CHECKS = 1;
 
--- --------------------------------------------------------
--- 1. TABELA DE USUÁRIOS & LOGIN (Inspetoras Vivi, Val, Cris, Nutri e ADM)
--- --------------------------------------------------------
 CREATE TABLE `usuarios` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `nome` VARCHAR(150) NOT NULL,
@@ -35,9 +27,6 @@ CREATE TABLE `usuarios` (
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
--- 2. TABELA DE ALUNOS (12 SALAS ÚNICAS: 1º ao 5º EF, 6º ao 9º EF, 1º ao 3º EM)
--- --------------------------------------------------------
 CREATE TABLE `alunos` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `nome` VARCHAR(150) NOT NULL,
@@ -50,9 +39,6 @@ CREATE TABLE `alunos` (
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
--- 3. TABELA DE FREQUÊNCIA INDIVIDUAL DIÁRIA
--- --------------------------------------------------------
 CREATE TABLE `frequencias` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `aluno_id` INT NOT NULL,
@@ -66,9 +52,6 @@ CREATE TABLE `frequencias` (
     UNIQUE KEY `uq_aluno_data` (`aluno_id`, `data`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
--- 4. TABELA DE PEDIDOS E COMUNICAÇÃO COM A COZINHA (NUTRICIONISTA)
--- --------------------------------------------------------
 CREATE TABLE `pedidos_cozinha` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `data` DATE NOT NULL UNIQUE,
@@ -89,9 +72,6 @@ CREATE TABLE `pedidos_cozinha` (
     `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
--- 5. TABELA DE HISTÓRICO DIÁRIO E GRÁFICOS DE PIZZA SALVOS
--- --------------------------------------------------------
 CREATE TABLE `historico_frequencia_diaria` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `data` DATE NOT NULL UNIQUE,
@@ -105,9 +85,6 @@ CREATE TABLE `historico_frequencia_diaria` (
     `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
--- 6. TABELA DE CARDÁPIOS SEMANAIS
--- --------------------------------------------------------
 CREATE TABLE `cardapios` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `dia_semana` VARCHAR(30) NOT NULL,
@@ -120,9 +97,6 @@ CREATE TABLE `cardapios` (
     `emoji` VARCHAR(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
--- 7. TABELA DE REFEIÇÕES E AVALIAÇÕES DA MERENDA
--- --------------------------------------------------------
 CREATE TABLE `refeicoes` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `aluno_id` INT NOT NULL,
@@ -135,9 +109,6 @@ CREATE TABLE `refeicoes` (
     CONSTRAINT `fk_ref_aluno` FOREIGN KEY (`aluno_id`) REFERENCES `alunos`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
--- 8. TABELA DE VOTAÇÃO DO PRATO DE SEXTA-FEIRA
--- --------------------------------------------------------
 CREATE TABLE `votacao_pratos` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `nome` VARCHAR(150) NOT NULL,
@@ -147,9 +118,6 @@ CREATE TABLE `votacao_pratos` (
     `categoria` VARCHAR(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
--- 9. TABELA DE DICAS DE NUTRIÇÃO (CHEF CORUJITO)
--- --------------------------------------------------------
 CREATE TABLE `dicas_nutricao` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `titulo` VARCHAR(150) NOT NULL,
@@ -157,9 +125,6 @@ CREATE TABLE `dicas_nutricao` (
     `icone` VARCHAR(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ========================================================
--- SEED INICIAL DE DADOS
--- ========================================================
 
 INSERT INTO `usuarios` (`id`, `nome`, `usuario`, `senha`, `perfil`, `cargo`, `avatar`, `ativo`) VALUES
 (1, 'Vivi', 'vivi', '$2y$10$TKXpka3wUO.YPChrMgVCreOJ9epmQ.FC6FNqN9prIk1EJxHDWnfEy', 'inspetora', 'Inspetora Escolar (Fund 1 & 2)', '👩‍🏫', 1),

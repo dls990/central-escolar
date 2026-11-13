@@ -1,6 +1,4 @@
--- Schema SQLite para o Central de Frequencia e Alimentacao Escolar.
--- Os dados iniciais sao criados por Database::seedData() na primeira conexao.
-
+-- Define as tabelas e os dados iniciais do sistema.
 PRAGMA foreign_keys = ON;
 
 CREATE TABLE IF NOT EXISTS usuarios (

@@ -1,4 +1,7 @@
 <?php
+// Exibe o cardapio semanal.
+
+
 $tituloPagina = 'Cardápio Semanal Escolar | VivalCris';
 require_once __DIR__ . '/../layouts/header.php';
 $origemPadrao = $cardapioEdicao['id'] ?? ($cardapios[0]['id'] ?? 0);
@@ -12,7 +15,7 @@ foreach ($diasSemana as $dia):
 endforeach;
 ?>
 
-<!-- Cabeçalho do Cardápio -->
+
 <div class="menu-page-heading">
     <div>
         <h1>Cardápio semanal</h1>
@@ -121,7 +124,7 @@ endforeach;
     </section>
 <?php endif; ?>
 
-<!-- Destaque do Prato do Dia -->
+
 <div class="today-menu-banner">
     <div>
         <span class="menu-section-label">Cardápio de hoje · <?= htmlspecialchars($cardapioHoje['dia_semana']) ?></span>
@@ -135,19 +138,19 @@ endforeach;
     </div>
 </div>
 
-<!-- Grid de Dias da Semana (Segunda a Sexta) -->
+
 <h3 class="menu-week-heading">Programação da semana</h3>
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
     <?php foreach ($cardapios as $c): ?>
-        <?php 
+        <?php
             $isHoje = ($c['dia_semana'] === $cardapioHoje['dia_semana']);
             $tags = explode(',', $c['tags']);
         ?>
         <div class="menu-day-card <?= $isHoje ? 'is-today' : '' ?>">
-            
+
             <div>
-                <!-- Topo do Card -->
+
                 <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
                     <div class="flex items-center gap-2">
                         <div>
@@ -162,7 +165,7 @@ endforeach;
                     </span>
                 </div>
 
-                <!-- Prato Principal -->
+
                 <div class="mb-3">
                     <span class="text-[10px] font-bold text-slate-600 uppercase tracking-wider">Prato Principal</span>
                     <p class="font-brand font-bold text-base text-slate-800 leading-snug">
@@ -170,7 +173,7 @@ endforeach;
                     </p>
                 </div>
 
-                <!-- Acompanhamento -->
+
                 <div class="mb-4">
                     <span class="text-[10px] font-bold text-slate-600 uppercase tracking-wider">Acompanhamentos</span>
                     <p class="text-xs text-slate-600 leading-relaxed">
@@ -178,14 +181,14 @@ endforeach;
                     </p>
                 </div>
 
-                <!-- Sobremesa e Bebida -->
+
                 <div class="menu-card-details">
                     <p><strong>Sobremesa</strong><?= htmlspecialchars($c['sobremesa']) ?></p>
                     <p><strong>Bebida</strong><?= htmlspecialchars($c['bebida']) ?></p>
                 </div>
             </div>
 
-            <!-- Tags Nutricionais -->
+
             <div class="pt-3 border-t border-slate-100 flex flex-wrap gap-1.5">
                 <?php foreach ($tags as $tag): ?>
                     <span class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
@@ -204,7 +207,7 @@ endforeach;
     <?php endforeach; ?>
 </div>
 
-<!-- Dicas da Nutricionista -->
+
 <div class="menu-guidance">
     <div>
         <h4>Restrições e alergias</h4>

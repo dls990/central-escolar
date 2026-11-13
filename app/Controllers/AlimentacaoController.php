@@ -1,7 +1,10 @@
 <?php
-/**
- * Controller Alimentacao - Merenda, Cardápio, Fila do Refeitório e Votação
- */
+// Controla os cardapios, votacoes e refeicoes.
+
+
+
+
+
 namespace App\Controllers;
 
 use Core\Controller;
@@ -97,11 +100,11 @@ class AlimentacaoController extends Controller {
 
         $turmas = Aluno::getTurmas();
         $alunos = (!empty($turma) && $turma !== 'todas') ? Aluno::getByTurma($turma) : Aluno::all();
-        
+
         $cardapioHoje = Cardapio::getCardapioDeHoje();
         $refeicoesHoje = Refeicao::getDoDia($data);
-        
-        // Mapeia alunos que já consumiram
+
+
         $consumoMap = [];
         foreach ($refeicoesHoje as $r) {
             $consumoMap[$r['aluno_id']] = $r;
@@ -124,7 +127,7 @@ class AlimentacaoController extends Controller {
         $alunoId = (int)($_POST['aluno_id'] ?? 0);
         $cardapioId = (int)($_POST['cardapio_id'] ?? 1);
         $data = $_POST['data'] ?? date('Y-m-d');
-        $acao = $_POST['acao'] ?? 'consumir'; // 'consumir' ou 'cancelar'
+        $acao = $_POST['acao'] ?? 'consumir';
         $avaliacao = (int)($_POST['avaliacao'] ?? 5);
         $comentario = trim($_POST['comentario'] ?? '');
 

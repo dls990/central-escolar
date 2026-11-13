@@ -1,7 +1,10 @@
 <?php
-/**
- * Model Cardapio
- */
+// Gerencia os cardapios escolares.
+
+
+
+
+
 namespace App\Models;
 
 use Core\Model;
@@ -42,7 +45,7 @@ class Cardapio extends Model {
             3 => 'Quarta-feira',
             4 => 'Quinta-feira',
             5 => 'Sexta-feira',
-            6 => 'Segunda-feira', // Final de semana cai no padrão da segunda
+            6 => 'Segunda-feira',
             0 => 'Segunda-feira'
         ];
         $diaAtual = (int)date('w');

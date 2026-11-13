@@ -1,7 +1,10 @@
 <?php
-/**
- * Controller Alunos
- */
+// Controla o cadastro e a gestao de alunos.
+
+
+
+
+
 namespace App\Controllers;
 
 use Core\Controller;
@@ -18,7 +21,7 @@ class AlunosController extends Controller {
         if (!empty($busca)) {
             $buscaLower = mb_strtolower($busca, 'UTF-8');
             $alunos = array_filter($alunos, function($a) use ($buscaLower) {
-                return (str_contains(mb_strtolower($a['nome'], 'UTF-8'), $buscaLower) || 
+                return (str_contains(mb_strtolower($a['nome'], 'UTF-8'), $buscaLower) ||
                         str_contains(mb_strtolower($a['matricula'], 'UTF-8'), $buscaLower) ||
                         str_contains(mb_strtolower($a['restricoes'], 'UTF-8'), $buscaLower));
             });

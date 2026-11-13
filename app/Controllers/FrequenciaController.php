@@ -1,7 +1,10 @@
 <?php
-/**
- * Controller Frequencia - Gestão de Chamada, Gráficos de Pizza e Envio para a Cozinha
- */
+// Controla a chamada e o registro de frequencia.
+
+
+
+
+
 namespace App\Controllers;
 
 use Core\Controller;
@@ -25,7 +28,7 @@ class FrequenciaController extends Controller {
         $pedidoCozinha = PedidoCozinha::getPorData($data);
         $usuario = Usuario::usuarioAtual();
 
-        // Dados para o Gráfico de Pizza diário
+
         $pizzaStats = HistoricoFrequencia::getDadosGraficoPizza($data);
 
         $this->view('frequencia/index', [
@@ -59,7 +62,7 @@ class FrequenciaController extends Controller {
 
         $ok = Frequencia::registrar($alunoId, $data, $status, $horario, $obs, $inspetoraNome);
 
-        // Salva automaticamente o snapshot diário para o histórico e o gráfico de pizza
+
         HistoricoFrequencia::salvarDiario($data, $inspetoraNome);
 
         $stats = Frequencia::getEstatisticas($data);
@@ -85,7 +88,7 @@ class FrequenciaController extends Controller {
 
         $totalAlterados = Frequencia::marcarTodos($data, $status, $turma, $inspetoraNome);
 
-        // Salva automaticamente o snapshot diário para o histórico e o gráfico de pizza
+
         HistoricoFrequencia::salvarDiario($data, $inspetoraNome);
 
         $stats = Frequencia::getEstatisticas($data);

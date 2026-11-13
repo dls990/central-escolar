@@ -1,7 +1,10 @@
 <?php
-/**
- * Model Frequencia
- */
+// Registra e consulta a frequencia dos alunos.
+
+
+
+
+
 namespace App\Models;
 
 use Core\Model;
@@ -52,21 +55,21 @@ class Frequencia extends Model {
 
         $db = self::getConnection();
 
-        // Verifica se já existe registro
+
         $stmtCheck = $db->prepare("SELECT id FROM frequencias WHERE aluno_id = ? AND data = ?");
         $stmtCheck->execute([$alunoId, $data]);
         $existente = $stmtCheck->fetchColumn();
 
         if ($existente) {
             $stmt = $db->prepare("
-                UPDATE frequencias 
-                SET status = ?, horario = ?, observacao = ?, inspetora_nome = ? 
+                UPDATE frequencias
+                SET status = ?, horario = ?, observacao = ?, inspetora_nome = ?
                 WHERE aluno_id = ? AND data = ?
             ");
             return $stmt->execute([$status, $horario, $obs, $inspetoraNome, $alunoId, $data]);
         } else {
             $stmt = $db->prepare("
-                INSERT INTO frequencias (aluno_id, data, status, horario, observacao, inspetora_nome) 
+                INSERT INTO frequencias (aluno_id, data, status, horario, observacao, inspetora_nome)
                 VALUES (?, ?, ?, ?, ?, ?)
             ");
             return $stmt->execute([$alunoId, $data, $status, $horario, $obs, $inspetoraNome]);
@@ -74,8 +77,8 @@ class Frequencia extends Model {
     }
 
     public static function marcarTodos(string $data, string $status, ?string $turma = null, ?string $inspetoraNome = null): int {
-        $alunos = (!empty($turma) && $turma !== 'todas') 
-            ? Aluno::getByTurma($turma) 
+        $alunos = (!empty($turma) && $turma !== 'todas')
+            ? Aluno::getByTurma($turma)
             : Aluno::all();
 
         $count = 0;
@@ -91,7 +94,7 @@ class Frequencia extends Model {
         $totalAlunos = Aluno::countTotal();
 
         $stmt = self::getConnection()->prepare("
-            SELECT 
+            SELECT
                 SUM(CASE WHEN status = 'presente' THEN 1 ELSE 0 END) as presentes,
                 SUM(CASE WHEN status = 'ausente' THEN 1 ELSE 0 END) as ausentes,
                 SUM(CASE WHEN status = 'justificado' THEN 1 ELSE 0 END) as justificados

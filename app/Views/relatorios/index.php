@@ -1,9 +1,11 @@
 <?php
+// Exibe os relatorios escolares.
+
 $tituloPagina = 'Relatórios Escolares | VivalCris';
 require_once __DIR__ . '/../layouts/header.php';
 ?>
 
-<!-- Cabeçalho -->
+
 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
     <div>
         <div class="flex items-center gap-2">
@@ -20,9 +22,9 @@ require_once __DIR__ . '/../layouts/header.php';
     </button>
 </div>
 
-<!-- Indicadores Globais -->
+
 <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
-    
+
     <div class="fun-card p-6 bg-emerald-500 text-white">
         <span class="text-xs font-bold text-emerald-100 uppercase tracking-wider">Índice Geral de Presença</span>
         <div class="text-4xl font-brand font-bold mt-2"><?= $statsFreq['taxa_presenca'] ?>%</div>
@@ -43,10 +45,10 @@ require_once __DIR__ . '/../layouts/header.php';
 
 </div>
 
-<!-- Detalhamento por Turma e por Restrição -->
+
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-    
-    <!-- Presença por Turma -->
+
+
     <div class="fun-card p-6 bg-white">
         <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
             <h3 class="font-brand font-bold text-lg text-slate-800 flex items-center gap-2">
@@ -65,7 +67,7 @@ require_once __DIR__ . '/../layouts/header.php';
                         </span>
                     </div>
                     <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
-                        <div class="h-3 rounded-full transition-all duration-700 <?= ($rt['porcentagem'] >= 85) ? 'bg-emerald-500' : 'bg-amber-500' ?>" 
+                        <div class="h-3 rounded-full transition-all duration-700 <?= ($rt['porcentagem'] >= 85) ? 'bg-emerald-500' : 'bg-amber-500' ?>"
                              style="width: <?= $rt['porcentagem'] ?>%"></div>
                     </div>
                 </div>
@@ -73,7 +75,7 @@ require_once __DIR__ . '/../layouts/header.php';
         </div>
     </div>
 
-    <!-- Restrições e Alergias Mapeadas -->
+
     <div class="fun-card p-6 bg-white">
         <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
             <h3 class="font-brand font-bold text-lg text-slate-800 flex items-center gap-2">
@@ -84,7 +86,7 @@ require_once __DIR__ . '/../layouts/header.php';
 
         <div class="space-y-3">
             <?php foreach ($restricoesContagem as $restricao => $qtd): ?>
-                <?php 
+                <?php
                     $isLivre = strtolower($restricao) === 'nenhuma';
                     $pct = ($totalAlunos > 0) ? round(($qtd / $totalAlunos) * 100, 1) : 0;
                 ?>
@@ -106,7 +108,7 @@ require_once __DIR__ . '/../layouts/header.php';
 
 </div>
 
-<!-- Apresentação Escolar & Conclusão Pedagógica -->
+
 <div class="fun-card p-6 bg-gradient-to-r from-slate-900 to-indigo-950 text-white">
     <div class="flex items-center gap-3 mb-2 text-emerald-400 text-xs font-bold uppercase tracking-wider">
         <span>🎓</span> Avaliação Pedagógica do Sistema Integrado

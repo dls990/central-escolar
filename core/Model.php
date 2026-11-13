@@ -1,7 +1,9 @@
 <?php
-/**
- * Model Base
- */
+// Define recursos compartilhados pelos modelos.
+
+
+
+
 namespace Core;
 
 use App\Models\Database;

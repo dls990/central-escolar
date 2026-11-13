@@ -1,7 +1,4 @@
-/**
- * Motor de Confetes em HTML5 Canvas
- * Leve, super animado e sem dependências
- */
+// Cria efeitos visuais de celebracao.
 class ConfettiEngine {
     constructor() {
         this.canvas = document.getElementById('confettiCanvas');

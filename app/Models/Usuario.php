@@ -1,7 +1,10 @@
 <?php
-/**
- * Model Usuario - Gestão de Usuários e Autenticação (Inspetoras, Nutricionista, ADM)
- */
+// Gerencia os usuarios e seus perfis.
+
+
+
+
+
 namespace App\Models;
 
 use Core\Model;
@@ -35,11 +38,11 @@ class Usuario extends Model {
         }
 
         if (password_verify($senha, $user['senha'])) {
-            // Atualiza último login
+
             $stmt = self::getConnection()->prepare("UPDATE usuarios SET ultimo_login = CURRENT_TIMESTAMP WHERE id = ?");
             $stmt->execute([$user['id']]);
 
-            // Remove a senha do array por segurança
+
             unset($user['senha']);
             return $user;
         }
@@ -79,7 +82,7 @@ class Usuario extends Model {
             return false;
         }
 
-        // Admin tem acesso a tudo
+
         if ($usuario['perfil'] === 'admin') {
             return true;
         }
@@ -113,7 +116,7 @@ class Usuario extends Model {
         if (!empty($dados['senha'])) {
             $hash = password_hash($dados['senha'], PASSWORD_DEFAULT);
             $stmt = self::getConnection()->prepare("
-                UPDATE usuarios 
+                UPDATE usuarios
                 SET nome = ?, usuario = ?, senha = ?, perfil = ?, cargo = ?, avatar = ?, ativo = ?
                 WHERE id = ?
             ");
@@ -129,7 +132,7 @@ class Usuario extends Model {
             ]);
         } else {
             $stmt = self::getConnection()->prepare("
-                UPDATE usuarios 
+                UPDATE usuarios
                 SET nome = ?, usuario = ?, perfil = ?, cargo = ?, avatar = ?, ativo = ?
                 WHERE id = ?
             ");
@@ -146,7 +149,7 @@ class Usuario extends Model {
     }
 
     public static function excluir(int $id): bool {
-        // Impede excluir o admin principal (id 1 ou usuário 'admin')
+
         $u = self::find($id);
         if ($u && $u['usuario'] === 'admin') {
             return false;

@@ -1,7 +1,10 @@
 <?php
-/**
- * Controller Cozinha - Painel da Nutricionista e Gestão de Refeições
- */
+// Controla os pedidos e o painel da cozinha.
+
+
+
+
+
 namespace App\Controllers;
 
 use Core\Controller;
@@ -22,13 +25,13 @@ class CozinhaController extends Controller {
         $ultimosPedidos = PedidoCozinha::getUltimosPedidos(10);
         $usuario = Usuario::usuarioAtual();
 
-        // Se ainda não houve envio formal da inspetoria para a data de hoje,
-        // geramos uma prévia em tempo real baseada nos alunos presentes no momento
+
+
         $previaTempoReal = null;
         if (!$pedido) {
             $stats = Frequencia::getEstatisticas($data);
             $alunos = Frequencia::getChamada($data);
-            
+
             $fund1 = 0;
             $fund2 = 0;
             $medio = 0;

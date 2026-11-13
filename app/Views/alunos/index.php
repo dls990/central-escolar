@@ -1,9 +1,12 @@
 <?php
+// Exibe a lista de alunos.
+
+
 $tituloPagina = 'Gestão de Alunos | VivalCris';
 require_once __DIR__ . '/../layouts/header.php';
 ?>
 
-<!-- Cabeçalho -->
+
 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
     <div>
         <div class="flex items-center gap-2">
@@ -20,12 +23,12 @@ require_once __DIR__ . '/../layouts/header.php';
     </a>
 </div>
 
-<!-- Filtros de Busca e Turma -->
+
 <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm mb-6 flex flex-col md:flex-row items-center justify-between gap-3">
-    
+
     <form method="GET" action="<?= url('alunos') ?>" class="flex flex-wrap items-center gap-3 w-full md:w-auto">
         <div class="relative flex-grow sm:flex-grow-0 sm:w-64">
-            <input type="text" name="busca" value="<?= htmlspecialchars($busca) ?>" placeholder="Buscar por nome ou matrícula..." 
+            <input type="text" name="busca" value="<?= htmlspecialchars($busca) ?>" placeholder="Buscar por nome ou matrícula..."
                    class="w-full text-xs p-2.5 pl-8 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500">
             <span class="absolute left-2.5 top-2.5 text-slate-600 text-xs">🔍</span>
         </div>
@@ -55,7 +58,7 @@ require_once __DIR__ . '/../layouts/header.php';
     </div>
 </div>
 
-<!-- Tabela de Alunos -->
+
 <div class="fun-card overflow-hidden">
     <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
@@ -81,7 +84,7 @@ require_once __DIR__ . '/../layouts/header.php';
                 <?php else: ?>
                     <?php foreach ($alunos as $aluno): ?>
                         <tr class="hover:bg-slate-50/70 transition-colors">
-                            
+
                             <td class="py-3.5 px-4">
                                 <div class="flex items-center gap-3">
                                     <span class="text-3xl select-none"><?= $aluno['avatar'] ?></span>
@@ -123,8 +126,8 @@ require_once __DIR__ . '/../layouts/header.php';
 
                             <td class="py-3.5 px-4 text-center">
                                 <div class="flex items-center justify-center gap-1.5">
-                                    <a href="<?= url('alunos/editar?id=' . $aluno['id']) ?>" 
-                                       class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition" 
+                                    <a href="<?= url('alunos/editar?id=' . $aluno['id']) ?>"
+                                       class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition"
                                        title="Editar dados">
                                         ✏️
                                     </a>

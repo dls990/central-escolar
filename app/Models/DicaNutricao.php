@@ -1,7 +1,6 @@
 <?php
-/**
- * Model DicaNutricao - Mensagens Divertidas do Mascote
- */
+// Gerencia as dicas de nutricao.
+
 namespace App\Models;
 
 use Core\Model;

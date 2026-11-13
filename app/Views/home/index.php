@@ -1,4 +1,6 @@
 <?php
+// Exibe o painel inicial.
+
 $tituloPagina = 'VivalCris - Central Escolar de Frequência & Alimentação';
 require_once __DIR__ . '/../layouts/header.php';
 ?>
@@ -15,10 +17,10 @@ require_once __DIR__ . '/../layouts/header.php';
     </div>
 </section>
 
-<!-- Cards de Estatísticas Animadas e Gráfico de Pizza Consolidado -->
+
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
-    
-    <!-- Gráfico de Pizza Diário de Hoje -->
+
+
     <div class="lg:col-span-4 scroll-reveal-left">
         <div class="dashboard-panel p-5 h-full flex flex-col justify-between">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-2">
@@ -46,33 +48,33 @@ require_once __DIR__ . '/../layouts/header.php';
         </div>
     </div>
 
-    <!-- 4 Indicadores Rápidos -->
+
     <div class="lg:col-span-8 flex flex-col justify-between gap-4 scroll-reveal-right">
-        
+
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            
-            <!-- Taxa de Presença -->
+
+
             <div class="dashboard-stat">
                 <span class="text-[10px] font-bold text-slate-600 uppercase tracking-wider block">Assiduidade</span>
                 <span class="text-2xl sm:text-3xl font-brand font-bold text-emerald-700 block mt-1"><?= $statsFrequencia['taxa_presenca'] ?>%</span>
                 <span class="text-[11px] text-emerald-700 font-semibold"><?= $statsFrequencia['presentes'] ?> presentes</span>
             </div>
 
-            <!-- Refeições na Cozinha -->
+
             <div class="dashboard-stat">
                 <span class="text-[10px] font-bold text-slate-600 uppercase tracking-wider block">Refeições Cozinha</span>
                 <span class="text-2xl sm:text-3xl font-brand font-bold text-amber-700 block mt-1"><?= $pedidoHoje['total_presentes'] ?? $statsFrequencia['presentes'] ?></span>
                 <span class="text-[11px] text-amber-800 font-semibold">Confirmadas hoje</span>
             </div>
 
-            <!-- Pratos Poupados (Desperdício Zero) -->
+
             <div class="dashboard-stat">
                 <span class="text-[10px] font-bold text-slate-600 uppercase tracking-wider block">Pratos Poupados</span>
                 <span class="text-2xl sm:text-3xl font-brand font-bold text-rose-600 block mt-1"><?= $pedidoHoje['total_ausentes'] ?? $statsFrequencia['ausentes'] ?></span>
                 <span class="text-[11px] text-rose-700 font-semibold">Zero desperdício</span>
             </div>
 
-            <!-- Salas Únicas -->
+
             <div class="dashboard-stat">
                 <span class="text-[10px] font-bold text-slate-600 uppercase tracking-wider block">Salas Únicas</span>
                 <span class="text-2xl sm:text-3xl font-brand font-bold text-indigo-700 block mt-1">12</span>
@@ -129,7 +131,7 @@ require_once __DIR__ . '/../layouts/header.php';
     </section>
 </section>
 
-<!-- Inicialização do Gráfico de Pizza da Home -->
+
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const ctx = document.getElementById('homePizzaChart');

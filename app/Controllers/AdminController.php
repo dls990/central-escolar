@@ -1,7 +1,10 @@
 <?php
-/**
- * Controller Admin - Monitoramento Integrado (Inspetoria + Cozinha) e Gestão de Usuários
- */
+// Controla a administracao e os usuarios do sistema.
+
+
+
+
+
 namespace App\Controllers;
 
 use Core\Controller;
@@ -21,17 +24,17 @@ class AdminController extends Controller {
         $totalAlunos = Aluno::countTotal();
         $turmas = Aluno::getTurmas();
 
-        // Dados do lado da Inspetoria
+
         $statsFrequencia = Frequencia::getEstatisticas($hoje);
         $pizzaStats = HistoricoFrequencia::getDadosGraficoPizza($hoje);
         $historicos = HistoricoFrequencia::getTodos(7);
 
-        // Dados do lado da Cozinha
+
         $pedidoHoje = PedidoCozinha::getPorData($hoje);
         $cardapioHoje = Cardapio::getCardapioDeHoje();
         $pedidosRecentes = PedidoCozinha::getUltimosPedidos(7);
 
-        // Usuários do sistema
+
         $usuarios = Usuario::all();
 
         $this->view('admin/index', [

@@ -1,8 +1,11 @@
 <?php
-/**
- * Gerenciador de Banco de Dados MySQL com Auto-Migração e Seed Inicial
- * Central de Frequência e Alimentação Escolar
- */
+// Configura o acesso e a estrutura do banco de dados.
+
+
+
+
+
+
 namespace App\Models;
 
 use PDO;
@@ -25,7 +28,7 @@ class Database {
                     self::$instance->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
                     self::$instance->exec("SET NAMES utf8mb4");
                 } else {
-                    // Fallback SQLite
+
                     $dbDir = __DIR__ . '/../../database';
                     if (!is_dir($dbDir)) {
                         mkdir($dbDir, 0777, true);
@@ -36,10 +39,10 @@ class Database {
                     self::$instance->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
                 }
 
-                // Garante que todas as tabelas necessárias existam
+
                 self::ensureSchema(self::$instance, $driver);
 
-                // Verifica se a tabela de usuários tem dados, caso contrário roda seed
+
                 $userCount = (int)self::$instance->query("SELECT COUNT(*) FROM usuarios")->fetchColumn();
                 if ($userCount === 0) {
                     self::seedData(self::$instance, $driver);
@@ -66,15 +69,15 @@ class Database {
     }
 
     private static function ensureSchemaMysql(PDO $db): void {
-        // Verifica se as tabelas existem no MySQL
-        $tabelas = ['usuarios', 'alunos', 'frequencias', 'pedidos_cozinha', 
-                     'historico_frequencia_diaria', 'cardapios', 'refeicoes', 
+
+        $tabelas = ['usuarios', 'alunos', 'frequencias', 'pedidos_cozinha',
+                     'historico_frequencia_diaria', 'cardapios', 'refeicoes',
                      'votacao_pratos', 'dicas_nutricao'];
-        
+
         foreach ($tabelas as $tabela) {
             $stmt = $db->query("SHOW TABLES LIKE '{$tabela}'");
             if ($stmt->rowCount() === 0) {
-                // Tabelas não existem, cria todas de uma vez
+
                 self::createTablesMysql($db);
                 return;
             }
@@ -385,51 +388,51 @@ class Database {
         $db->exec("DELETE FROM alunos");
 
         $alunos = [
-            // 1º Ano EF
+
             ['Arthur Ferreira', '20260101', '1º Ano EF', '👦', 'Nenhuma', '(11) 98111-0101', 90],
             ['Helena Castro', '20260102', '1º Ano EF', '👧', 'Sem Lactose', '(11) 98111-0102', 120],
             ['Bernardo Dias', '20260103', '1º Ano EF', '🧒', 'Nenhuma', '(11) 98111-0103', 85],
-            // 2º Ano EF
+
             ['Alice Santos', '20260201', '2º Ano EF', '👧', 'Sem Glúten', '(11) 98111-0201', 110],
             ['Theo Carvalho', '20260202', '2º Ano EF', '👦', 'Nenhuma', '(11) 98111-0202', 95],
             ['Manuela Souza', '20260203', '2º Ano EF', '👩', 'Nenhuma', '(11) 98111-0203', 100],
-            // 3º Ano EF
+
             ['Davi Lucca', '20260301', '3º Ano EF', '👦', 'Nenhuma', '(11) 98111-0301', 105],
             ['Valentina Lima', '20260302', '3º Ano EF', '👧', 'Vegetariana', '(11) 98111-0302', 140],
             ['Gabriel Alves', '20260303', '3º Ano EF', '🧒', 'Nenhuma', '(11) 98111-0303', 80],
-            // 4º Ano EF
+
             ['Lorena Martins', '20260401', '4º Ano EF', '👧', 'Alérgica a Amendoim', '(11) 98111-0401', 130],
             ['Heitor Barbosa', '20260402', '4º Ano EF', '👦', 'Nenhuma', '(11) 98111-0402', 115],
             ['Sophia Ribeiro', '20260403', '4º Ano EF', '👩', 'Sem Lactose', '(11) 98111-0403', 125],
-            // 5º Ano EF
+
             ['Samuel Cardoso', '20260501', '5º Ano EF', '👦', 'Nenhuma', '(11) 98111-0501', 110],
             ['Laura Moreira', '20260502', '5º Ano EF', '👧', 'Nenhuma', '(11) 98111-0502', 105],
             ['Felipe Araujo', '20260503', '5º Ano EF', '🧒', 'Vegetariano', '(11) 98111-0503', 95],
-            // 6º Ano EF
+
             ['Lucas Oliveira', '20260601', '6º Ano EF', '👦', 'Nenhuma', '(11) 98111-0601', 135],
             ['Sofia Mendes', '20260602', '6º Ano EF', '👧', 'Sem Lactose', '(11) 98111-0602', 150],
             ['Mateus Silva', '20260603', '6º Ano EF', '🧒', 'Vegetariano', '(11) 98111-0603', 95],
-            // 7º Ano EF
+
             ['Beatriz Costa', '20260701', '7º Ano EF', '👩', 'Sem Glúten', '(11) 98111-0701', 180],
             ['Enzo Gabriel', '20260702', '7º Ano EF', '🧑', 'Nenhuma', '(11) 98111-0702', 110],
             ['Camila Rocha', '20260703', '7º Ano EF', '👧', 'Alérgica a Frutos do Mar', '(11) 98111-0703', 140],
-            // 8º Ano EF
+
             ['Pedro Henrique', '20260801', '8º Ano EF', '🧒', 'Nenhuma', '(11) 98111-0801', 85],
             ['Mariana Fernandes', '20260802', '8º Ano EF', '👧', 'Vegetariana', '(11) 98111-0802', 130],
             ['Guilherme Ribeiro', '20260803', '8º Ano EF', '🧑', 'Nenhuma', '(11) 98111-0803', 90],
-            // 9º Ano EF
+
             ['Isabela Souza', '20260901', '9º Ano EF', '👩', 'Sem Glúten', '(11) 98111-0901', 175],
             ['Gustavo Nogueira', '20260902', '9º Ano EF', '👦', 'Nenhuma', '(11) 98111-0902', 120],
             ['Leticia Campos', '20260903', '9º Ano EF', '👧', 'Sem Lactose', '(11) 98111-0903', 145],
-            // 1º Ano EM
+
             ['Thiago Mendes', '20261001', '1º Ano EM', '🧑', 'Nenhuma', '(11) 98111-1001', 160],
             ['Julia Azevedo', '20261002', '1º Ano EM', '👩', 'Vegetariana', '(11) 98111-1002', 170],
             ['Nicolas Ramos', '20261003', '1º Ano EM', '👦', 'Nenhuma', '(11) 98111-1003', 115],
-            // 2º Ano EM
+
             ['Rafaela Pires', '20261101', '2º Ano EM', '👩', 'Sem Lactose', '(11) 98111-1101', 190],
             ['Leonardo Freitas', '20261102', '2º Ano EM', '🧑', 'Nenhuma', '(11) 98111-1102', 130],
             ['Bruna Guimaraes', '20261103', '2º Ano EM', '👧', 'Nenhuma', '(11) 98111-1103', 140],
-            // 3º Ano EM
+
             ['Caio Vicente', '20261201', '3º Ano EM', '👦', 'Nenhuma', '(11) 98111-1201', 200],
             ['Yasmin Toledo', '20261202', '3º Ano EM', '👩', 'Sem Glúten', '(11) 98111-1202', 185],
             ['Rodrigo Peixoto', '20261203', '3º Ano EM', '🧑', 'Vegetariano', '(11) 98111-1203', 165],
@@ -451,10 +454,10 @@ class Database {
         $ontem = date('Y-m-d', strtotime('-1 day'));
         $anteontem = date('Y-m-d', strtotime('-2 days'));
 
-        // Chamada de Hoje realizada pela Inspetora Vivi
+
         $stmtFreq = $db->prepare("INSERT INTO frequencias (aluno_id, data, status, horario, observacao, inspetora_nome) VALUES (?, ?, ?, ?, ?, ?)");
 
-        // 36 alunos: 31 presentes, 3 ausentes, 2 justificados
+
         for ($id = 1; $id <= $totalAlunos; $id++) {
             if ($id === 6 || $id === 18 || $id === 28) {
                 $status = 'ausente';
@@ -472,33 +475,33 @@ class Database {
             $stmtFreq->execute([$id, $hoje, $status, $horario, $obs, 'Inspetora Vivi']);
         }
 
-        // Salva histórico de hoje
+
         HistoricoFrequencia::salvarDiario($hoje, 'Inspetora Vivi');
 
-        // Envia pedido de hoje para a cozinha
+
         PedidoCozinha::enviarParaCozinha($hoje, 'Inspetora Vivi', 'Alunos do 7º e 8º EF têm aula prática antes do almoço. Refeições conferidas!');
 
-        // Histórico de ontem (fechado pela Inspetora Val)
+
         $db->exec("
-            INSERT INTO historico_frequencia_diaria 
+            INSERT INTO historico_frequencia_diaria
             (data, presentes, ausentes, justificados, taxa_presenca, total_alunos, fechado_por)
             VALUES ('{$ontem}', 33, 2, 1, 91.7, {$totalAlunos}, 'Inspetora Val')
         ");
         $db->exec("
-            INSERT INTO pedidos_cozinha 
+            INSERT INTO pedidos_cozinha
             (data, enviado_por, horario_envio, total_matriculados, total_presentes, total_ausentes, total_justificados,
              refeicoes_fund1, refeicoes_fund2, refeicoes_medio, restricoes_resumo, status, observacao_inspetora, observacao_cozinha)
             VALUES ('{$ontem}', 'Inspetora Val', '08:20', {$totalAlunos}, 33, 2, 1, 14, 11, 8, '3x Sem Lactose, 2x Sem Glúten, 3x Vegetariano', 'pronto', 'Tudo tranquilo nas salas de aula.', 'Cardápio servido com 100% de aceitação!')
         ");
 
-        // Histórico de anteontem (fechado pela Inspetora Cris)
+
         $db->exec("
-            INSERT INTO historico_frequencia_diaria 
+            INSERT INTO historico_frequencia_diaria
             (data, presentes, ausentes, justificados, taxa_presenca, total_alunos, fechado_por)
             VALUES ('{$anteontem}', 34, 1, 1, 94.4, {$totalAlunos}, 'Inspetora Cris')
         ");
         $db->exec("
-            INSERT INTO pedidos_cozinha 
+            INSERT INTO pedidos_cozinha
             (data, enviado_por, horario_envio, total_matriculados, total_presentes, total_ausentes, total_justificados,
              refeicoes_fund1, refeicoes_fund2, refeicoes_medio, restricoes_resumo, status, observacao_inspetora, observacao_cozinha)
             VALUES ('{$anteontem}', 'Inspetora Cris', '08:10', {$totalAlunos}, 34, 1, 1, 14, 12, 8, '4x Sem Lactose, 2x Sem Glúten, 3x Vegetariano', 'pronto', 'Dia de prova do EM, chamada antecipada.', 'Almoço finalizado às 12:30.')

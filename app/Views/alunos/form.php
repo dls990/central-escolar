@@ -1,4 +1,7 @@
 <?php
+// Exibe o formulario de cadastro de alunos.
+
+
 $tituloPagina = $titulo . ' | VivalCris';
 require_once __DIR__ . '/../layouts/header.php';
 
@@ -7,7 +10,7 @@ $actionUrl = $isEdit ? url('alunos/atualizar') : url('alunos/salvar');
 ?>
 
 <div class="max-w-2xl mx-auto">
-    
+
     <div class="flex items-center justify-between mb-6">
         <div>
             <h1 class="text-2xl font-brand font-bold text-slate-800"><?= htmlspecialchars($titulo) ?></h1>
@@ -24,14 +27,14 @@ $actionUrl = $isEdit ? url('alunos/atualizar') : url('alunos/salvar');
                 <input type="hidden" name="id" value="<?= $aluno['id'] ?>">
             <?php endif; ?>
 
-            <!-- Escolha de Avatar Divertido -->
+
             <?php if (!$isEdit): ?>
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
                         Escolha um Avatar Divertido
                     </label>
                     <div class="flex flex-wrap gap-2">
-                        <?php 
+                        <?php
                             $opcoesAvatares = ['👦', '👧', '🧒', '👩', '🧑', '🎒', '⭐', '🎈'];
                             $avatarAtual = $aluno['avatar'] ?? '👦';
                         ?>
@@ -47,22 +50,22 @@ $actionUrl = $isEdit ? url('alunos/atualizar') : url('alunos/salvar');
                 </div>
             <?php endif; ?>
 
-            <!-- Nome Completo -->
+
             <div>
                 <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
                     Nome Completo do Aluno *
                 </label>
-                <input type="text" name="nome" required value="<?= htmlspecialchars($aluno['nome'] ?? '') ?>" placeholder="Ex: Lucas Gabriel Oliveira" 
+                <input type="text" name="nome" required value="<?= htmlspecialchars($aluno['nome'] ?? '') ?>" placeholder="Ex: Lucas Gabriel Oliveira"
                        class="w-full text-sm p-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500">
             </div>
 
-            <!-- Matrícula e Turma -->
+
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
                         Número de Matrícula *
                     </label>
-                    <input type="text" name="matricula" required value="<?= htmlspecialchars($aluno['matricula'] ?? '2026' . rand(1000, 9999)) ?>" 
+                    <input type="text" name="matricula" required value="<?= htmlspecialchars($aluno['matricula'] ?? '2026' . rand(1000, 9999)) ?>"
                            class="w-full text-sm p-3 rounded-xl border border-slate-200 font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 </div>
 
@@ -71,7 +74,7 @@ $actionUrl = $isEdit ? url('alunos/atualizar') : url('alunos/salvar');
                         Turma / Ano *
                     </label>
                     <select name="turma" required class="w-full text-sm p-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500">
-                        <?php 
+                        <?php
                             $turmasPadrao = [
                                 '1º Ano EF', '2º Ano EF', '3º Ano EF', '4º Ano EF', '5º Ano EF',
                                 '6º Ano EF', '7º Ano EF', '8º Ano EF', '9º Ano EF',
@@ -89,7 +92,7 @@ $actionUrl = $isEdit ? url('alunos/atualizar') : url('alunos/salvar');
                 </div>
             </div>
 
-            <!-- Restrição Alimentar / Alergia -->
+
             <div>
                 <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
                     Restrições Alimentares ou Alergias (Segurança no Refeitório)
@@ -103,17 +106,17 @@ $actionUrl = $isEdit ? url('alunos/atualizar') : url('alunos/salvar');
                     <option value="Alérgica a Amendoim">🥜 Alergia Severa a Amendoim / Nozes</option>
                     <option value="Alérgico a Frutos do Mar">🦐 Alergia a Frutos do Mar</option>
                 </select>
-                <input type="text" id="campoRestricao" name="restricoes" value="<?= htmlspecialchars($aluno['restricoes'] ?? 'Nenhuma') ?>" 
-                       placeholder="Ex: Sem Lactose ou Nenhuma" 
+                <input type="text" id="campoRestricao" name="restricoes" value="<?= htmlspecialchars($aluno['restricoes'] ?? 'Nenhuma') ?>"
+                       placeholder="Ex: Sem Lactose ou Nenhuma"
                        class="w-full text-sm p-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500">
             </div>
 
-            <!-- Telefone do Responsável -->
+
             <div>
                 <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
                     Telefone de Contato do Responsável
                 </label>
-                <input type="text" name="telefone_responsavel" value="<?= htmlspecialchars($aluno['telefone_responsavel'] ?? '') ?>" placeholder="(11) 98765-4321" 
+                <input type="text" name="telefone_responsavel" value="<?= htmlspecialchars($aluno['telefone_responsavel'] ?? '') ?>" placeholder="(11) 98765-4321"
                        class="w-full text-sm p-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500">
             </div>
 
