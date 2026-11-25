@@ -113,6 +113,31 @@ class AdminController extends Controller {
         $this->redirect('admin/usuarios');
     }
 
+    // Redefine a senha da conta escolhida sem exibir ou armazenar a senha em texto puro.
+    public function alterarSenhaUsuario(): void {
+        $this->requireRole('admin');
+        $id = filter_var($_POST['id'] ?? null, FILTER_VALIDATE_INT);
+        $senha = $_POST['senha'] ?? null;
+        $confirmacao = $_POST['confirmacao'] ?? null;
+
+        if ($id === false || $id === null || $id <= 0
+            || !is_string($senha) || strlen($senha) < 8
+            || !is_string($confirmacao) || !hash_equals($senha, $confirmacao)) {
+            $this->flash('error', 'Informe uma conta válida e uma senha confirmada com pelo menos 8 caracteres.');
+            $this->redirect('admin/usuarios');
+            return;
+        }
+
+        if (!Usuario::redefinirSenhaPorAdmin($id, $senha)) {
+            $this->flash('error', 'Não foi possível alterar a senha: a conta selecionada não foi encontrada.');
+            $this->redirect('admin/usuarios');
+            return;
+        }
+
+        $this->flash('success', 'Senha redefinida. Avise o usuário por um canal seguro.');
+        $this->redirect('admin/usuarios');
+    }
+
     // Remove a conta solicitada, respeitando a protecao do administrador principal.
     public function excluirUsuario(): void {
         $this->requireRole('admin');

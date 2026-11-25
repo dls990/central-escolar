@@ -10,64 +10,70 @@ use App\Models\Usuario;
 
 class Router {
     private static array $routes = [];
+    private static array $routeRoles = [];
 
-    // Associa uma rota GET a uma acao de controller.
-    public static function get(string $path, string $handler): void {
+    // Registra a rota e os perfis autorizados; esconder links na tela nao protege a URL.
+    public static function get(string $path, string $handler, ?array $roles = null): void {
         self::$routes['GET'][$path] = $handler;
+        self::$routeRoles['GET'][$path] = $roles;
     }
 
-    // Associa uma rota POST a uma acao de controller.
-    public static function post(string $path, string $handler): void {
+    // Aplica as mesmas regras de autorizacao tambem as operacoes enviadas por formulario.
+    public static function post(string $path, string $handler, ?array $roles = null): void {
         self::$routes['POST'][$path] = $handler;
+        self::$routeRoles['POST'][$path] = $roles;
     }
 
-    // Localiza a rota correspondente ao metodo e ao caminho solicitados.
+    // Localiza a rota e valida autenticacao/perfil antes de executar qualquer controller.
     public static function dispatch(): void {
-        $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+        $method = strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET');
         $uri = self::resolveUri();
-
-
-        if (strpos($uri, '?') !== false) {
-            $uri = substr($uri, 0, strpos($uri, '?'));
-        }
 
         $uri = '/' . trim($uri, '/');
 
-        if ($uri !== '/login' && !Usuario::estaLogado()) {
+        $publicRoutes = ['/login'];
+        if (!in_array($uri, $publicRoutes, true) && !Usuario::estaLogado()) {
             header('Location: ' . url('login'));
             exit;
         }
 
-        if (isset(self::$routes[$method][$uri])) {
-            self::executeHandler(self::$routes[$method][$uri]);
+        if (!isset(self::$routes[$method][$uri])) {
+            http_response_code(404);
+            require_once __DIR__ . '/../app/Views/errors/404.php';
             return;
         }
 
-
-        http_response_code(404);
-        require_once __DIR__ . '/../app/Views/errors/404.php';
-    }
-
-    // Normaliza o endereco e remove a pasta base usada no servidor.
-    private static function resolveUri(): string {
-
-        if (!empty($_GET['url'])) {
-            return '/' . trim($_GET['url'], '/');
+        $allowedRoles = self::$routeRoles[$method][$uri] ?? null;
+        if ($allowedRoles !== null && !Usuario::temPerfil($allowedRoles)) {
+            http_response_code(403);
+            header('Content-Type: text/plain; charset=utf-8');
+            echo 'Acesso negado para este perfil.';
+            return;
         }
 
-        $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
+        self::executeHandler(self::$routes[$method][$uri]);
+    }
+
+    // Usa somente o caminho real requisitado; parametros como ?url=/admin nao escolhem rotas.
+    private static function resolveUri(): string {
+        $requestUri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+        $requestUri = is_string($requestUri) ? $requestUri : '/';
         $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
         $basePath = dirname($scriptName);
 
+        if ($requestUri === $scriptName) {
+            return '/';
+        }
 
-        if ($basePath !== '/' && $basePath !== '\\' && strpos($requestUri, $basePath) === 0) {
+        if ($basePath !== '/' && $basePath !== '\\' && strpos($requestUri, $basePath . '/') === 0) {
             $requestUri = substr($requestUri, strlen($basePath));
         }
 
+        if ($requestUri === '/index.php') {
+            return '/';
+        }
 
-        $requestUri = preg_replace('/^\/index\.php/', '', $requestUri);
-
-        return empty($requestUri) ? '/' : $requestUri;
+        return $requestUri === '' ? '/' : $requestUri;
     }
 
     // Cria o controller e chama a acao registrada para a rota.

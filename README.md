@@ -22,6 +22,9 @@ Sistema web completo desenvolvido em **PHP Puro com Arquitetura MVC (Model-View-
 
 > 💡 **Acesso seguro:** cada perfil entra pela tela de login com seu próprio usuário e senha. Para demonstrar outro perfil, encerre a sessão e autentique-se novamente.
 
+### 🔐 Redefinição de senhas pela administração
+Na tela **Gerenciar Usuários**, o administrador pode abrir **Redefinir senha** em qualquer conta, informar e confirmar uma senha nova (mínimo de 8 caracteres). A nova senha é salva em hash; compartilhe-a com a pessoa por um canal seguro.
+
 ---
 
 ## 🏫 Estrutura das Turmas (Regra das Salas Únicas)

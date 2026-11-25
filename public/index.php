@@ -67,44 +67,45 @@ Router::get('/', 'HomeController@index');
 
 
 // Chamada diaria, indicadores, envio para cozinha e consulta do historico.
-Router::get('/frequencia', 'FrequenciaController@index');
-Router::post('/frequencia/salvar', 'FrequenciaController@salvar');
-Router::post('/frequencia/marcarTodos', 'FrequenciaController@marcarTodos');
-Router::post('/frequencia/enviarCozinha', 'FrequenciaController@enviarParaCozinha');
-Router::get('/frequencia/pizza-dados', 'FrequenciaController@pizzaDados');
-Router::get('/frequencia/historico', 'FrequenciaController@historico');
+Router::get('/frequencia', 'FrequenciaController@index', ['inspetora']);
+Router::post('/frequencia/salvar', 'FrequenciaController@salvar', ['inspetora']);
+Router::post('/frequencia/marcarTodos', 'FrequenciaController@marcarTodos', ['inspetora']);
+Router::post('/frequencia/enviarCozinha', 'FrequenciaController@enviarParaCozinha', ['inspetora']);
+Router::get('/frequencia/pizza-dados', 'FrequenciaController@pizzaDados', ['inspetora']);
+Router::get('/frequencia/historico', 'FrequenciaController@historico', ['inspetora']);
 
 
 // Recebimento dos pedidos e atualizacao do preparo das refeicoes.
-Router::get('/cozinha', 'CozinhaController@index');
-Router::post('/cozinha/atualizarStatus', 'CozinhaController@atualizarStatus');
+Router::get('/cozinha', 'CozinhaController@index', ['nutricionista']);
+Router::post('/cozinha/atualizarStatus', 'CozinhaController@atualizarStatus', ['nutricionista']);
 
 
 // Painel administrativo e operacoes de gerenciamento de contas.
-Router::get('/admin', 'AdminController@index');
-Router::get('/admin/usuarios', 'AdminController@usuarios');
-Router::post('/admin/usuarios/salvar', 'AdminController@salvarUsuario');
-Router::post('/admin/usuarios/excluir', 'AdminController@excluirUsuario');
+Router::get('/admin', 'AdminController@index', ['admin']);
+Router::get('/admin/usuarios', 'AdminController@usuarios', ['admin']);
+Router::post('/admin/usuarios/salvar', 'AdminController@salvarUsuario', ['admin']);
+Router::post('/admin/usuarios/alterar-senha', 'AdminController@alterarSenhaUsuario', ['admin']);
+Router::post('/admin/usuarios/excluir', 'AdminController@excluirUsuario', ['admin']);
 
 
 // Cardapio, fila do refeitorio, consumo e interacoes de alimentacao.
 Router::get('/alimentacao/cardapio', 'AlimentacaoController@cardapio');
-Router::post('/alimentacao/cardapio/salvar', 'AlimentacaoController@salvarCardapio');
-Router::post('/alimentacao/cardapio/copiar', 'AlimentacaoController@copiarCardapio');
-Router::get('/alimentacao/fila', 'AlimentacaoController@fila');
-Router::post('/alimentacao/salvarConsumo', 'AlimentacaoController@salvarConsumo');
+Router::post('/alimentacao/cardapio/salvar', 'AlimentacaoController@salvarCardapio', ['nutricionista']);
+Router::post('/alimentacao/cardapio/copiar', 'AlimentacaoController@copiarCardapio', ['nutricionista']);
+Router::get('/alimentacao/fila', 'AlimentacaoController@fila', ['nutricionista']);
+Router::post('/alimentacao/salvarConsumo', 'AlimentacaoController@salvarConsumo', ['nutricionista']);
 Router::get('/alimentacao/votacao', 'AlimentacaoController@votacao');
 Router::post('/alimentacao/votar', 'AlimentacaoController@votar');
 Router::get('/alimentacao/roleta', 'AlimentacaoController@roleta');
 
 
 // Cadastro e manutencao dos estudantes e suas turmas.
-Router::get('/alunos', 'AlunosController@index');
-Router::get('/alunos/novo', 'AlunosController@novo');
-Router::post('/alunos/salvar', 'AlunosController@salvar');
-Router::get('/alunos/editar', 'AlunosController@editar');
-Router::post('/alunos/atualizar', 'AlunosController@atualizar');
-Router::post('/alunos/excluir', 'AlunosController@excluir');
+Router::get('/alunos', 'AlunosController@index', ['admin']);
+Router::get('/alunos/novo', 'AlunosController@novo', ['admin']);
+Router::post('/alunos/salvar', 'AlunosController@salvar', ['admin']);
+Router::get('/alunos/editar', 'AlunosController@editar', ['admin']);
+Router::post('/alunos/atualizar', 'AlunosController@atualizar', ['admin']);
+Router::post('/alunos/excluir', 'AlunosController@excluir', ['admin']);
 
 
 // Consulta dos indicadores consolidados em relatorios.

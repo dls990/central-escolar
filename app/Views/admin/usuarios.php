@@ -87,6 +87,20 @@ require_once __DIR__ . '/../layouts/header.php';
                             <span class="user-badge"><?= htmlspecialchars($rotulosPerfil[$u['perfil']] ?? $u['perfil']) ?></span>
                             <span class="user-badge <?= empty($u['ativo']) ? 'inactive' : '' ?>"><?= empty($u['ativo']) ? 'Inativo' : 'Ativo' ?></span>
 
+                            <details>
+                                <summary class="cursor-pointer text-xs font-bold text-indigo-700 hover:text-indigo-900">Redefinir senha</summary>
+                                <form method="POST" action="<?= url('admin/usuarios/alterar-senha') ?>" class="users-form mt-2 min-w-56">
+                                    <input type="hidden" name="id" value="<?= (int)$u['id'] ?>">
+                                    <label for="senha-<?= (int)$u['id'] ?>">Nova senha</label>
+                                    <input id="senha-<?= (int)$u['id'] ?>" type="password" name="senha" required minlength="8" maxlength="255"
+                                           autocomplete="new-password" placeholder="Nova senha (mín. 8 caracteres)">
+                                    <label for="confirmacao-<?= (int)$u['id'] ?>">Confirmar senha</label>
+                                    <input id="confirmacao-<?= (int)$u['id'] ?>" type="password" name="confirmacao" required minlength="8" maxlength="255"
+                                           autocomplete="new-password" placeholder="Confirme a nova senha">
+                                    <button type="submit" class="users-form-submit">Salvar nova senha</button>
+                                </form>
+                            </details>
+
                             <?php if ($u['usuario'] !== 'admin'): ?>
                                 <form method="POST" action="<?= url('admin/usuarios/excluir') ?>" onsubmit="return confirm('Deseja excluir esta conta?')">
                                     <input type="hidden" name="id" value="<?= (int)$u['id'] ?>">

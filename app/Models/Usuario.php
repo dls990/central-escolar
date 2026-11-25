@@ -53,6 +53,17 @@ class Usuario extends Model {
         return null;
     }
 
+    // Permite que o administrador defina uma nova senha sem expor o hash armazenado.
+    public static function redefinirSenhaPorAdmin(int $id, string $novaSenha): bool {
+        $hash = password_hash($novaSenha, PASSWORD_DEFAULT);
+        $stmt = self::getConnection()->prepare(
+            'UPDATE usuarios SET senha = ? WHERE id = ?'
+        );
+        $stmt->execute([$hash, $id]);
+
+        return $stmt->rowCount() === 1;
+    }
+
     // Armazena os dados da conta autenticada na sessao.
     public static function login(array $user): void {
         if (session_status() === PHP_SESSION_NONE) {
