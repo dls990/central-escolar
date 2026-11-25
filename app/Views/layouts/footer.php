@@ -78,7 +78,13 @@
         const BASE_URL = '<?= base_url() ?>';
         function toggleMobileMenu() {
             const menu = document.getElementById('mobileMenu');
+            const toggle = document.getElementById('mobileMenuToggle');
+            if (!menu || !toggle) return;
+
             menu.classList.toggle('hidden');
+            const isExpanded = !menu.classList.contains('hidden');
+            toggle.setAttribute('aria-expanded', String(isExpanded));
+            toggle.setAttribute('aria-label', isExpanded ? 'Fechar menu de navegação' : 'Abrir menu de navegação');
         }
     </script>
     <script src="<?= asset('js/audio.js') ?>"></script>

@@ -2,6 +2,15 @@
 // Permite filtrar turmas, registrar presencas e enviar o total diario para a cozinha.
 
 $tituloPagina = 'Chamada Interativa & Frequência | VivalCris';
+$alunosPorTurma = [];
+foreach ($alunos as $aluno) {
+    $alunosPorTurma[$aluno['turma']][] = $aluno;
+}
+
+$turmasExibidas = $turmaSelecionada === 'todas'
+    ? $turmas
+    : (in_array($turmaSelecionada, $turmas, true) ? [$turmaSelecionada] : []);
+
 require_once __DIR__ . '/../layouts/header.php';
 ?>
 
@@ -22,8 +31,9 @@ require_once __DIR__ . '/../layouts/header.php';
     <form method="GET" action="<?= url('frequencia') ?>" class="flex flex-wrap items-center gap-2 bg-white p-2 rounded-2xl border border-slate-200 shadow-sm">
         <div>
             <label class="sr-only">Data</label>
-            <input type="date" name="data" value="<?= htmlspecialchars($data) ?>"
-                   onchange="this.form.submit()"
+            <input type="date" name="data" value="<?= htmlspecialchars($data, ENT_QUOTES, 'UTF-8') ?>"
+                   max="<?= date('Y-m-d') ?>" required
+                   onchange="this.form.requestSubmit()"
                    class="text-xs font-semibold px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500">
         </div>
 
@@ -67,9 +77,6 @@ require_once __DIR__ . '/../layouts/header.php';
                 <span class="px-3 py-1.5 rounded-xl bg-white/20 backdrop-blur-md text-xs font-bold capitalize">
                     Status Cozinha: <?= htmlspecialchars($pedidoCozinha['status']) ?>
                 </span>
-                <a href="<?= url('cozinha?data=' . $data) ?>" class="px-3 py-1.5 rounded-xl bg-white text-emerald-800 hover:bg-emerald-50 text-xs font-bold transition shadow-sm">
-                    Ver na Cozinha ➔
-                </a>
             </div>
         </div>
     <?php else: ?>
@@ -204,7 +211,9 @@ require_once __DIR__ . '/../layouts/header.php';
             </div>
 
             <div class="flex flex-wrap items-center gap-2">
-                <button onclick="marcarTodosPresentes('<?= $data ?>', '<?= $turmaSelecionada ?>')"
+                <button onclick="marcarTodosPresentes(this.dataset.data, this.dataset.turma)"
+                        data-data="<?= htmlspecialchars($data, ENT_QUOTES, 'UTF-8') ?>"
+                        data-turma="<?= htmlspecialchars($turmaSelecionada, ENT_QUOTES, 'UTF-8') ?>"
                         class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold rounded-xl transition transform active:scale-95 shadow-sm shadow-emerald-500/20">
                     <span>🎉</span> Marcar Todos Presentes
                 </button>
@@ -229,139 +238,134 @@ require_once __DIR__ . '/../layouts/header.php';
 </div>
 
 
-<!-- Tabela individual com dados, restricoes e controles de presenca por aluno. -->
-<div class="scroll-reveal fun-card overflow-hidden">
-    <div class="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
-        <h3 class="font-brand font-bold text-slate-800 text-sm flex items-center gap-2">
-            <span>📝</span> Lista de Estudantes da Sala (<?= count($alunos) ?>)
-        </h3>
-        <span class="text-xs text-slate-600">
-            Marque cada estudante; sem seleção, a frequência fica em branco
-        </span>
-    </div>
+<!-- Organiza a lista por turma para a inspetora abrir somente a sala em chamada. -->
+<section class="attendance-classes scroll-reveal" aria-labelledby="attendance-classes-title">
+    <header class="attendance-section-heading">
+        <div>
+            <p class="dashboard-eyebrow">Chamada organizada por sala</p>
+            <h2 id="attendance-classes-title">Turmas e estudantes</h2>
+            <p>Abra uma turma para consultar os alunos e registrar cada presença.</p>
+        </div>
+        <span class="attendance-total"><?= count($alunos) ?> estudantes na seleção</span>
+    </header>
 
-    <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
-            <thead>
-                <tr class="bg-white border-b border-slate-200 text-[11px] font-bold text-slate-600 uppercase tracking-wider">
-                    <th class="py-3.5 px-4">Estudante</th>
-                    <th class="py-3.5 px-4">Matrícula</th>
-                    <th class="py-3.5 px-4">Sala Única</th>
-                    <th class="py-3.5 px-4">Restrições / Cuidados</th>
-                    <th class="py-3.5 px-4 text-center">Status</th>
-                    <th class="py-3.5 px-4 text-center">Marcar Frequência</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-slate-100 text-sm bg-white">
-                <?php if (empty($alunos)): ?>
-                    <tr>
-                        <td colspan="6" class="py-12 text-center text-slate-600">
-                            <span class="text-4xl block mb-2">🎒</span>
-                            Nenhum aluno encontrado para este filtro.
-                        </td>
-                    </tr>
-                <?php else: ?>
-                    <?php foreach ($alunos as $aluno): ?>
-                        <?php
-                            $status = $aluno['status'] ?? '';
-                        ?>
-                        <tr id="aluno-row-<?= $aluno['aluno_id'] ?>" class="hover:bg-slate-50/70 transition-colors">
+    <?php if (empty($turmasExibidas)): ?>
+        <div class="attendance-empty">
+            <span aria-hidden="true">🎒</span>
+            <p>Nenhuma turma encontrada para este filtro.</p>
+        </div>
+    <?php else: ?>
+        <div class="attendance-class-list">
+            <?php foreach ($turmasExibidas as $indiceTurma => $turma): ?>
+                <?php $alunosDaTurma = $alunosPorTurma[$turma] ?? []; ?>
+                <details class="attendance-class-card" <?= ($turmaSelecionada !== 'todas' || $indiceTurma === 0) ? 'open' : '' ?>>
+                    <summary class="attendance-class-summary">
+                        <span class="attendance-room-icon" aria-hidden="true">🏫</span>
+                        <span class="attendance-room-title">
+                            <strong><?= htmlspecialchars($turma, ENT_QUOTES, 'UTF-8') ?></strong>
+                            <small><?= count($alunosDaTurma) ?> <?= count($alunosDaTurma) === 1 ? 'estudante' : 'estudantes' ?></small>
+                        </span>
+                        <span class="attendance-room-toggle">Ver lista</span>
+                    </summary>
 
+                    <?php if (empty($alunosDaTurma)): ?>
+                        <p class="attendance-empty-room">Nenhum estudante cadastrado nesta turma.</p>
+                    <?php else: ?>
+                        <div class="attendance-class-toolbar">
+                            <span>Selecione o status de cada estudante para registrar a chamada.</span>
+                            <button type="button"
+                                    onclick="marcarTodosPresentes(this.dataset.data, this.dataset.turma)"
+                                    data-data="<?= htmlspecialchars($data, ENT_QUOTES, 'UTF-8') ?>"
+                                    data-turma="<?= htmlspecialchars($turma, ENT_QUOTES, 'UTF-8') ?>"
+                                    class="attendance-mark-room">
+                                Marcar turma presente
+                            </button>
+                        </div>
 
-                            <td class="py-3.5 px-4">
-                                <div class="flex items-center gap-3">
-                                    <span class="text-2xl select-none"><?= $aluno['avatar'] ?></span>
-                                    <div>
-                                        <p class="font-bold text-slate-800 leading-tight"><?= htmlspecialchars($aluno['nome']) ?></p>
-                                        <span id="horario-<?= $aluno['aluno_id'] ?>" class="text-[11px] text-slate-600 font-medium">
-                                            <?= !empty($aluno['horario']) ? 'Chegada: ' . htmlspecialchars($aluno['horario']) : '' ?>
+                        <div class="attendance-student-list">
+                            <?php foreach ($alunosDaTurma as $aluno): ?>
+                                <?php
+                                    $alunoId = (int)$aluno['aluno_id'];
+                                    $status = $aluno['status'] ?? '';
+                                ?>
+                                <article id="aluno-row-<?= $alunoId ?>" class="attendance-student">
+                                    <div class="attendance-student-identity">
+                                        <span class="attendance-student-avatar" aria-hidden="true">
+                                            <?= htmlspecialchars($aluno['avatar'], ENT_QUOTES, 'UTF-8') ?>
+                                        </span>
+                                        <div>
+                                            <h3><?= htmlspecialchars($aluno['nome'], ENT_QUOTES, 'UTF-8') ?></h3>
+                                            <span class="attendance-student-meta">
+                                                Matrícula <?= htmlspecialchars($aluno['matricula'], ENT_QUOTES, 'UTF-8') ?>
+                                            </span>
+                                            <span id="horario-<?= $alunoId ?>" class="attendance-student-meta">
+                                                <?= !empty($aluno['horario']) ? 'Chegada: ' . htmlspecialchars($aluno['horario'], ENT_QUOTES, 'UTF-8') : '' ?>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="attendance-student-status">
+                                        <?php if (!empty($aluno['restricoes']) && strtolower($aluno['restricoes']) !== 'nenhuma'): ?>
+                                            <span class="attendance-restriction">
+                                                <span aria-hidden="true">⚠️</span>
+                                                <?= htmlspecialchars($aluno['restricoes'], ENT_QUOTES, 'UTF-8') ?>
+                                            </span>
+                                        <?php else: ?>
+                                            <span class="attendance-no-restriction">Sem restrições alimentares</span>
+                                        <?php endif; ?>
+
+                                        <span id="badge-status-<?= $alunoId ?>"
+                                              class="attendance-status-badge <?= ($status === 'presente') ? 'badge-presente' : (($status === 'ausente') ? 'badge-ausente' : (($status === 'justificado') ? 'badge-justificado' : 'badge-pendente')) ?>">
+                                            <?php
+                                                if ($status === 'presente') echo '✓ Presente';
+                                                elseif ($status === 'ausente') echo '✕ Ausente';
+                                                elseif ($status === 'justificado') echo '• Justificado';
+                                                else echo 'Não marcado';
+                                            ?>
                                         </span>
                                     </div>
-                                </div>
-                            </td>
 
-
-                            <td class="py-3.5 px-4 font-mono text-xs text-slate-600">
-                                <?= htmlspecialchars($aluno['matricula']) ?>
-                            </td>
-
-
-                            <td class="py-3.5 px-4">
-                                <span class="font-bold text-xs px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200">
-                                    <?= htmlspecialchars($aluno['turma']) ?>
-                                </span>
-                            </td>
-
-
-                            <td class="py-3.5 px-4">
-                                <?php if (!empty($aluno['restricoes']) && strtolower($aluno['restricoes']) !== 'nenhuma'): ?>
-                                    <span class="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-xl bg-rose-50 text-rose-700 border border-rose-200">
-                                        <span>⚠️</span> <?= htmlspecialchars($aluno['restricoes']) ?>
-                                    </span>
-                                <?php else: ?>
-                                    <span class="text-xs text-slate-600">Sem restrições</span>
-                                <?php endif; ?>
-                            </td>
-
-
-                            <!-- Atualiza o status visual sem sair da tela da chamada. -->
-                            <td class="py-3.5 px-4 text-center">
-                                <span id="badge-status-<?= $aluno['aluno_id'] ?>"
-                                      class="px-3 py-1 rounded-xl text-xs font-bold capitalize transition-all duration-300
-                                      <?= ($status === 'presente') ? 'badge-presente' : (($status === 'ausente') ? 'badge-ausente' : (($status === 'justificado') ? 'badge-justificado' : 'badge-pendente')) ?>">
-                                    <?php
-                                        if ($status === 'presente') echo '✓ Presente';
-                                        elseif ($status === 'ausente') echo '✕ Ausente';
-                                        elseif ($status === 'justificado') echo '• Justificado';
-                                        else echo 'Não marcado';
-                                    ?>
-                                </span>
-                            </td>
-
-
-                            <td class="py-3.5 px-4 text-center">
-                                <div class="inline-flex items-center gap-1.5 p-1 bg-slate-100 rounded-2xl">
-
-
-                                    <button onclick="atualizarFrequencia(<?= $aluno['aluno_id'] ?>, 'presente', '<?= $data ?>')"
-                                            data-aluno="<?= $aluno['aluno_id'] ?>"
-                                            data-status="presente"
-                                            class="px-3 py-1.5 rounded-xl font-bold text-xs transition transform active:scale-90
-                                            <?= ($status === 'presente') ? 'bg-emerald-500 text-white shadow-sm ring-2 ring-offset-1 ring-emerald-400' : 'bg-white text-slate-600 hover:bg-slate-100' ?>"
-                                            title="Marcar Presente">
-                                        ✓ Presente
-                                    </button>
-
-
-                                    <button onclick="atualizarFrequencia(<?= $aluno['aluno_id'] ?>, 'ausente', '<?= $data ?>')"
-                                            data-aluno="<?= $aluno['aluno_id'] ?>"
-                                            data-status="ausente"
-                                            class="px-3 py-1.5 rounded-xl font-bold text-xs transition transform active:scale-90
-                                            <?= ($status === 'ausente') ? 'bg-rose-500 text-white shadow-sm ring-2 ring-offset-1 ring-rose-400' : 'bg-white text-slate-600 hover:bg-slate-100' ?>"
-                                            title="Marcar Falta">
-                                        ✕ Ausente
-                                    </button>
-
-
-                                    <button onclick="atualizarFrequencia(<?= $aluno['aluno_id'] ?>, 'justificado', '<?= $data ?>')"
-                                            data-aluno="<?= $aluno['aluno_id'] ?>"
-                                            data-status="justificado"
-                                            class="px-3 py-1.5 rounded-xl font-bold text-xs transition transform active:scale-90
-                                            <?= ($status === 'justificado') ? 'bg-amber-500 text-white shadow-sm ring-2 ring-offset-1 ring-amber-400' : 'bg-white text-slate-600 hover:bg-slate-100' ?>"
-                                            title="Marcar Falta Justificada">
-                                        • Justificado
-                                    </button>
-
-                                </div>
-                            </td>
-
-                        </tr>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </tbody>
-        </table>
-    </div>
-</div>
+                                    <div class="attendance-student-actions" role="group" aria-label="Frequência de <?= htmlspecialchars($aluno['nome'], ENT_QUOTES, 'UTF-8') ?>">
+                                        <button type="button"
+                                                onclick="atualizarFrequencia(<?= $alunoId ?>, 'presente', this.dataset.data)"
+                                                data-data="<?= htmlspecialchars($data, ENT_QUOTES, 'UTF-8') ?>"
+                                                data-aluno="<?= $alunoId ?>"
+                                                data-status="presente"
+                                                class="attendance-status-button px-3 py-1.5 rounded-xl font-bold text-xs transition transform active:scale-90
+                                                <?= ($status === 'presente') ? 'bg-emerald-500 text-white shadow-sm ring-2 ring-offset-1 ring-emerald-400' : 'bg-white text-slate-600 hover:bg-slate-100' ?>"
+                                                title="Marcar Presente">
+                                            ✓ Presente
+                                        </button>
+                                        <button type="button"
+                                                onclick="atualizarFrequencia(<?= $alunoId ?>, 'ausente', this.dataset.data)"
+                                                data-data="<?= htmlspecialchars($data, ENT_QUOTES, 'UTF-8') ?>"
+                                                data-aluno="<?= $alunoId ?>"
+                                                data-status="ausente"
+                                                class="attendance-status-button px-3 py-1.5 rounded-xl font-bold text-xs transition transform active:scale-90
+                                                <?= ($status === 'ausente') ? 'bg-rose-500 text-white shadow-sm ring-2 ring-offset-1 ring-rose-400' : 'bg-white text-slate-600 hover:bg-slate-100' ?>"
+                                                title="Marcar Falta">
+                                            ✕ Ausente
+                                        </button>
+                                        <button type="button"
+                                                onclick="atualizarFrequencia(<?= $alunoId ?>, 'justificado', this.dataset.data)"
+                                                data-data="<?= htmlspecialchars($data, ENT_QUOTES, 'UTF-8') ?>"
+                                                data-aluno="<?= $alunoId ?>"
+                                                data-status="justificado"
+                                                class="attendance-status-button px-3 py-1.5 rounded-xl font-bold text-xs transition transform active:scale-90
+                                                <?= ($status === 'justificado') ? 'bg-amber-500 text-white shadow-sm ring-2 ring-offset-1 ring-amber-400' : 'bg-white text-slate-600 hover:bg-slate-100' ?>"
+                                                title="Marcar Falta Justificada">
+                                            • Justificado
+                                        </button>
+                                    </div>
+                                </article>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+                </details>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+</section>
 
 
 <!-- Confirma quantidades e observacao antes de enviar o resumo para a cozinha. -->

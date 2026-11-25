@@ -102,20 +102,21 @@ require_once __DIR__ . '/../layouts/header.php';
             <div><h2>Acesso operacional</h2><p>Atalhos para as rotinas da escola.</p></div>
         </div>
         <nav class="dashboard-links" aria-label="Módulos do sistema">
-            <a href="<?= url('frequencia') ?>"><span><strong>Frequência</strong><small>Registro diário das 12 turmas</small></span><b aria-hidden="true">→</b></a>
-            <a href="<?= url('cozinha') ?>"><span><strong>Cozinha</strong><small>Pedidos e status de preparo</small></span><b aria-hidden="true">→</b></a>
-            <a href="<?= url('alimentacao/votacao') ?>"><span><strong>Votação de pratos</strong><small>Preferências do cardápio escolar</small></span><b aria-hidden="true">→</b></a>
-            <?php if (tem_perfil('admin')): ?>
-                <a href="<?= url('alunos') ?>"><span><strong>Alunos</strong><small>Cadastro e restrições alimentares</small></span><b aria-hidden="true">→</b></a>
+            <?php if (tem_perfil('inspetora')): ?>
+                <a href="<?= url('frequencia') ?>"><span><strong>Fazer chamada</strong><small>Marcar presença por turma</small></span><b aria-hidden="true">→</b></a>
+                <a href="<?= url('frequencia/historico') ?>"><span><strong>Consultar histórico</strong><small>Ver chamadas de outros dias</small></span><b aria-hidden="true">→</b></a>
             <?php endif; ?>
+            <?php if (tem_perfil('nutricionista')): ?>
+                <a href="<?= url('cozinha') ?>"><span><strong>Abrir cozinha</strong><small>Ver pedidos e atualizar preparo</small></span><b aria-hidden="true">→</b></a>
+                <a href="<?= url('alimentacao/cardapio') ?>"><span><strong>Gerenciar cardápio</strong><small>Consultar e atualizar refeições</small></span><b aria-hidden="true">→</b></a>
+            <?php endif; ?>
+            <?php if (tem_perfil('admin')): ?>
+                <a href="<?= url('admin') ?>"><span><strong>Visão administrativa</strong><small>Acompanhar indicadores do sistema</small></span><b aria-hidden="true">→</b></a>
+                <a href="<?= url('alunos') ?>"><span><strong>Gerenciar alunos</strong><small>Cadastros e restrições alimentares</small></span><b aria-hidden="true">→</b></a>
+                <a href="<?= url('admin/usuarios') ?>"><span><strong>Gerenciar usuários</strong><small>Contas e redefinição de senhas</small></span><b aria-hidden="true">→</b></a>
+            <?php endif; ?>
+            <a href="<?= url('relatorios') ?>"><span><strong>Relatórios</strong><small>Consultar dados e resumos</small></span><b aria-hidden="true">→</b></a>
         </nav>
-        <?php if ($liderVotacao): ?>
-            <div class="dashboard-vote-summary">
-                <span>Prato mais votado</span>
-                <strong><?= htmlspecialchars($liderVotacao['nome']) ?></strong>
-                <small><?= (int)$liderVotacao['votos'] ?> votos</small>
-            </div>
-        <?php endif; ?>
     </div>
 
     <section class="dashboard-panel dashboard-restrictions scroll-reveal-right" aria-labelledby="restrictions-title">

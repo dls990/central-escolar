@@ -1,5 +1,5 @@
 <?php
-// Controla os cardapios, votacoes e refeicoes.
+// Controla os cardapios e refeicoes.
 
 
 
@@ -11,7 +11,6 @@ use Core\Controller;
 use App\Models\Aluno;
 use App\Models\Cardapio;
 use App\Models\Refeicao;
-use App\Models\Votacao;
 use App\Models\Usuario;
 
 class AlimentacaoController extends Controller {
@@ -172,40 +171,6 @@ class AlimentacaoController extends Controller {
             'consumiu' => $consumiu,
             'stats' => $stats,
             'message' => $msg
-        ]);
-    }
-
-    // Carrega as opcoes da votacao e identifica a opcao mais votada.
-    public function votacao(): void {
-        $pratos = Votacao::all();
-        $totalVotos = Votacao::getTotalVotos();
-        $lider = Votacao::getLider();
-
-        $this->view('alimentacao/votacao', [
-            'pratos' => $pratos,
-            'totalVotos' => $totalVotos,
-            'lider' => $lider
-        ]);
-    }
-
-    // Registra o voto recebido e devolve a contagem atualizada em JSON.
-    public function votar(): void {
-        $pratoId = (int)($_POST['prato_id'] ?? 0);
-
-        if ($pratoId <= 0) {
-            $this->json(['success' => false, 'message' => 'Opção inválida!'], 400);
-            return;
-        }
-
-        $ok = Votacao::votar($pratoId);
-        $pratos = Votacao::all();
-        $totalVotos = Votacao::getTotalVotos();
-
-        $this->json([
-            'success' => $ok,
-            'pratos' => $pratos,
-            'totalVotos' => $totalVotos,
-            'message' => 'Voto computado com sucesso! 🌟'
         ]);
     }
 

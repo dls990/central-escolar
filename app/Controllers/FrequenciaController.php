@@ -21,6 +21,11 @@ class FrequenciaController extends Controller {
         $this->requireAuth();
 
         $data = $_GET['data'] ?? date('Y-m-d');
+        if (!$this->dataChamadaPermitida($data)) {
+            $this->flash('error', 'A data da chamada precisa ser válida e não pode ser posterior a hoje.');
+            $this->redirect('frequencia');
+        }
+
         $turma = $_GET['turma'] ?? 'todas';
 
         $turmas = Aluno::getTurmas();
@@ -50,11 +55,16 @@ class FrequenciaController extends Controller {
         $usuario = $this->requireAuth();
 
         $alunoId = (int)($_POST['aluno_id'] ?? 0);
-        $data = $_POST['data'] ?? date('Y-m-d');
+        $data = $_POST['data'] ?? null;
         $status = $_POST['status'] ?? '';
         $obs = $_POST['observacao'] ?? null;
 
-        if ($alunoId <= 0 || !in_array($status, ['presente', 'ausente', 'justificado'])) {
+        if (!$this->dataChamadaPermitida($data)) {
+            $this->json(['success' => false, 'message' => 'Selecione uma data válida, até hoje, para registrar a chamada.'], 400);
+            return;
+        }
+
+        if ($alunoId <= 0 || !in_array($status, ['presente', 'ausente', 'justificado'], true)) {
             $this->json(['success' => false, 'message' => 'Dados de frequência inválidos!'], 400);
             return;
         }
@@ -84,10 +94,15 @@ class FrequenciaController extends Controller {
     public function marcarTodos(): void {
         $usuario = $this->requireAuth();
 
-        $data = $_POST['data'] ?? date('Y-m-d');
+        $data = $_POST['data'] ?? null;
         $status = $_POST['status'] ?? '';
         $turma = $_POST['turma'] ?? 'todas';
         $inspetoraNome = $usuario['nome'] ?? 'Inspetora';
+
+        if (!$this->dataChamadaPermitida($data)) {
+            $this->json(['success' => false, 'message' => 'Selecione uma data válida, até hoje, para registrar a chamada.'], 400);
+            return;
+        }
 
         if (!in_array($status, ['presente', 'ausente', 'justificado'], true)) {
             $this->json(['success' => false, 'message' => 'Selecione um status de frequência válido.'], 400);
@@ -115,9 +130,14 @@ class FrequenciaController extends Controller {
     public function enviarParaCozinha(): void {
         $usuario = $this->requireAuth();
 
-        $data = $_POST['data'] ?? date('Y-m-d');
+        $data = $_POST['data'] ?? null;
         $obs = trim($_POST['observacao'] ?? '');
         $inspetoraNome = $usuario['nome'] ?? 'Inspetora';
+
+        if (!$this->dataChamadaPermitida($data)) {
+            $this->json(['success' => false, 'message' => 'Selecione uma data válida, até hoje, para enviar o censo.'], 400);
+            return;
+        }
 
         $resultado = PedidoCozinha::enviarParaCozinha($data, $inspetoraNome, $obs);
 
@@ -153,5 +173,16 @@ class FrequenciaController extends Controller {
             'pedido' => $pedido,
             'usuario' => $usuario
         ]);
+    }
+
+    // Aceita somente datas reais no formato ISO que nao sejam posteriores ao dia atual.
+    private function dataChamadaPermitida($data): bool {
+        if (!is_string($data) || !preg_match('/\A\d{4}-\d{2}-\d{2}\z/', $data)) {
+            return false;
+        }
+
+        [$ano, $mes, $dia] = array_map('intval', explode('-', $data));
+
+        return checkdate($mes, $dia, $ano) && $data <= date('Y-m-d');
     }
 }

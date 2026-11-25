@@ -110,16 +110,6 @@ CREATE TABLE IF NOT EXISTS refeicoes (
     UNIQUE (aluno_id, data)
 );
 
--- Opcoes de pratos e contagem da votacao escolar.
-CREATE TABLE IF NOT EXISTS votacao_pratos (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nome TEXT NOT NULL,
-    descricao TEXT NOT NULL,
-    votos INTEGER NOT NULL DEFAULT 0,
-    emoji TEXT NOT NULL,
-    categoria TEXT NOT NULL
-);
-
 -- Dicas educativas mostradas pelo mascote.
 CREATE TABLE IF NOT EXISTS dicas_nutricao (
     id INTEGER PRIMARY KEY AUTOINCREMENT,

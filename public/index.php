@@ -88,14 +88,12 @@ Router::post('/admin/usuarios/alterar-senha', 'AdminController@alterarSenhaUsuar
 Router::post('/admin/usuarios/excluir', 'AdminController@excluirUsuario', ['admin']);
 
 
-// Cardapio, fila do refeitorio, consumo e interacoes de alimentacao.
+// Cardapio, fila do refeitorio e registro do consumo.
 Router::get('/alimentacao/cardapio', 'AlimentacaoController@cardapio');
 Router::post('/alimentacao/cardapio/salvar', 'AlimentacaoController@salvarCardapio', ['nutricionista']);
 Router::post('/alimentacao/cardapio/copiar', 'AlimentacaoController@copiarCardapio', ['nutricionista']);
 Router::get('/alimentacao/fila', 'AlimentacaoController@fila', ['nutricionista']);
 Router::post('/alimentacao/salvarConsumo', 'AlimentacaoController@salvarConsumo', ['nutricionista']);
-Router::get('/alimentacao/votacao', 'AlimentacaoController@votacao');
-Router::post('/alimentacao/votar', 'AlimentacaoController@votar');
 Router::get('/alimentacao/roleta', 'AlimentacaoController@roleta');
 
 

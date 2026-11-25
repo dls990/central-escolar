@@ -77,7 +77,7 @@ central-escolar/
 │   │   ├── CozinhaController.php       # Painel da Nutricionista e controle de preparo
 │   │   ├── AdminController.php         # Monitoramento dos dois lados e usuários
 │   │   ├── HomeController.php          # Dashboard principal da feira tecnológica
-│   │   ├── AlimentacaoController.php   # Cardápio semanal, fila do refeitório e votação
+│   │   ├── AlimentacaoController.php   # Cardápio semanal, fila do refeitório e consumo
 │   │   ├── AlunosController.php        # Gestão dos estudantes das 12 salas únicas
 │   │   └── RelatoriosController.php    # Relatórios gerenciais e modo impressão
 │   ├── Models/

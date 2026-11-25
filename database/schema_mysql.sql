@@ -9,7 +9,6 @@ DROP TABLE IF EXISTS `frequencias`;
 DROP TABLE IF EXISTS `pedidos_cozinha`;
 DROP TABLE IF EXISTS `historico_frequencia_diaria`;
 DROP TABLE IF EXISTS `cardapios`;
-DROP TABLE IF EXISTS `votacao_pratos`;
 DROP TABLE IF EXISTS `dicas_nutricao`;
 DROP TABLE IF EXISTS `alunos`;
 DROP TABLE IF EXISTS `usuarios`;
@@ -117,16 +116,6 @@ CREATE TABLE `refeicoes` (
     CONSTRAINT `fk_ref_aluno` FOREIGN KEY (`aluno_id`) REFERENCES `alunos`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Pratos da votacao e quantidade de votos recebidos.
-CREATE TABLE `votacao_pratos` (
-    `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `nome` VARCHAR(150) NOT NULL,
-    `descricao` TEXT NOT NULL,
-    `votos` INT DEFAULT 0,
-    `emoji` VARCHAR(10) NOT NULL,
-    `categoria` VARCHAR(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 -- Conteudo educativo mostrado pelo mascote de nutricao.
 CREATE TABLE `dicas_nutricao` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
@@ -187,12 +176,6 @@ INSERT INTO `cardapios` (`id`, `dia_semana`, `prato_principal`, `acompanhamento`
 (3, 'Quarta-feira', 'Filé de Peixe Empanado com Aveia', 'Purê de Mandioquinha e Brócolis ao Vapor', 'Maçã Doce Higienizada', 'Suco de Laranja Natural', 460, 'Ômega 3,Amigo do Cérebro', '🐟'),
 (4, 'Quinta-feira', 'Estrogonofe Nutritivo de Frango & Abóbora', 'Arroz de Couve-Flor & Batata Rústica Assada', 'Salada de Frutas Tropicais', 'Suco de Melão com Limão', 490, 'Cremoso & Saudável,Super Vitaminas', '🍲'),
 (5, 'Sexta-feira', 'Macarronada Colorida com Molho de Tomate Fresco e Almôndegas', 'Mix de Folhas Verdes e Cenoura Ralada', 'Picolé Natural de Fruta', 'Limonada Suíça Refrescante', 510, 'Prato da Alegria,Fibras & Sabor', '🍝');
-
-INSERT INTO `votacao_pratos` (`id`, `nome`, `descricao`, `votos`, `emoji`, `categoria`) VALUES
-(1, 'Hambúrguer Gourmet Saudável', 'Pão integral, blend de frango e aveia, alface crocante, tomate e molho de iogurte.', 48, '🍔', 'Especial'),
-(2, 'Tacos Mexicanos Nutritivos', 'Tortilhas de milho assadas, recheio colorido de vegetais, frango desfiado e guacamole.', 39, '🌮', 'Internacional'),
-(3, 'Lasanha de Berinjela e Queijo Magro', 'Camadas suculentas de berinjela grelhada, molho caseiro de tomate e queijo derretido.', 31, '🧀', 'Conforto'),
-(4, 'Crepioca Recheada com Ricota e Espinafre', 'Massa leve e crocante com gergelim dourado e recheio cremoso aromático.', 25, '🥞', 'Fitness');
 
 INSERT INTO `dicas_nutricao` (`id`, `titulo`, `dica`, `icone`) VALUES
 (1, 'Beba Água com Frequência', 'Manter-se hidratado melhora a concentração nas aulas e a energia para brincar no recreio!', '💧'),

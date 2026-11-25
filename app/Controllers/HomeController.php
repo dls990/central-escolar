@@ -13,7 +13,6 @@ use App\Models\Frequencia;
 use App\Models\Cardapio;
 use App\Models\Refeicao;
 use App\Models\DicaNutricao;
-use App\Models\Votacao;
 use App\Models\HistoricoFrequencia;
 use App\Models\PedidoCozinha;
 
@@ -28,7 +27,6 @@ class HomeController extends Controller {
         $statsRefeicao = Refeicao::getEstatisticas($hoje);
         $cardapioHoje = Cardapio::getCardapioDeHoje();
         $dicaNutri = DicaNutricao::getAleatoria();
-        $liderVotacao = Votacao::getLider();
         $totalAlunos = Aluno::countTotal();
 
 
@@ -45,7 +43,6 @@ class HomeController extends Controller {
             'statsRefeicao' => $statsRefeicao,
             'cardapioHoje' => $cardapioHoje,
             'dicaNutri' => $dicaNutri,
-            'liderVotacao' => $liderVotacao,
             'totalAlunos' => $totalAlunos,
             'alunosComAlergia' => array_values($alunosComAlergia)
         ]);

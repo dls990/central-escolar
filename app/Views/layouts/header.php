@@ -99,7 +99,7 @@ $usuarioLogado = usuario_logado();
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
-    <link rel="stylesheet" href="<?= asset('css/style.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/style.css') ?>?v=<?= filemtime(__DIR__ . '/../../../public/css/style.css') ?>">
 </head>
 <body class="app-body min-h-screen flex flex-col text-slate-800 antialiased selection:bg-brand-200 selection:text-slate-900">
 
@@ -147,7 +147,7 @@ $usuarioLogado = usuario_logado();
                         <a href="<?= url('/') ?>" class="nav-item <?= isActiveRoute('/') ?>">Início</a>
 
 
-                    <?php if (tem_perfil(['inspetora', 'admin'])): ?>
+                    <?php if (tem_perfil('inspetora')): ?>
                         <a href="<?= url('frequencia') ?>" class="nav-item <?= isActiveRoute('frequencia') ?>">Frequência</a>
                         <a href="<?= url('frequencia/historico') ?>" class="nav-item <?= isActiveRoute('frequencia/historico') ?>">Histórico</a>
                     <?php endif; ?>
@@ -213,15 +213,17 @@ $usuarioLogado = usuario_logado();
 
 
                     <?php if ($usuarioLogado): ?>
-                        <button onclick="toggleMobileMenu()" class="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100">
-                            <span class="text-2xl">☰</span>
+                        <button type="button" id="mobileMenuToggle" onclick="toggleMobileMenu()"
+                                aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menu de navegação"
+                                class="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100">
+                            <span aria-hidden="true" class="text-2xl">☰</span>
                         </button>
                     <?php endif; ?>
                 </div>
             </div>
         </div>
         <?php if ($usuarioLogado): ?>
-        <div id="mobileMenu" class="hidden lg:hidden border-t border-slate-100 bg-white/95 px-4 pt-2 pb-6 space-y-1">
+        <nav id="mobileMenu" aria-label="Navegação principal" class="hidden lg:hidden border-t border-slate-100 bg-white/95 px-4 pt-2 pb-6 space-y-1">
                 <div class="p-3 bg-emerald-50 rounded-xl flex items-center justify-between mb-2">
                     <div class="flex items-center gap-2">
                         <span class="text-2xl"><?= $usuarioLogado['avatar'] ?></span>
@@ -233,20 +235,24 @@ $usuarioLogado = usuario_logado();
                     <a href="<?= url('logout') ?>" class="text-xs font-bold text-rose-600">Sair</a>
                 </div>
 
-            <a href="<?= url('/') ?>" class="mobile-nav-item">Início</a>
-            <a href="<?= url('frequencia') ?>" class="mobile-nav-item">Frequência</a>
-            <a href="<?= url('frequencia/historico') ?>" class="mobile-nav-item">Histórico</a>
-            <a href="<?= url('cozinha') ?>" class="mobile-nav-item">Cozinha</a>
-            <a href="<?= url('alimentacao/cardapio') ?>" class="mobile-nav-item">Cardápio</a>
-            <?php if (tem_perfil('admin')): ?>
-                <a href="<?= url('alunos') ?>" class="mobile-nav-item">Alunos</a>
+            <p class="mobile-menu-heading">Acessos do seu perfil</p>
+            <a href="<?= url('/') ?>" class="mobile-nav-item <?= isActiveRoute('/') ?>">Início</a>
+            <?php if (tem_perfil('inspetora')): ?>
+                <a href="<?= url('frequencia') ?>" class="mobile-nav-item <?= isActiveRoute('frequencia') ?>">Frequência</a>
+                <a href="<?= url('frequencia/historico') ?>" class="mobile-nav-item <?= isActiveRoute('frequencia/historico') ?>">Histórico</a>
             <?php endif; ?>
-            <?php if (tem_perfil('admin')): ?>
-                <a href="<?= url('admin') ?>" class="mobile-nav-item">Administração</a>
-                <a href="<?= url('admin/usuarios') ?>" class="mobile-nav-item">Usuários</a>
+            <?php if (tem_perfil('nutricionista')): ?>
+                <a href="<?= url('cozinha') ?>" class="mobile-nav-item <?= isActiveRoute('cozinha') ?>">Cozinha</a>
             <?php endif; ?>
-            <a href="<?= url('relatorios') ?>" class="mobile-nav-item">Relatórios</a>
-        </div>
+            <a href="<?= url('alimentacao/cardapio') ?>" class="mobile-nav-item <?= isActiveRoute('alimentacao/cardapio') ?>">Cardápio</a>
+            <a href="<?= url('relatorios') ?>" class="mobile-nav-item <?= isActiveRoute('relatorios') ?>">Relatórios</a>
+            <?php if (tem_perfil('admin')): ?>
+                <p class="mobile-menu-heading">Gestão</p>
+                <a href="<?= url('alunos') ?>" class="mobile-nav-item <?= isActiveRoute('alunos') ?>">Alunos</a>
+                <a href="<?= url('admin') ?>" class="mobile-nav-item <?= isActiveRoute('admin') ?>">Administração</a>
+                <a href="<?= url('admin/usuarios') ?>" class="mobile-nav-item <?= isActiveRoute('admin/usuarios') ?>">Usuários</a>
+            <?php endif; ?>
+        </nav>
         <?php endif; ?>
     </header>
 

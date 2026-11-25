@@ -82,7 +82,7 @@ class Database {
         // A lista permite detectar uma instalacao incompleta, nao apenas vazia.
         $tabelas = ['usuarios', 'alunos', 'frequencias', 'pedidos_cozinha',
                      'historico_frequencia_diaria', 'cardapios', 'refeicoes',
-                     'votacao_pratos', 'dicas_nutricao'];
+                     'dicas_nutricao'];
 
         foreach ($tabelas as $tabela) {
             $stmt = $db->query("SHOW TABLES LIKE '{$tabela}'");
@@ -192,15 +192,6 @@ class Database {
                 CONSTRAINT `fk_ref_aluno` FOREIGN KEY (`aluno_id`) REFERENCES `alunos`(`id`) ON DELETE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-            CREATE TABLE IF NOT EXISTS `votacao_pratos` (
-                `id` INT AUTO_INCREMENT PRIMARY KEY,
-                `nome` VARCHAR(150) NOT NULL,
-                `descricao` TEXT NOT NULL,
-                `votos` INT DEFAULT 0,
-                `emoji` VARCHAR(10) NOT NULL,
-                `categoria` VARCHAR(50) NOT NULL
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
             CREATE TABLE IF NOT EXISTS `dicas_nutricao` (
                 `id` INT AUTO_INCREMENT PRIMARY KEY,
                 `titulo` VARCHAR(150) NOT NULL,
@@ -308,15 +299,6 @@ class Database {
                 FOREIGN KEY (aluno_id) REFERENCES alunos(id) ON DELETE CASCADE
             );
 
-            CREATE TABLE IF NOT EXISTS votacao_pratos (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nome TEXT NOT NULL,
-                descricao TEXT NOT NULL,
-                votos INTEGER DEFAULT 0,
-                emoji TEXT NOT NULL,
-                categoria TEXT NOT NULL
-            );
-
             CREATE TABLE IF NOT EXISTS dicas_nutricao (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 titulo TEXT NOT NULL,
@@ -336,7 +318,6 @@ class Database {
         self::seedUsuarios($db);
         self::seedAlunos($db);
         self::seedCardapios($db);
-        self::seedVotacao($db);
         self::seedDicas($db);
         self::seedHistoricoEFrequencia($db, $driver);
     }
@@ -511,22 +492,6 @@ class Database {
         $stmt = $db->prepare("INSERT INTO cardapios (dia_semana, prato_principal, acompanhamento, sobremesa, bebida, calorias, tags, emoji) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         foreach ($cardapios as $c) {
             $stmt->execute($c);
-        }
-    }
-
-    // Cadastra as opcoes iniciais da votacao dos pratos.
-    public static function seedVotacao(PDO $db): void {
-        $db->exec("DELETE FROM votacao_pratos");
-        $pratosVotacao = [
-            ['Hambúrguer Gourmet Saudável', 'Pão integral, blend de frango e aveia, alface crocante, tomate e molho de iogurte.', 48, '🍔', 'Especial'],
-            ['Tacos Mexicanos Nutritivos', 'Tortilhas de milho assadas, recheio colorido de vegetais, frango desfiado e guacamole.', 39, '🌮', 'Internacional'],
-            ['Lasanha de Berinjela e Queijo Magro', 'Camadas suculentas de berinjela grelhada, molho caseiro de tomate e queijo derretido.', 31, '🧀', 'Conforto'],
-            ['Crepioca Recheada com Ricota e Espinafre', 'Massa leve e crocante com gergelim dourado e recheio cremoso aromático.', 25, '🥞', 'Fitness']
-        ];
-
-        $stmt = $db->prepare("INSERT INTO votacao_pratos (nome, descricao, votos, emoji, categoria) VALUES (?, ?, ?, ?, ?)");
-        foreach ($pratosVotacao as $pv) {
-            $stmt->execute($pv);
         }
     }
 

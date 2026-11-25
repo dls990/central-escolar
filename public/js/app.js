@@ -58,6 +58,9 @@ function showToast(message, type = 'success') {
 
 // Salva uma presenca e atualiza linha, indicadores e grafico sem recarregar.
 async function atualizarFrequencia(alunoId, status, data) {
+    data = obterDataChamadaPermitida(data);
+    if (!data) return;
+
     window.appAudio?.playPop();
 
     const row = document.getElementById(`aluno-row-${alunoId}`);
@@ -107,13 +110,31 @@ async function atualizarFrequencia(alunoId, status, data) {
     }
 }
 
+function obterDataChamadaPermitida(data) {
+    const campoData = document.querySelector('input[name="data"]');
+    const dataSelecionada = campoData ? campoData.value : data;
+    const dataMaxima = campoData?.max;
+
+    if (!dataSelecionada) {
+        showToast('Selecione uma data antes de fazer a chamada.', 'error');
+        return null;
+    }
+
+    if (dataMaxima && dataSelecionada > dataMaxima) {
+        showToast('Não é possível fazer chamada para uma data futura.', 'error');
+        return null;
+    }
+
+    return dataSelecionada;
+}
+
 // Reflete a situacao escolhida no selo, horario e botoes do aluno.
 function atualizarLinhaFrequencia(alunoId, status, horario) {
     const badge = document.getElementById(`badge-status-${alunoId}`);
     const timeSpan = document.getElementById(`horario-${alunoId}`);
 
     if (badge) {
-        badge.className = 'px-3 py-1 rounded-xl text-xs font-bold capitalize transition-all duration-300';
+        badge.className = 'attendance-status-badge px-3 py-1 rounded-xl text-xs font-bold capitalize transition-all duration-300';
         if (status === 'presente') {
             badge.classList.add('badge-presente');
             badge.innerHTML = '✓ Presente';
@@ -134,12 +155,12 @@ function atualizarLinhaFrequencia(alunoId, status, horario) {
     buttons.forEach(btn => {
         const btnStatus = btn.dataset.status;
         if (btnStatus === status) {
-            btn.className = `px-3 py-1.5 rounded-xl font-bold text-xs transition transform active:scale-90 text-white shadow-sm ring-2 ring-offset-1 ${
+            btn.className = `attendance-status-button px-3 py-1.5 rounded-xl font-bold text-xs transition transform active:scale-90 text-white shadow-sm ring-2 ring-offset-1 ${
                 status === 'presente' ? 'bg-emerald-500 ring-emerald-400' :
                 (status === 'ausente' ? 'bg-rose-500 ring-rose-400' : 'bg-amber-500 ring-amber-400')
             }`;
         } else {
-            btn.className = 'px-3 py-1.5 rounded-xl font-bold text-xs transition transform active:scale-90 bg-white text-slate-600 hover:bg-slate-100';
+            btn.className = 'attendance-status-button px-3 py-1.5 rounded-xl font-bold text-xs transition transform active:scale-90 bg-white text-slate-600 hover:bg-slate-100';
         }
     });
 }
@@ -161,6 +182,9 @@ function atualizarCardsEstatisticas(stats) {
 
 // Solicita confirmacao antes de registrar presenca para a turma filtrada.
 async function marcarTodosPresentes(data, turma) {
+    data = obterDataChamadaPermitida(data);
+    if (!data) return;
+
     if (!confirm('Deseja marcar TODOS os alunos listados como presentes hoje?')) return;
 
     try {
@@ -192,6 +216,9 @@ async function marcarTodosPresentes(data, turma) {
 
 // Envia a contagem diaria e a observacao da inspetoria para a cozinha.
 async function enviarParaCozinha(data) {
+    data = obterDataChamadaPermitida(data);
+    if (!data) return;
+
     const obsInput = document.getElementById('obsEnvioCozinha');
     const obs = obsInput ? obsInput.value : '';
 
